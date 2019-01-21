@@ -9,6 +9,7 @@ import {
   handlePendingSignIn,
   signUserOut,
 } from 'blockstack';
+import PublicList from './PublicList.jsx';
 
 export default class App extends Component {
 
@@ -35,6 +36,7 @@ export default class App extends Component {
             <Signin handleSignIn={ this.handleSignIn } />
             : 
             <Switch>
+              <Route path='/public-list' component={PublicList} />
               <Route
                 path='/:username?'
                 render={

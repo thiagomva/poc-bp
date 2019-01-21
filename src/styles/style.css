@@ -34,3 +34,7 @@ input, textarea{color:#000;padding:10px;}
 /* Statuses */
 .statuses{padding-top:30px;}
 .status{margin:15px 0px;padding:20px;background-color:#2e2e2e;border-radius:6px}
+
+/* Files */
+.file-container{padding: 5px; width: 50%; margin-left: 25%;}
+.file-card{margin:5px 0px;padding:20px;background-color:#ff4828;color:#ffffff;border-radius:6px}

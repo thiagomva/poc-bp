@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PageEdit from './PageEdit.jsx';
+import NewPost from './NewPost.jsx';
 
 import {
   isSignInPending,
@@ -30,10 +31,6 @@ export default class Profile extends Component {
       },
       username: "",
       newStatus: "",
-      newPageName: "",
-      newPageDescription: "",
-      newPagePrice:null,
-      newPageDuration: null,
       statuses: [],
       statusIndex: 0,
       isLoading: false,
@@ -99,23 +96,7 @@ export default class Profile extends Component {
               }
             </div>
             {this.showNewPost() && 
-              <div className="new-status">
-                <div className="col-md-12">
-                  <textarea className="input-status"
-                    value={this.state.newStatus}
-                    onChange={e => this.handleNewStatusChange(e)}
-                    placeholder="What's on your mind?"
-                  />
-                </div>
-                <div className="col-md-12 text-right">
-                  <button
-                    className="btn btn-primary btn-lg"
-                    onClick={e => this.handleNewStatusSubmit(e)}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
+              <NewPost handleSavePage={handleNewPageSubmit}/>
             }
             {this.showPageEdit() &&
               <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit}/>

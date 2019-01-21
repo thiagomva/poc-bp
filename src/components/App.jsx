@@ -2,6 +2,7 @@ import React, { Component, Link } from 'react';
 import { Switch, Route } from 'react-router-dom'
 import Profile from './Profile.jsx';
 import Signin from './Signin.jsx';
+
 import {
   isSignInPending,
   isUserSignedIn,

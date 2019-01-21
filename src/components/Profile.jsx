@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PageEdit from './PageEdit.jsx';
+
 import {
   isSignInPending,
   loadUserData,
@@ -28,11 +30,17 @@ export default class Profile extends Component {
       },
       username: "",
       newStatus: "",
+      newPageName: "",
+      newPageDescription: "",
+      newPagePrice:null,
+      newPageDuration: null,
       statuses: [],
       statusIndex: 0,
       isLoading: false,
+      isEditing: false,
       docPrivateKey: "",
-      docPublicKey: ""
+      docPublicKey: "",
+      pageInfo: null
     };
   }
 
@@ -40,7 +48,20 @@ export default class Profile extends Component {
     const { handleSignOut } = this.props;
     const { person } = this.state;
     const { username } = this.state;
-   
+    var handleNewPageSubmit = (pageInfo) =>{
+      let docOptions = {
+        encrypt: false
+      };
+      this.setState({isLoading: true});
+      putFile('pageInfo.json', JSON.stringify(pageInfo), docOptions)
+        .then(() => {
+          this.setState({pageInfo: pageInfo});
+        })
+        .finally(()=>{
+          this.setState({isLoading: false,isEditing:false});
+        });
+    }
+
     return (
       !isSignInPending() && person ?
       <div className="container">
@@ -67,8 +88,17 @@ export default class Profile extends Component {
                   }
                 </div>
               </div>
+              {
+                this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
+                <button
+                className="btn btn-primary btn-lg pull-left"
+                onClick={e => this.handleEditPage(e)}
+                >
+                Edit Page
+                </button>
+              }
             </div>
-            {this.isLocal() &&
+            {this.showNewPost() && 
               <div className="new-status">
                 <div className="col-md-12">
                   <textarea className="input-status"
@@ -85,15 +115,10 @@ export default class Profile extends Component {
                     Submit
                   </button>
                 </div>
-                <div className="col-md-12 text-right">
-                  <button
-                    className="btn btn-primary btn-lg"
-                    onClick={e => this.handleReadFile(e)}
-                  >
-                    Read File
-                  </button>
-                </div>
               </div>
+            }
+            {this.showPageEdit() &&
+              <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit}/>
             }
             <div className="col-md-12 statuses">
             {this.state.isLoading && <span>Loading...</span>}
@@ -124,8 +149,32 @@ export default class Profile extends Component {
   handleNewStatusChange(event) {
     this.setState({newStatus: event.target.value})
   }
- 
+
+  handleEditPage(event) {
+    this.setState({
+      isEditing: true,
+      newPageName : this.state.pageInfo.pageName,
+      newPageDescription : this.state.pageInfo.pageDescription,
+      newPagePrice : this.state.pageInfo.pagePrice,
+      newPageDuration : this.state.pageInfo.pageDuration,
+    })
+  }
   
+  handleNewPageNameChange(event) {
+    this.setState({newPageName: event.target.value})
+  }
+
+  handleNewPageDescriptionChange(event) {
+    this.setState({newPageDescription: event.target.value})
+  }
+
+  handleNewPagePriceChange(event) {
+    this.setState({newPagePrice: event.target.value})
+  }
+
+  handleNewPageDurationChange(event) {
+    this.setState({newPageDuration: event.target.value})
+  }
 
   handleNewStatusSubmit(event) {
     this.state.docPrivateKey = makeECPrivateKey();
@@ -153,8 +202,7 @@ export default class Profile extends Component {
       });
   }
 
-  handleReadFile(e){
-    
+  handleReadFile(e){    
     const options = { username: 'olamundo.id.blockstack', decrypt: false }
     getFile('olamundo2.id.blockstack.json', options).then(
       (file1)=>{
@@ -173,28 +221,10 @@ export default class Profile extends Component {
   }
 
   fetchData() {
-    this.setState({ isLoading: true })
-   if (this.isLocal()) {
-    listFiles(file => {console.log("File: "+file);
-    return true;});
-
-     const options = { decrypt: false }
-     getFile('statuses2.json', options)
-       .then((file) => {
-         var statuses = JSON.parse(file || '[]')
-         this.setState({
-           person: new Person(loadUserData().profile),
-           username: loadUserData().username,
-           statusIndex: statuses.length,
-           statuses: statuses,
-         })
-       })
-       .finally(() => {
-         this.setState({ isLoading: false })
-       })
-   } else {
-     const username = this.props.match.params.username
-
+    this.setState({ isLoading: true });
+    var username = this.state.username;
+    if (!this.isLocal()) {
+     username = this.props.match.params.username
      lookupProfile(username)
        .then((profile) => {
          console.log("Profile: "+profile);
@@ -206,26 +236,41 @@ export default class Profile extends Component {
        .catch((error) => {
          console.log('could not resolve profile')
        })
-    
+    }
+    this.getPageInfo(username);
+  }
+
+  getPageInfo(username){
     const options = { username: username, decrypt: false }
-    getFile('statuses2.json', options)
+    getFile('pageInfo.json', options)
       .then((file) => {
-        var statuses = JSON.parse(file || '[]')
+        var pageInfo = JSON.parse(file)
         this.setState({
-          statusIndex: statuses.length,
-          statuses: statuses
+          pageInfo: pageInfo
         })
-      })
-      .catch((error) => {
-        console.log('could not fetch statuses')
       })
       .finally(() => {
         this.setState({ isLoading: false })
       })
-    }
   }
 
   isLocal() {
     return this.props.match.params.username ? false : true
+  }
+
+  isLocalAndHasConfiguredPage() {
+    return this.isLocal() && this.state.pageInfo != null ? true : false
+  }
+
+  isLocalAndHasNotConfiguredPage() {
+    return this.isLocal() && this.state.pageInfo == null ? true : false
+  }
+
+  showNewPost(){
+    return !this.state.isLoading && this.isLocalAndHasConfiguredPage() && !this.state.isEditing;
+  }
+
+  showPageEdit(){
+    return !this.state.isLoading && (this.isLocalAndHasNotConfiguredPage() || this.state.isEditing);
   }
 }

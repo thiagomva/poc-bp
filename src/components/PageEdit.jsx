@@ -21,7 +21,7 @@ export default class PageEdit extends Component {
       newPageName: "",
       newPageDescription: "",
       newPagePrice:undefined,
-      newPageDuration: undefined,
+      newSubscriptionDuration: undefined,
       isLoading: false,
       pageInfo: null
     };
@@ -54,8 +54,8 @@ export default class PageEdit extends Component {
         </div>
         <div className="col-md-6">
           <input className="input-page-duration" type="number"
-            value={this.state.newPageDuration}
-            onChange={e => this.handleNewPageDurationChange(e)}
+            value={this.state.newSubscriptionDuration}
+            onChange={e => this.handleNewSubscriptionDurationChange(e)}
             placeholder="Subscription duration (days)"
           />
         </div>
@@ -81,8 +81,8 @@ export default class PageEdit extends Component {
       this.setState({
         newPageName : this.props.pageInfo.pageName,
         newPageDescription : this.props.pageInfo.pageDescription,
-        newPagePrice : this.props.pageInfo.pagePrice,
-        newPageDuration : this.props.pageInfo.pageDuration,
+        newSubscriptionPrice : this.props.pageInfo.subscriptionPrice,
+        newSubscriptionDuration : this.props.pageInfo.subscriptionDuration,
       })
     }
   }
@@ -98,20 +98,20 @@ export default class PageEdit extends Component {
     this.setState({newPageDescription: event.target.value})
   }
 
-  handleNewPagePriceChange(event) {
-    this.setState({newPagePrice: event.target.value})
+  handleNewSubscriptionPriceChange(event) {
+    this.setState({newSubscriptionPrice: event.target.value})
   }
 
-  handleNewPageDurationChange(event) {
-    this.setState({newPageDuration: event.target.value})
+  handleNewSubscriptionDurationChange(event) {
+    this.setState({newSubscriptionDuration: event.target.value})
   }
 
   handleNewPageSubmit(event) {
     let pageInfo = {
       pageName: this.state.newPageName,
       pageDescription: this.state.newPageDescription,
-      pagePrice: this.state.newPagePrice,
-      pageDuration:this.state.newPageDuration
+      subscriptionPrice: this.state.newSubscriptionPrice,
+      subscriptionDuration:this.state.newSubscriptionDuration
     };
     this.props.handleSavePage(pageInfo);
   }

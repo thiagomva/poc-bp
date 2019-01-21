@@ -150,32 +150,6 @@ export default class Profile extends Component {
     this.setState({newStatus: event.target.value})
   }
 
-  handleEditPage(event) {
-    this.setState({
-      isEditing: true,
-      newPageName : this.state.pageInfo.pageName,
-      newPageDescription : this.state.pageInfo.pageDescription,
-      newPagePrice : this.state.pageInfo.pagePrice,
-      newPageDuration : this.state.pageInfo.pageDuration,
-    })
-  }
-  
-  handleNewPageNameChange(event) {
-    this.setState({newPageName: event.target.value})
-  }
-
-  handleNewPageDescriptionChange(event) {
-    this.setState({newPageDescription: event.target.value})
-  }
-
-  handleNewPagePriceChange(event) {
-    this.setState({newPagePrice: event.target.value})
-  }
-
-  handleNewPageDurationChange(event) {
-    this.setState({newPageDuration: event.target.value})
-  }
-
   handleNewStatusSubmit(event) {
     this.state.docPrivateKey = makeECPrivateKey();
     console.log("generated private key:"+this.state.docPrivateKey);

@@ -61,6 +61,7 @@ function checkTransactionConfirmed(resolve, reject, web3, transactionId, pageUse
         resolve(transactionId);
       }).catch((err) => {
         reject(err);
-      });}
+      });
+    }
   });
 }

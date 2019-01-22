@@ -54,12 +54,14 @@ function checkTransactionConfirmed(resolve, reject, web3, transactionId, pageUse
     if (err || !receipt || !receipt.blockNumber) {
       setTimeout(function(){ checkTransactionConfirmed(resolve, reject, web3, transactionId, pageUserName, loggedUserAppPublicKey); }, 3000);
     } else {
-      Axios.post(server_url + '/subscribe', {
-        userAppPublicKey: loggedUserAppPublicKey,
-        pageUserName: pageUserName
+      var url = server_url + '/api/v1/subscribers';
+      Axios.post(url, {
+        appPublicKey: loggedUserAppPublicKey,
+        username: pageUserName
       }).then(response => {
         resolve(transactionId);
       }).catch((err) => {
+        console.error(err);
         reject(err);
       });
     }

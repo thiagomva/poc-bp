@@ -1,8 +1,6 @@
 !node_modules/
 node_modules/*
 !node_modules/blockstack/
-node_modules/blockstack/*
-!node_modules/blockstack/dist
 
 .vscode
 public

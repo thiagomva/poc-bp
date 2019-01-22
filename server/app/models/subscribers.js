@@ -1,5 +1,6 @@
 var config = require('nconf');
 var Error = require('../util/error.js');
+var Blockstack = require('blockstack');
 
 class Subscribers {
     constructor(username, appPublicKey) {
@@ -20,6 +21,7 @@ class Subscribers {
                     var userJwt = jsonFile[this.username];
                     console.log(userJwt);
                     //TODO Do stuff (save docs etc using jwt)
+                    //Blockstack.getFile(...); //autocomplete doesn't work, members and methods generated dynamically
                     cb(null, JSON.parse('{ "success": true }'));
                 }
                 else {

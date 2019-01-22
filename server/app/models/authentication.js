@@ -13,24 +13,21 @@ class Authentication {
         var jwtStoreName = 'jwtStore.json';
         try {
             var content;
+            var stringfiedJson = "";
             if (fs.existsSync('./' + jwtStoreName)) {
                 content = fs.readFileSync('./' + jwtStoreName);
                 var jsonFile = JSON.parse(content);
-                console.log(jsonFile);
                 jsonFile[this.username] = this.jsonWebToken;
-                console.log(jsonFile);
-                fs.writeFileSync( jwtStoreName, JSON.stringify(jsonFile), "utf8");
-                console.log(jsonFile);
+                stringfiedJson = JSON.stringify(jsonFile);
             }
             else {
-                var myJson = '{ "' + this.username + '": ' + '"' + this.jsonWebToken + '" }'
-                fs.writeFile( jwtStoreName, myJson, "utf8", null );
+                stringfiedJson = '{ "' + this.username + '": ' + '"' + this.jsonWebToken + '" }';
             }
+            fs.writeFileSync( jwtStoreName, stringfiedJson, "utf8" );
+            cb(null, JSON.parse(stringfiedJson));
           } catch(err) {
-            console.error(err)
+            cb(err)
           }
-
-        return true;
     }
 }
 

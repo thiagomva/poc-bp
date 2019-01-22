@@ -9,12 +9,15 @@ var config = require('nconf');
 // configure middlewares
 var bodyParser = require('body-parser');
 var logger = require('winston');
+var cors = require('cors');
 var app;
 
 var start = function (cb) {
   'use strict';
   // Configure express 
   app = express();
+  app.use(cors());
+  app.options('*', cors());
 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json({ type: '*/*' }));
@@ -26,7 +29,6 @@ var start = function (cb) {
 
   app.use(express.static(path.join(__dirname, 'public')));
 
-  // Error handler
   app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.json({

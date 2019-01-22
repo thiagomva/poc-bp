@@ -1,10 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 
-// copy manifest.json to the path: 'public/build'
-// this will allow for the authRequest to see the file at www.example.com/manifest.json
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ManifestAssetPlugin = new CopyWebpackPlugin([ { from: 'src/assets/manifest.json', to: 'manifest.json' } ]);
+const ConfigAssetPlugin = new CopyWebpackPlugin([ { from: 'src/assets/config.json', to: 'config.json' } ]);
 const IconAssetPlugin = new CopyWebpackPlugin([ { from: 'src/images/icon-192x192.png', to: 'icon-192x192.png' } ]);
 const WebConfigPlugin = new CopyWebpackPlugin([ { from: 'src/web.config', to: 'web.config' } ]);
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -58,5 +57,5 @@ module.exports = {
       { test: /\.css$/, loader: 'style-loader!css-loader' }
     ]
   },
-  plugins: [HtmlWebpackPluginConfig, ManifestAssetPlugin, IconAssetPlugin,WebConfigPlugin]
+  plugins: [HtmlWebpackPluginConfig, ManifestAssetPlugin, ConfigAssetPlugin, IconAssetPlugin, WebConfigPlugin]
 }

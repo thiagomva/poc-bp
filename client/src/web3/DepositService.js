@@ -2,6 +2,8 @@ import {
   getPublicKeyFromPrivate,
   loadUserData
 } from 'blockstack';
+import Axios from 'axios';
+import { server_url } from '../config';
 
 export const deposit = (pageUserName, address, ethAmount) => {
     return new Promise((resolve, reject) => {
@@ -31,7 +33,7 @@ export const deposit = (pageUserName, address, ethAmount) => {
           } else {
             console.log(transactionId);
             var loggedUserAppPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey);
-            checkTransactionConfirmed(resolve, web3, transactionId, pageUserName, loggedUserAppPublicKey);
+              checkTransactionConfirmed(resolve, reject, web3, transactionId, pageUserName, loggedUserAppPublicKey);
           }
         });
       });
@@ -47,14 +49,21 @@ function getMetamaksProvider() {
   }
 }
 
-function checkTransactionConfirmed(resolve, web3, transactionId, pageUserName, loggedUserAppPublicKey) {
+function checkTransactionConfirmed(resolve, reject, web3, transactionId, pageUserName, loggedUserAppPublicKey) {
   web3.eth.getTransactionReceipt(transactionId, function(err, receipt) { 
     if (err || !receipt || !receipt.blockNumber) {
-      setTimeout(function(){ checkTransactionConfirmed(resolve, web3, transactionId, pageUserName, loggedUserAppPublicKey); }, 3000);
+      setTimeout(function(){ checkTransactionConfirmed(resolve, reject, web3, transactionId, pageUserName, loggedUserAppPublicKey); }, 3000);
     } else {
-      resolve(transactionId);
-      //TODO call the server
-      alert('User ' + loggedUserAppPublicKey + ' confirmed subscription on block ' + receipt.blockNumber + ' for the content generator ' + pageUserName);
+      var url = server_url + '/api/v1/subscribers';
+      Axios.post(url, {
+        appPublicKey: loggedUserAppPublicKey,
+        username: pageUserName
+      }).then(response => {
+        resolve(transactionId);
+      }).catch((err) => {
+        console.error(err);
+        reject(err);
+      });
     }
   });
 }

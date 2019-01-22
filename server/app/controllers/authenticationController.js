@@ -4,14 +4,15 @@ var Error = require('../util/error.js');
 class AuthenticationController {
     constructor() {}
 
-    valid(username, jwt){
-        if (!username) throw new Error(400, 'username is mandatory');
-        if (!jwt) throw new Error(400, 'jwt is mandatory');
+    valid(json){
+        if (!json) throw new Error(400, 'no body in request');
+        if (!json.username) throw new Error(400, 'username is mandatory');
+        if (!json.jwt) throw new Error(400, 'jwt is mandatory');
     }
 
-    storeJwt(username, jwt, cb) {
-        this.valid(username, jwt);
-        new Authentication(username, jwt).getAuthenticationResult(cb);
+    storeJwt(json, cb) {
+        this.valid(json);
+        new Authentication(json.username, json.jwt).getAuthenticationResult(cb);
     }
 }
 

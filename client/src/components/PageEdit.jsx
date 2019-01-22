@@ -7,6 +7,8 @@ import {
   getOrSetLocalGaiaHubConnection,
   uploadToGaiaHub
 } from 'blockstack';
+import Axios from 'axios';
+import { server_url } from '../config';
 
 export default class PageEdit extends Component {
   constructor(props) {
@@ -105,11 +107,7 @@ export default class PageEdit extends Component {
           }
         }
       }
-      this.setState(
-        {
-          hasEthereumAddress: hasEthereumAddress
-        }
-      );
+      this.setState({ hasEthereumAddress: hasEthereumAddress });
       if (!hasEthereumAddress) {
         alert('You should set an Ethereum Wallet on your Blockstack account for create a page');
       }
@@ -142,15 +140,20 @@ export default class PageEdit extends Component {
     if (!this.state.hasEthereumAddress) {
       alert('You should set an Ethereum address on your Blockstack account for create a page');
     } else {
-      let pageInfo = {
-        pageName: this.state.newPageName,
-        pageDescription: this.state.newPageDescription,
-        subscriptionPrice: parseFloat(this.state.newSubscriptionPrice),
-        subscriptionDuration: parseInt(this.state.newSubscriptionDuration),
-        files: this.props.pageInfo ? this.props.pageInfo.files : {}
-      };
-     
-      this.props.handleSavePage(pageInfo);
+      var url = server_url + '/api/v1/authentication';
+      Axios.post(url, {
+        jwt: 'TODO',
+        username: loadUserData().username
+      }).then(response => {
+        let pageInfo = {
+          pageName: this.state.newPageName,
+          pageDescription: this.state.newPageDescription,
+          subscriptionPrice: parseFloat(this.state.newSubscriptionPrice),
+          subscriptionDuration: parseInt(this.state.newSubscriptionDuration),
+          files: this.props.pageInfo ? this.props.pageInfo.files : {}
+        };
+        this.props.handleSavePage(pageInfo);
+      });
     }
   }
 

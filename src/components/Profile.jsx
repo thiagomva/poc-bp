@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Payment from './Payment.jsx';
 import {
   isSignInPending,
   loadUserData,
@@ -92,6 +93,9 @@ export default class Profile extends Component {
                   >
                     Read File
                   </button>
+                </div>
+                <div className="col-md-12 text-right">
+                  <Payment address={"0x581ab454E80A62DB25E4BAa324fDAa8bDd1b8C5A"} amount={0.1}></Payment>
                 </div>
               </div>
             }

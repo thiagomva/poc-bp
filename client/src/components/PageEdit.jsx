@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import {
   loadUserData,
   Person,
-  lookupProfile
+  makeV1GaiaAuthToken,
+  lookupProfile,
+  getOrSetLocalGaiaHubConnection,
+  uploadToGaiaHub
 } from 'blockstack';
 import Axios from 'axios';
 import { server_url } from '../config';
@@ -89,6 +92,8 @@ export default class PageEdit extends Component {
         newSubscriptionDuration : this.props.pageInfo.subscriptionDuration,
       })
     }
+   /* this.saveJwtToken();
+    this.writeUsingJwt();*/
 
     lookupProfile(loadUserData().username)
     .then((profile) => {
@@ -151,4 +156,26 @@ export default class PageEdit extends Component {
       });
     }
   }
+
+ /* saveJwtToken() {
+    let privateKey = loadUserData().appPrivateKey;
+    let scopes = ['store_write', 'publish_data'];
+    let hubUrl = loadUserData().hubUrl;
+    fetch(hubUrl+'/hub_info')
+    .then(response => response.json())
+    .then((hubInfo) => {
+            let token =  makeV1GaiaAuthToken(hubInfo, privateKey, hubUrl, null, scopes);
+          });
+  }
+  writeUsingJwt(){
+    let jwtToken = "v1:eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJnYWlhQ2hhbGxlbmdlIjoiW1wiZ2FpYWh1YlwiLFwiMjAxOVwiLFwic3RvcmFnZTIuYmxvY2tzdGFjay5vcmdcIixcImJsb2Nrc3RhY2tfc3RvcmFnZV9wbGVhc2Vfc2lnblwiXSIsImh1YlVybCI6Imh0dHBzOi8vaHViLmJsb2Nrc3RhY2sub3JnIiwiaXNzIjoiMDNkYTdlODUxMGFiZWUxMjRlOTA2OGUyMDA4ZmUxYWRlM2FiYmI3ZTViM2U3ZDNmODhkY2EwMjNmYzg3ODJmMDU3Iiwic2FsdCI6IjFkMTc1ZGUzM2FlZWJlYzgwZjY1ZWJmMjMwOGNkMDQzIiwiYXNzb2NpYXRpb25Ub2tlbiI6bnVsbCwic2NvcGVzIjpbInN0b3JlX3dyaXRlIiwicHVibGlzaF9kYXRhIl19.5QG3-dYUtx_eJQX9u38189AKQbMYpkNzPh_ZaXmmgZGinS1AlJDC2ogrAZjrgtX7yPC_ieFmKUUJjzYQY_atug";
+    getOrSetLocalGaiaHubConnection().then( hubConfig => {
+        hubConfig.token = jwtToken;
+        //hubConfig.server = TODO;
+        uploadToGaiaHub('test.html','<html><body> loaded at: ' + Date.toString() + '</body></html>', hubConfig)
+          .then(res => alert(res));
+      }
+
+    )
+  }*/
 }

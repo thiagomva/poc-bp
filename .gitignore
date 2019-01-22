@@ -4,3 +4,4 @@
 /.vscode
 /.vs
 server/jwtStore.json
+.vs/slnx.sqlite

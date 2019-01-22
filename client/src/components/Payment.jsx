@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import isEmpty from 'lodash/isEmpty';
 import { deposit } from '../web3/DepositActions';
+import { getOrSetLocalGaiaHubConnection } from 'blockstack';
 import { ethereum_network } from '../config';
 
 class Payment extends Component {
@@ -21,6 +22,8 @@ class Payment extends Component {
   }
 
   render() {
+   
+
     const web3 = window.web3;
     let failed = false;
     let error = null;
@@ -56,6 +59,16 @@ class Payment extends Component {
       </div>
     );
   }
+
+  /*writeUsingJwt(){
+    let jwtToken = "v1:eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJnYWlhQ2hhbGxlbmdlIjoiW1wiZ2FpYWh1YlwiLFwiMjAxOVwiLFwic3RvcmFnZTIuYmxvY2tzdGFjay5vcmdcIixcImJsb2Nrc3RhY2tfc3RvcmFnZV9wbGVhc2Vfc2lnblwiXSIsImh1YlVybCI6Imh0dHBzOi8vaHViLmJsb2Nrc3RhY2sub3JnIiwiaXNzIjoiMDNkYTdlODUxMGFiZWUxMjRlOTA2OGUyMDA4ZmUxYWRlM2FiYmI3ZTViM2U3ZDNmODhkY2EwMjNmYzg3ODJmMDU3Iiwic2FsdCI6IjFkMTc1ZGUzM2FlZWJlYzgwZjY1ZWJmMjMwOGNkMDQzIiwiYXNzb2NpYXRpb25Ub2tlbiI6bnVsbCwic2NvcGVzIjpbInN0b3JlX3dyaXRlIiwicHVibGlzaF9kYXRhIl19.5QG3-dYUtx_eJQX9u38189AKQbMYpkNzPh_ZaXmmgZGinS1AlJDC2ogrAZjrgtX7yPC_ieFmKUUJjzYQY_atug";
+    getOrSetLocalGaiaHubConnection().then( hubConfig => {
+        hubConfig.token = jwtToken;
+        hubConfig.server = "test";
+      }
+
+    )
+  }*/
 }
 
 Payment.propTypes = {
@@ -90,3 +103,5 @@ const hoc = connect(mapStateToProps, mapDispatchToProps)(Payment);
 // EXPORT COMPONENT
 
 export default hoc;
+
+

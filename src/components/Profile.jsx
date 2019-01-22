@@ -31,6 +31,7 @@ export default class Profile extends Component {
         },
       },
       username: "",
+      pageUsername:"",
       newStatus: "",
       statuses: [],
       statusIndex: 0,
@@ -107,7 +108,7 @@ export default class Profile extends Component {
             <div className="col-md-12 statuses">
             {
               !this.showPageEdit() && 
-              <PublicList pageInfo={this.state.pageInfo}/>
+              <PublicList pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername}/>
             }
             </div>
           </div>
@@ -135,50 +136,6 @@ export default class Profile extends Component {
     this.setState({isEditing: true})
   }
 
-  handleNewStatusSubmit(event) {
-    this.state.docPrivateKey = makeECPrivateKey();
-    console.log("generated private key:"+this.state.docPrivateKey);
-    this.state.docPublicKey = getPublicKeyFromPrivate(this.state.docPrivateKey);
-    console.log("generated public key:"+this.state.docPublicKey);
-    let encryptOptions = {
-      publicKey: this.state.docPublicKey
-    };
-    var docEncryptedContent = encryptContent(JSON.stringify(this.state.newStatus), encryptOptions)
-    let docOptions = {
-      encrypt: false
-    };
-    putFile('testDocEncrypted.json', docEncryptedContent, docOptions)
-      .then(() => {
-        console.log("saved 1");
-        var docPrivateKeyEncryptedContent = 
-          encryptContent(this.state.docPrivateKey, 
-            {
-              publicKey: '033ddb29f4af473bc22c66510c58b1272525fcadc3b2f5b5d5841bffe498ea95fb'
-            }
-          );
-        
-        putFile('olamundo2.id.blockstack.json', docPrivateKeyEncryptedContent, docOptions).then(()=> {console.log("saved 2");});
-      });
-  }
-
-  handleReadFile(e){    
-    const options = { username: 'olamundo.id.blockstack', decrypt: false }
-    getFile('olamundo2.id.blockstack.json', options).then(
-      (file1)=>{
-        var decryptedFile = decryptContent(file1, {privateKey:"ccdfa7d3449c8d64bb923cbe5d94fe48daba7bce10010816f9f25fcd6267eaa9"});
-        getFile('testDocEncrypted.json', options)
-      .then((file) => {
-        let decryptOptions = {
-          privateKey: decryptedFile
-        }
-        console.log("read private key:"+decryptOptions.privateKey);
-        var content = decryptContent(file, decryptOptions);
-        console.log("Conteudo: "+content);
-      });
-      }
-    )
-  }
-
   fetchData() {
     this.setState({ isLoading: true });
     var username = this.state.username;
@@ -186,7 +143,6 @@ export default class Profile extends Component {
      username = this.props.match.params.username
      lookupProfile(username)
        .then((profile) => {
-         console.log("Profile: "+profile);
          this.setState({
            person: new Person(profile),
            username: username
@@ -196,6 +152,7 @@ export default class Profile extends Component {
          console.log('could not resolve profile')
        })
     }
+    this.setState({ pageUsername: username });
     this.getPageInfo(username);
   }
 

@@ -1,4 +1,9 @@
-export const deposit = (address, ethAmount) => {
+import {
+  getPublicKeyFromPrivate,
+  loadUserData
+} from 'blockstack';
+
+export const deposit = (pageUserName, address, ethAmount) => {
     return new Promise((resolve, reject) => {
       const web3 = getMetamaksProvider();
 
@@ -25,8 +30,8 @@ export const deposit = (address, ethAmount) => {
             reject(error);
           } else {
             console.log(transactionId);
-            resolve(transactionId);
-            monitoringTransaction(transactionId);
+            var loggedUserAppPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey);
+            checkTransactionConfirmed(resolve, web3, transactionId, pageUserName, loggedUserAppPublicKey);
           }
         });
       });
@@ -42,21 +47,14 @@ function getMetamaksProvider() {
   }
 }
 
-function monitoringTransaction(transactionId) {
-  if (transactionId) {
-    const web3 = getMetamaksProvider();
-    checkTransactionConfirmed(web3, transactionId);
-  }
-}
-
-function checkTransactionConfirmed(web3, transactionId) {
+function checkTransactionConfirmed(resolve, web3, transactionId, pageUserName, loggedUserAppPublicKey) {
   web3.eth.getTransactionReceipt(transactionId, function(err, receipt) { 
     if (err || !receipt || !receipt.blockNumber) {
-      setTimeout(function(){ checkTransactionConfirmed(web3, transactionId); }, 3000);
+      setTimeout(function(){ checkTransactionConfirmed(resolve, web3, transactionId, pageUserName, loggedUserAppPublicKey); }, 3000);
     } else {
+      resolve(transactionId);
       //TODO call the server
-      console.log(receipt);
-      alert('Mined on block ' + receipt.blockNumber);
+      alert('User ' + loggedUserAppPublicKey + ' confirmed subscription on block ' + receipt.blockNumber + ' for the content generator ' + pageUserName);
     }
   });
 }

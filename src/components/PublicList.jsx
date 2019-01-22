@@ -51,15 +51,6 @@ export default class PublicList extends Component {
                 }
             );
         }
-        // this.setState({ isLoading: true })
-        // if (this.useDummy()) {
-        //     this.getDummyData().then((data) => {
-                
-        //     })
-        //     .finally(() => {
-        //         this.setState({ isLoading: false })
-        //       })
-        // }
     }
 
     getFormattedDateFromDuration(duration) {

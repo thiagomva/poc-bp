@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
+import {
+    loadUserData,
+    getFile,
+    getPublicKeyFromPrivate,
+  } from 'blockstack';
 
 export default class PublicList extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            pageUserName: "",
             isLoading: false,
             pageName: "",
             pageDescription: "",
+
             subscriptionPrice: undefined,
             subscriptionDuration: undefined,
-            files: {}
+            files: {},
+            currentFileContent:""
         }
     }
 
@@ -28,34 +36,37 @@ export default class PublicList extends Component {
                 <div className="file-container">
                 {Object.keys(this.state.files).map((fileName) => (
                 
-                    <div key={fileName} className="file-card">{this.state.files[fileName].title}</div>
+                    <div key={fileName} className="file-card" onClick={e => this.handleReadFile(fileName)}>{this.state.files[fileName].title}</div>
                 ))}
                 </div>
+
+                <div>{this.state.currentFileContent}</div>
             </div>
         );
     }
 
-    componentDidMount() {
-        this.fetchData()
+    componentWillReceiveProps(nextProps) {
+        this.fetchData(nextProps)
     }
 
-    fetchData() {
-        this.setState({ isLoading: true })
-        if (this.useDummy()) {
-            this.getDummyData().then((data) => {
-                this.setState(
-                    {
-                        pageName: data.pageName,
-                        pageDescription: data.pageDescription,
-                        subscriptionPrice: data.subscriptionPrice,
-                        subscriptionDuration: data.subscriptionDuration,
-                        files: data.files
-                    }
-                );
-            })
-            .finally(() => {
-                this.setState({ isLoading: false })
-              })
+    fetchData(nextProps) {
+        if(nextProps.pageInfo != null){
+            this.setState(
+                {
+                    pageName: nextProps.pageInfo.pageName,
+                    pageDescription: nextProps.pageInfo.pageDescription,
+                    subscriptionPrice: nextProps.pageInfo.subscriptionPrice,
+                    subscriptionDuration: nextProps.pageInfo.subscriptionDuration,
+                    files: nextProps.pageInfo.files
+                }
+            );
+        }
+        if(nextProps.pageUsername != null){
+            this.setState(
+                {
+                    pageUsername: nextProps.pageUsername
+                }
+            );
         }
     }
 
@@ -65,28 +76,36 @@ export default class PublicList extends Component {
         return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
     }
 
-    useDummy() {
-        return true;
-    }
+    handleReadFile(fileName){
+        var loggedUserAppPrivateKey = loadUserData().appPrivateKey;
+        var loggedUserAppPublicKey = getPublicKeyFromPrivate(loggedUserAppPrivateKey);
+        const options = { username:  this.state.pageUsername, decrypt: false }
+        getFile(loggedUserAppPublicKey, options).then(
+            (file1)=>{
+                if(file1 == null){
+                    alert("You need to subscribe to access this content");
+                    return;
+                }
+                var filesPrivateKeysList = JSON.parse(file1 || "{}");
+                var currentFile = filesPrivateKeysList[fileName];
+                if(currentFile == null){
+                    alert("You don't have access to this content");
+                    return;
+                }
 
-    getDummyData(onSuccess, onError) {
-        return new Promise((resolve, reject) => {
-            setTimeout(function() {
-                resolve({
-                    pageName: "My Page",
-                    pageDescription: "This is My Page",
-                    subscriptionPrice:0.1,
-                    subscriptionDuration:30,
-                    files:{
-                        "file1.html":{
-                            title:"Aula1"
-                        },
-                        "file2.html":{
-                            title:"DemoFile"
+                var decryptedFilePrivateKey = decryptContent(currentFile.decryptionPrivateKey,{privateKey:loggedUserAppPrivateKey});
+
+                getFile(fileName, options).then(
+                (fileWithEncryptedContent) => {
+                    var parsedFileWithEncryptedContent = JSON.parse(file|| "{}");
+                    var fileContent = decryptContent(parsedFileWithEncryptedContent.content, {privateKey:decryptedFilePrivateKey});
+                    this.setState(
+                        {
+                            currentFileContent: JSON.parse(fileContent)
                         }
-                    }
-                });
-              }, 1500);
-        });
+                    );
+                })
+            }
+        )
     }
 }

@@ -20,7 +20,7 @@ export default class PageEdit extends Component {
       username: "",
       newPageName: "",
       newPageDescription: "",
-      newPagePrice:undefined,
+      newSubscriptionPrice:undefined,
       newSubscriptionDuration: undefined,
       isLoading: false,
       pageInfo: null
@@ -47,8 +47,8 @@ export default class PageEdit extends Component {
         </div>
         <div className="col-md-6">
           <input className="input-page-price" type="number"
-            value={this.state.newPagePrice}
-            onChange={e => this.handleNewPagePriceChange(e)}
+            value={this.state.newSubscriptionPrice}
+            onChange={e => this.handleNewSubscriptionPriceChange(e)}
             placeholder="Subscription price (ETH)"
           />
         </div>
@@ -111,7 +111,7 @@ export default class PageEdit extends Component {
       pageName: this.state.newPageName,
       pageDescription: this.state.newPageDescription,
       subscriptionPrice: this.state.newSubscriptionPrice,
-      subscriptionDuration:this.state.newSubscriptionDuration,
+      subscriptionDuration:parseInt(this.state.newSubscriptionDuration),
       files: this.props.pageInfo.files
     };
     this.props.handleSavePage(pageInfo);

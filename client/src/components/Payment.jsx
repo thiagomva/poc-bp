@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import isEmpty from 'lodash/isEmpty';
 import { deposit } from '../web3/DepositActions';
+import { ethereum_network } from '../../config';
 
 class Payment extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class Payment extends Component {
       error = "Account unavailable!";
     }
 
-    if (!failed && this.props.network_id && this.props.network_id !== "4") {
+    if (!failed && this.props.network_id && this.props.network_id !== ethereum_network) {
       failed = true;
       error = "Ethereum network must be Rinkeby!";
     }

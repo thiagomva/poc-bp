@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import Payment from './Payment.jsx';
+import PageEdit from './PageEdit.jsx';
+import NewPost from './NewPost.jsx';
+import PublicList from './PublicList.jsx';
+
 import {
   isSignInPending,
   loadUserData,
@@ -28,12 +31,15 @@ export default class Profile extends Component {
         },
       },
       username: "",
+      pageUsername:"",
       newStatus: "",
       statuses: [],
       statusIndex: 0,
       isLoading: false,
+      isEditing: false,
       docPrivateKey: "",
-      docPublicKey: ""
+      docPublicKey: "",
+      pageInfo: null
     };
   }
 
@@ -41,7 +47,20 @@ export default class Profile extends Component {
     const { handleSignOut } = this.props;
     const { person } = this.state;
     const { username } = this.state;
-   
+    var handleNewPageSubmit = (pageInfo) =>{
+      let docOptions = {
+        encrypt: false
+      };
+      this.setState({isLoading: true});
+      putFile('pageInfo.json', JSON.stringify(pageInfo), docOptions)
+        .then(() => {
+          this.setState({pageInfo: pageInfo});
+        })
+        .finally(()=>{
+          this.setState({isLoading: false,isEditing:false});
+        });
+    }
+
     return (
       !isSignInPending() && person ?
       <div className="container">
@@ -68,45 +87,29 @@ export default class Profile extends Component {
                   }
                 </div>
               </div>
+              {
+                this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
+                <button
+                className="btn btn-primary btn-lg pull-left"
+                onClick={e => this.handleEditPage(e)}
+                >
+                Edit Page
+                </button>
+              }
             </div>
-            {this.isLocal() &&
-              <div className="new-status">
-                <div className="col-md-12">
-                  <textarea className="input-status"
-                    value={this.state.newStatus}
-                    onChange={e => this.handleNewStatusChange(e)}
-                    placeholder="What's on your mind?"
-                  />
-                </div>
-                <div className="col-md-12 text-right">
-                  <button
-                    className="btn btn-primary btn-lg"
-                    onClick={e => this.handleNewStatusSubmit(e)}
-                  >
-                    Submit
-                  </button>
-                </div>
-                <div className="col-md-12 text-right">
-                  <button
-                    className="btn btn-primary btn-lg"
-                    onClick={e => this.handleReadFile(e)}
-                  >
-                    Read File
-                  </button>
-                </div>
-                <div className="col-md-12 text-right">
-                  <Payment address={"0x581ab454E80A62DB25E4BAa324fDAa8bDd1b8C5A"} amount={0.1}></Payment>
-                </div>
-              </div>
+            {this.showNewPost() && 
+              <NewPost handleSavePage={handleNewPageSubmit}/>
             }
-            <div className="col-md-12 statuses">
+            {this.showPageEdit() &&
+              <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit}/>
+            }
+            
             {this.state.isLoading && <span>Loading...</span>}
-            {this.state.statuses.map((status) => (
-                <div className="status" key={status.id}>
-                  {status.text}
-                </div>
-                )
-            )}
+            <div className="col-md-12 statuses">
+            {
+              !this.showPageEdit() && 
+              <PublicList pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername}/>
+            }
             </div>
           </div>
         </div>
@@ -128,80 +131,18 @@ export default class Profile extends Component {
   handleNewStatusChange(event) {
     this.setState({newStatus: event.target.value})
   }
- 
-  
 
-  handleNewStatusSubmit(event) {
-    this.state.docPrivateKey = makeECPrivateKey();
-    console.log("generated private key:"+this.state.docPrivateKey);
-    this.state.docPublicKey = getPublicKeyFromPrivate(this.state.docPrivateKey);
-    console.log("generated public key:"+this.state.docPublicKey);
-    let encryptOptions = {
-      publicKey: this.state.docPublicKey
-    };
-    var docEncryptedContent = encryptContent(JSON.stringify(this.state.newStatus), encryptOptions)
-    let docOptions = {
-      encrypt: false
-    };
-    putFile('testDocEncrypted.json', docEncryptedContent, docOptions)
-      .then(() => {
-        console.log("saved 1");
-        var docPrivateKeyEncryptedContent = 
-          encryptContent(this.state.docPrivateKey, 
-            {
-              publicKey: '033ddb29f4af473bc22c66510c58b1272525fcadc3b2f5b5d5841bffe498ea95fb'
-            }
-          );
-        
-        putFile('olamundo2.id.blockstack.json', docPrivateKeyEncryptedContent, docOptions).then(()=> {console.log("saved 2");});
-      });
-  }
-
-  handleReadFile(e){
-    
-    const options = { username: 'olamundo.id.blockstack', decrypt: false }
-    getFile('olamundo2.id.blockstack.json', options).then(
-      (file1)=>{
-        var decryptedFile = decryptContent(file1, {privateKey:"ccdfa7d3449c8d64bb923cbe5d94fe48daba7bce10010816f9f25fcd6267eaa9"});
-        getFile('testDocEncrypted.json', options)
-      .then((file) => {
-        let decryptOptions = {
-          privateKey: decryptedFile
-        }
-        console.log("read private key:"+decryptOptions.privateKey);
-        var content = decryptContent(file, decryptOptions);
-        console.log("Conteudo: "+content);
-      });
-      }
-    )
+  handleEditPage(event){
+    this.setState({isEditing: true})
   }
 
   fetchData() {
-    this.setState({ isLoading: true })
-   if (this.isLocal()) {
-    listFiles(file => {console.log("File: "+file);
-    return true;});
-
-     const options = { decrypt: false }
-     getFile('statuses2.json', options)
-       .then((file) => {
-         var statuses = JSON.parse(file || '[]')
-         this.setState({
-           person: new Person(loadUserData().profile),
-           username: loadUserData().username,
-           statusIndex: statuses.length,
-           statuses: statuses,
-         })
-       })
-       .finally(() => {
-         this.setState({ isLoading: false })
-       })
-   } else {
-     const username = this.props.match.params.username
-
+    this.setState({ isLoading: true });
+    var username = this.state.username;
+    if (!this.isLocal()) {
+     username = this.props.match.params.username
      lookupProfile(username)
        .then((profile) => {
-         console.log("Profile: "+profile);
          this.setState({
            person: new Person(profile),
            username: username
@@ -210,26 +151,42 @@ export default class Profile extends Component {
        .catch((error) => {
          console.log('could not resolve profile')
        })
-    
+    }
+    this.setState({ pageUsername: username });
+    this.getPageInfo(username);
+  }
+
+  getPageInfo(username){
     const options = { username: username, decrypt: false }
-    getFile('statuses2.json', options)
+    getFile('pageInfo.json', options)
       .then((file) => {
-        var statuses = JSON.parse(file || '[]')
+        var pageInfo = JSON.parse(file)
         this.setState({
-          statusIndex: statuses.length,
-          statuses: statuses
+          pageInfo: pageInfo
         })
-      })
-      .catch((error) => {
-        console.log('could not fetch statuses')
       })
       .finally(() => {
         this.setState({ isLoading: false })
       })
-    }
   }
 
   isLocal() {
     return this.props.match.params.username ? false : true
+  }
+
+  isLocalAndHasConfiguredPage() {
+    return this.isLocal() && this.state.pageInfo != null ? true : false
+  }
+
+  isLocalAndHasNotConfiguredPage() {
+    return this.isLocal() && this.state.pageInfo == null ? true : false
+  }
+
+  showNewPost(){
+    return !this.state.isLoading && this.isLocalAndHasConfiguredPage() && !this.state.isEditing;
+  }
+
+  showPageEdit(){
+    return !this.state.isLoading && (this.isLocalAndHasNotConfiguredPage() || this.state.isEditing);
   }
 }

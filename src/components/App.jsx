@@ -2,6 +2,7 @@ import React, { Component, Link } from 'react';
 import { Switch, Route } from 'react-router-dom'
 import Profile from './Profile.jsx';
 import Signin from './Signin.jsx';
+
 import {
   isSignInPending,
   isUserSignedIn,
@@ -9,6 +10,7 @@ import {
   handlePendingSignIn,
   signUserOut,
 } from 'blockstack';
+import PublicList from './PublicList.jsx';
 
 export default class App extends Component {
 
@@ -35,6 +37,7 @@ export default class App extends Component {
             <Signin handleSignIn={ this.handleSignIn } />
             : 
             <Switch>
+              <Route path='/public-list' component={PublicList} />
               <Route
                 path='/:username?'
                 render={

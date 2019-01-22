@@ -48,7 +48,7 @@ class Payment extends Component {
           !failed && !this.props.depositFetched && this.state.paying && <span className="btn btn-lg">Waiting confirm...</span>
         }
         {
-          !failed && this.props.depositFetched && <span className="btn btn-lg">Subscription confirmed!</span>
+          !failed && this.props.depositFetched && this.props.confirmed() && <span className="btn btn-lg">Subscription confirmed!</span>
         }
         {
           failed && <span className="btn btn-lg">{error}</span>
@@ -60,6 +60,7 @@ class Payment extends Component {
 
 Payment.propTypes = {
   deposit: PropTypes.func.isRequired,
+  confirmed: PropTypes.func.isRequired,
   depositFetched: PropTypes.bool.isRequired,
   depositId: PropTypes.string,
   address: PropTypes.string.isRequired,

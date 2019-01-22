@@ -8,11 +8,12 @@ class AuthenticationController {
         if (!json) throw new Error(400, 'no body in request');
         if (!json.username) throw new Error(400, 'username is mandatory');
         if (!json.jwt) throw new Error(400, 'jwt is mandatory');
+        if (!json.address) throw new Error(400, 'address is mandatory');
     }
 
     storeJwt(json, cb) {
         this.valid(json);
-        new Authentication(json.username, json.jwt).getAuthenticationResult(cb);
+        new Authentication(json.username, json.jwt, json.address).getAuthenticationResult(cb);
     }
 }
 

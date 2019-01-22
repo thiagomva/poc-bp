@@ -17,8 +17,8 @@ class Subscribers {
             if (fs.existsSync('./' + jwtStoreName)) {
                 content = fs.readFileSync('./' + jwtStoreName);
                 var jsonFile = JSON.parse(content);
-                if(jsonFile[this.username]) {
-                    var userJwt = jsonFile[this.username];
+                if(jsonFile[this.username] && jsonFile[this.username].jwt && jsonFile[this.username].address) {
+                    var userJwt = jsonFile[this.username].jwt;
                     console.log(userJwt);
                     //TODO Do stuff (save docs etc using jwt)
                     //Blockstack.getFile(...); //autocomplete doesn't work, members and methods generated dynamically

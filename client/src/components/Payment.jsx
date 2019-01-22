@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import isEmpty from 'lodash/isEmpty';
 import { deposit } from '../web3/DepositActions';
+import { ethereum_network } from '../../config';
 
 class Payment extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class Payment extends Component {
       error = "Account unavailable!";
     }
 
-    if (!failed && this.props.network_id && this.props.network_id !== "4") {
+    if (!failed && this.props.network_id && this.props.network_id !== ethereum_network) {
       failed = true;
       error = "Ethereum network must be Rinkeby!";
     }
@@ -47,7 +48,7 @@ class Payment extends Component {
           !failed && !this.props.depositFetched && this.state.paying && <span className="btn btn-lg">Waiting confirm...</span>
         }
         {
-          !failed && this.props.depositFetched && <span className="btn btn-lg">Subscription confirmed!</span>
+          !failed && this.props.depositFetched && this.props.confirmed() && <span className="btn btn-lg">Subscription confirmed!</span>
         }
         {
           failed && <span className="btn btn-lg">{error}</span>
@@ -59,6 +60,7 @@ class Payment extends Component {
 
 Payment.propTypes = {
   deposit: PropTypes.func.isRequired,
+  confirmed: PropTypes.func.isRequired,
   depositFetched: PropTypes.bool.isRequired,
   depositId: PropTypes.string,
   address: PropTypes.string.isRequired,

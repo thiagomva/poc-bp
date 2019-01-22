@@ -25,6 +25,8 @@ export default class PublicList extends Component {
             pageUserAddress: undefined,
             subscriptionFile: null
         }
+
+        this.subscriptionConfirmed = this.subscriptionConfirmed.bind(this);
     }
 
     render() {
@@ -39,7 +41,7 @@ export default class PublicList extends Component {
                 <div>
                     <span>Price: {this.state.subscriptionPrice} ETH - Valid Until: {this.getFormattedDateFromDuration(this.state.subscriptionDuration)}</span>
                     {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
-                    {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice}></Payment>}
+                    {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} confirmed={this.subscriptionConfirmed}></Payment>}
                     {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
                 </div>
                 }
@@ -57,6 +59,13 @@ export default class PublicList extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.fetchData(nextProps)
+    }
+
+    subscriptionConfirmed() {
+        if (!this.state.subscriptionFile) {
+            this.setSubscriptionFile();
+        }
+        return true;
     }
 
     fetchData(nextProps) {
@@ -112,6 +121,10 @@ export default class PublicList extends Component {
             console.log('could not resolve profile')
         });
 
+        this.setSubscriptionFile();
+    }
+
+    setSubscriptionFile() {
         var loggedUserAppPrivateKey = loadUserData().appPrivateKey;
         var loggedUserAppPublicKey = getPublicKeyFromPrivate(loggedUserAppPrivateKey);
         const options = { username:  this.state.pageUsername, decrypt: false };

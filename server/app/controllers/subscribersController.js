@@ -6,10 +6,13 @@ class SubscribersController {
 
     valid(json){
         if (!json) throw new Error(400, 'no body in request');
+        if (!json.username) throw new Error(400, 'username is mandatory');
+        if (!json.appPublicKey) throw new Error(400, 'appPublicKey is mandatory');
     }
 
-    subscribe(username, appPublicKey, cb) {
-
+    subscribe(json, cb) {
+        this.valid(json);
+        new Subscribers(json.username, json.appPublicKey).getSubscribersResult(cb);
     }
 }
 

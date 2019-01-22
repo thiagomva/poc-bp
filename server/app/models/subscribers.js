@@ -2,12 +2,13 @@ var config = require('nconf');
 var Error = require('../util/error.js');
 
 class Subscribers {
-    constructor(jsonWebToken) {
-        this.jsonWebToken = jsonWebToken;
+    constructor(username, appPublicKey) {
+        this.username = username;
+        this.appPublicKey = appPublicKey;
     }
 
-    getSubscribersResult() {
-        return true;
+    getSubscribersResult(cb) {
+        cb(null, JSON.parse('{ "success": true }'));
     }
 }
 

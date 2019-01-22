@@ -35,28 +35,31 @@ export default class PublicList extends Component {
         );
     }
 
-    componentDidMount() {
-        this.fetchData()
+    componentWillReceiveProps(nextProps) {
+        this.fetchData(nextProps)
     }
 
-    fetchData() {
-        this.setState({ isLoading: true })
-        if (this.useDummy()) {
-            this.getDummyData().then((data) => {
-                this.setState(
-                    {
-                        pageName: data.pageName,
-                        pageDescription: data.pageDescription,
-                        subscriptionPrice: data.subscriptionPrice,
-                        subscriptionDuration: data.subscriptionDuration,
-                        files: data.files
-                    }
-                );
-            })
-            .finally(() => {
-                this.setState({ isLoading: false })
-              })
+    fetchData(nextProps) {
+        if(nextProps.pageInfo != null){
+            this.setState(
+                {
+                    pageName: nextProps.pageInfo.pageName,
+                    pageDescription: nextProps.pageInfo.pageDescription,
+                    subscriptionPrice: nextProps.pageInfo.subscriptionPrice,
+                    subscriptionDuration: nextProps.pageInfo.subscriptionDuration,
+                    files: nextProps.pageInfo.files
+                }
+            );
         }
+        // this.setState({ isLoading: true })
+        // if (this.useDummy()) {
+        //     this.getDummyData().then((data) => {
+                
+        //     })
+        //     .finally(() => {
+        //         this.setState({ isLoading: false })
+        //       })
+        // }
     }
 
     getFormattedDateFromDuration(duration) {

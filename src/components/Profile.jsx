@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PageEdit from './PageEdit.jsx';
 import NewPost from './NewPost.jsx';
+import PublicList from './PublicList.jsx';
 
 import {
   isSignInPending,
@@ -101,14 +102,13 @@ export default class Profile extends Component {
             {this.showPageEdit() &&
               <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit}/>
             }
-            <div className="col-md-12 statuses">
+            
             {this.state.isLoading && <span>Loading...</span>}
-            {this.state.statuses.map((status) => (
-                <div className="status" key={status.id}>
-                  {status.text}
-                </div>
-                )
-            )}
+            <div className="col-md-12 statuses">
+            {
+              !this.showPageEdit() && 
+              <PublicList pageInfo={this.state.pageInfo}/>
+            }
             </div>
           </div>
         </div>
@@ -129,6 +129,10 @@ export default class Profile extends Component {
 
   handleNewStatusChange(event) {
     this.setState({newStatus: event.target.value})
+  }
+
+  handleEditPage(event){
+    this.setState({isEditing: true})
   }
 
   handleNewStatusSubmit(event) {

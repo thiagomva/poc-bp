@@ -3,6 +3,7 @@ import {
   loadUserData,
   Person,
   makeV1GaiaAuthToken,
+  lookupProfile
 } from 'blockstack';
 
 export default class PageEdit extends Component {
@@ -24,7 +25,8 @@ export default class PageEdit extends Component {
       newSubscriptionPrice:undefined,
       newSubscriptionDuration: undefined,
       isLoading: false,
-      pageInfo: null
+      pageInfo: null,
+      hasEthereumAddress: false
     };
   }
 
@@ -78,7 +80,7 @@ export default class PageEdit extends Component {
       username: loadUserData().username
     })
 
-    if(this.props.pageInfo){
+    if (this.props.pageInfo) {
       this.setState({
         newPageName : this.props.pageInfo.pageName,
         newPageDescription : this.props.pageInfo.pageDescription,
@@ -88,6 +90,31 @@ export default class PageEdit extends Component {
     }
     this.saveJwtToken();
 
+
+    lookupProfile(loadUserData().username)
+    .then((profile) => {
+      var owner = new Person(profile).toJSON();
+      var hasEthereumAddress = false;
+      if (owner && owner.profile && owner.profile.account) {
+        for (var i = 0; i < owner.profile.account.length; ++i) {
+          if (owner.profile.account[i].service == "ethereum") {
+            hasEthereumAddress = true;
+            break;
+          }
+        }
+      }
+      this.setState(
+        {
+          hasEthereumAddress: hasEthereumAddress
+        }
+      );
+      if (!hasEthereumAddress) {
+        alert('You should set an Ethereum Wallet on your Blockstack account for create a page');
+      }
+    })
+    .catch((error) => {
+        console.log('could not resolve profile')
+    });
   }
 
   componentDidMount() {
@@ -110,16 +137,18 @@ export default class PageEdit extends Component {
   }
 
   handleNewPageSubmit(event) {
-    let pageInfo = {
-      pageName: this.state.newPageName,
-      pageDescription: this.state.newPageDescription,
-      subscriptionPrice: parseFloat(this.state.newSubscriptionPrice),
-      subscriptionDuration: parseInt(this.state.newSubscriptionDuration),
-      files: this.props.pageInfo ? this.props.pageInfo.files : {}
-    };
-
-    
-    this.props.handleSavePage(pageInfo);
+    if (!this.state.hasEthereumAddress) {
+      alert('You should set an Ethereum address on your Blockstack account for create a page');
+    } else {
+      let pageInfo = {
+        pageName: this.state.newPageName,
+        pageDescription: this.state.newPageDescription,
+        subscriptionPrice: parseFloat(this.state.newSubscriptionPrice),
+        subscriptionDuration: parseInt(this.state.newSubscriptionDuration),
+        files: this.props.pageInfo ? this.props.pageInfo.files : {}
+      };
+      this.props.handleSavePage(pageInfo);
+    }
   }
 
   saveJwtToken() {

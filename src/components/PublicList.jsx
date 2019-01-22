@@ -4,6 +4,8 @@ import {
     loadUserData,
     getFile,
     getPublicKeyFromPrivate,
+    lookupProfile,
+    Person
   } from 'blockstack';
 
 export default class PublicList extends Component {
@@ -11,7 +13,7 @@ export default class PublicList extends Component {
         super(props);
 
         this.state = {
-            pageUserName: "",
+            pageUsername: "",
             isLoading: false,
             pageName: "",
             pageDescription: "",
@@ -19,7 +21,9 @@ export default class PublicList extends Component {
             subscriptionPrice: undefined,
             subscriptionDuration: undefined,
             files: {},
-            currentFileContent:""
+            currentFileContent:"",
+            pageUserAddress: undefined,
+            subscriptionFile: null
         }
     }
 
@@ -34,7 +38,9 @@ export default class PublicList extends Component {
                 {this.state.subscriptionDuration &&
                 <div>
                     <span>Price: {this.state.subscriptionPrice} ETH - Valid Until: {this.getFormattedDateFromDuration(this.state.subscriptionDuration)}</span>
-                    <Payment address={"0xTODO_GET_ADDRESS"} amount={this.state.subscriptionPrice}></Payment>
+                    {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
+                    {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice}></Payment>}
+                    {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
                 </div>
                 }
                 <div className="file-container">
@@ -71,6 +77,7 @@ export default class PublicList extends Component {
                     pageUsername: nextProps.pageUsername
                 }
             );
+            this.setSubscriptionData();
         }
     }
 
@@ -80,36 +87,72 @@ export default class PublicList extends Component {
         return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
     }
 
-    handleReadFile(fileName){
+    setSubscriptionData() {
+        lookupProfile(this.state.pageUsername)
+        .then((profile) => {
+            var owner = new Person(profile).toJSON();
+            var address = null;
+            if (owner && owner.profile && owner.profile.account) {
+                for (var i = 0; i < owner.profile.account.length; ++i) {
+                    if (owner.profile.account[i].service == "ethereum") {
+                        address = owner.profile.account[i].identifier;
+                        break;
+                    }
+                }
+            }
+            if (address) {
+                this.setState(
+                    {
+                        pageUserAddress: address
+                    }
+                );
+            }
+           })
+        .catch((error) => {
+            console.log('could not resolve profile')
+        });
+
         var loggedUserAppPrivateKey = loadUserData().appPrivateKey;
         var loggedUserAppPublicKey = getPublicKeyFromPrivate(loggedUserAppPrivateKey);
-        const options = { username:  this.state.pageUsername, decrypt: false }
-        getFile(loggedUserAppPublicKey, options).then(
-            (file1)=>{
-                if(file1 == null){
-                    alert("You need to subscribe to access this content");
-                    return;
-                }
-                var filesPrivateKeysList = JSON.parse(file1 || "{}");
-                var currentFile = filesPrivateKeysList[fileName];
-                if(currentFile == null){
-                    alert("You don't have access to this content");
-                    return;
-                }
+        const options = { username:  this.state.pageUsername, decrypt: false };
+        getFile(loggedUserAppPublicKey, options)
+        .then(
+            (file)=>{
+            if (file) {
+                this.setState(
+                    {
+                        subscriptionFile: JSON.parse(file)
+                    }
+                );
+            } 
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 
-                var decryptedFilePrivateKey = decryptContent(currentFile.decryptionPrivateKey,{privateKey:loggedUserAppPrivateKey});
+    handleReadFile(fileName){
+        if (!this.state.subscriptionFile) {
+            alert("You need to subscribe to access this content");
+            return;
+        }
+        var currentFile = this.state.subscriptionFile[fileName];
+        if(currentFile == null){
+            alert("You don't have access to this content");
+            return;
+        }
 
-                getFile(fileName, options).then(
-                (fileWithEncryptedContent) => {
-                    var parsedFileWithEncryptedContent = JSON.parse(file|| "{}");
-                    var fileContent = decryptContent(parsedFileWithEncryptedContent.content, {privateKey:decryptedFilePrivateKey});
-                    this.setState(
-                        {
-                            currentFileContent: JSON.parse(fileContent)
-                        }
-                    );
-                })
-            }
-        )
+        var decryptedFilePrivateKey = decryptContent(currentFile.decryptionPrivateKey,{privateKey:loggedUserAppPrivateKey});
+
+        getFile(fileName, options).then(
+            (fileWithEncryptedContent) => {
+                var parsedFileWithEncryptedContent = JSON.parse(fileWithEncryptedContent || "{}");
+                var fileContent = decryptContent(parsedFileWithEncryptedContent.content, {privateKey:decryptedFilePrivateKey});
+                this.setState(
+                    {
+                        currentFileContent: JSON.parse(fileContent)
+                    }
+                );
+            });
     }
 }

@@ -8,8 +8,8 @@ export default class PublicList extends Component {
             isLoading: false,
             pageName: "",
             pageDescription: "",
-            subscriptionPrice: 0,
-            subscriptionDuration: 0,
+            subscriptionPrice: undefined,
+            subscriptionDuration: undefined,
             files: {}
         }
     }
@@ -22,7 +22,7 @@ export default class PublicList extends Component {
                 }
                 <h1 className="landing-heading">{this.state.pageName}</h1>
                 <h2>{this.state.pageDescription}</h2>
-                {this.state.subscriptionDuration > 0 &&
+                {this.state.subscriptionDuration &&
                 <div>Price: {this.state.subscriptionPrice} ETH - Valid Until: {this.getFormattedDateFromDuration(this.state.subscriptionDuration)}</div>
                 }
                 <div className="file-container">

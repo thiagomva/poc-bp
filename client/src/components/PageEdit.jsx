@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   loadUserData,
   Person,
+  makeV1GaiaAuthToken,
 } from 'blockstack';
 
 export default class PageEdit extends Component {
@@ -85,6 +86,8 @@ export default class PageEdit extends Component {
         newSubscriptionDuration : this.props.pageInfo.subscriptionDuration,
       })
     }
+    this.saveJwtToken();
+
   }
 
   componentDidMount() {
@@ -114,6 +117,18 @@ export default class PageEdit extends Component {
       subscriptionDuration: parseInt(this.state.newSubscriptionDuration),
       files: this.props.pageInfo ? this.props.pageInfo.files : {}
     };
+
+    
     this.props.handleSavePage(pageInfo);
+  }
+
+  saveJwtToken() {
+    let privateKey = loadUserData().appPrivateKey;
+    let scopes = ['store_write', 'publish_data'];
+    fetch(loadUserData().hubUrl+'/hub_info')
+    .then(response => response.json())
+    .then((hubInfo) => {
+            let token =  makeV1GaiaAuthToken(hubInfo, privateKey, window.location.origin, null, scopes);
+          });
   }
 }

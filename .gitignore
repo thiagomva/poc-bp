@@ -3,3 +3,4 @@
 .vs/*
 /.vscode
 /.vs
+server/jwtStore.json

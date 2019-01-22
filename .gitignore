@@ -1,0 +1,7 @@
+
+.vs/poc-bp/v15/.suo
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+.vs/slnx.sqlite
+*.sqlite
+server/jwtStore.json

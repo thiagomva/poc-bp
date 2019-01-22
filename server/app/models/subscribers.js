@@ -19,7 +19,7 @@ class Subscribers {
                 if(jsonFile[this.username]) {
                     var userJwt = jsonFile[this.username];
                     console.log(userJwt);
-                    //Do stuff
+                    //TODO Do stuff (save docs etc using jwt)
                     cb(null, JSON.parse('{ "success": true }'));
                 }
                 else {

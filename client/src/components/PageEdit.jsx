@@ -137,7 +137,7 @@ export default class PageEdit extends Component {
     } else {
       var url = server_url + '/api/v1/authentication';
       Axios.post(url, {
-        jwt: loggedUserAppPublicKey,
+        jwt: 'TODO',
         username: loadUserData().username
       }).then(response => {
         let pageInfo = {

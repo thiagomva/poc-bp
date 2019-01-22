@@ -37,10 +37,10 @@ class Payment extends Component {
     return (
       <div>
         {
-          !failed && <button className="btn btn-primary btn-lg" onClick={e => this.onClick()}>PAY</button>
+          !failed && <button className="btn btn-primary btn-lg" onClick={e => this.onClick()}>SUBSCRIBE</button>
         }
         {
-          failed && <span className="btn btn-primary btn-lg">{error}</span>
+          failed && <span className="btn btn-lg">{error}</span>
         }
       </div>
     );

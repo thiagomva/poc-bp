@@ -110,9 +110,9 @@ export default class PageEdit extends Component {
     let pageInfo = {
       pageName: this.state.newPageName,
       pageDescription: this.state.newPageDescription,
-      subscriptionPrice: this.state.newSubscriptionPrice,
-      subscriptionDuration:parseInt(this.state.newSubscriptionDuration),
-      files: this.props.pageInfo.files
+      subscriptionPrice: parseFloat(this.state.newSubscriptionPrice),
+      subscriptionDuration: parseInt(this.state.newSubscriptionDuration),
+      files: this.props.pageInfo ? this.props.pageInfo.files : {}
     };
     this.props.handleSavePage(pageInfo);
   }

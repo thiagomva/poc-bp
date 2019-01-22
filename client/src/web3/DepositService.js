@@ -3,7 +3,7 @@ import {
   loadUserData
 } from 'blockstack';
 import Axios from 'axios';
-import { server_url } from '../../config';
+import { server_url } from '../config';
 
 export const deposit = (pageUserName, address, ethAmount) => {
     return new Promise((resolve, reject) => {

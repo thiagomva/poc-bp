@@ -100,11 +100,7 @@ export default class PageEdit extends Component {
           }
         }
       }
-      this.setState(
-        {
-          hasEthereumAddress: hasEthereumAddress
-        }
-      );
+      this.setState({ hasEthereumAddress: hasEthereumAddress });
       if (!hasEthereumAddress) {
         alert('You should set an Ethereum Wallet on your Blockstack account for create a page');
       }

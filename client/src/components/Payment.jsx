@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import isEmpty from 'lodash/isEmpty';
 import { deposit } from '../web3/DepositActions';
-import { ethereum_network } from '../../config';
+import { ethereum_network } from '../config';
 
 class Payment extends Component {
   constructor(props) {

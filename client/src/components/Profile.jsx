@@ -128,10 +128,7 @@ export default class Profile extends Component {
   }
 
   componentDidMount() {
-    this.fetchData()
-
-    
-    this.saveJwtToken();
+    this.fetchData();
   }
 
   handleNewStatusChange(event) {
@@ -194,40 +191,5 @@ export default class Profile extends Component {
 
   showPageEdit(){
     return !this.state.isLoading && (this.isLocalAndHasNotConfiguredPage() || this.state.isEditing);
-  }
-
-  saveJwtToken() {
-    let privateKey = loadUserData().appPrivateKey;
-    let scopes = ['store_write', 'publish_data'];
-
-    scopes = [
-      {
-        scope: 'putFilePrefix',
-        domain: 'bitPatron/'
-      }
-    ]
-    let hubUrl = loadUserData().hubUrl;
-    fetch(hubUrl+'/hub_info')
-    .then(response => response.json())
-    .then((hubInfo) => {
-            let token =  makeV1GaiaAuthToken(hubInfo, privateKey, hubUrl, null, scopes);
-            this.writeUsingJwt(token)
-          });
-  }
-
-  writeUsingJwt(){
-      let jwtToken = "v1:eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJnYWlhQ2hhbGxlbmdlIjoiW1wiZ2FpYWh1YlwiLFwiMjAxOVwiLFwic3RvcmFnZTIuYmxvY2tzdGFjay5vcmdcIixcImJsb2Nrc3RhY2tfc3RvcmFnZV9wbGVhc2Vfc2lnblwiXSIsImh1YlVybCI6Imh0dHBzOi8vaHViLmJsb2Nrc3RhY2sub3JnIiwiaXNzIjoiMDNkYTdlODUxMGFiZWUxMjRlOTA2OGUyMDA4ZmUxYWRlM2FiYmI3ZTViM2U3ZDNmODhkY2EwMjNmYzg3ODJmMDU3Iiwic2FsdCI6IjEyMjY2YzZmYmRmZGY0MTQ3ZWM2ODkxZmI4ZGE1NzJmIiwiYXNzb2NpYXRpb25Ub2tlbiI6bnVsbCwic2NvcGVzIjpbeyJzY29wZSI6InB1dEZpbGVQcmVmaXgiLCJkb21haW4iOiJiaXRQYXRyb24vIn1dfQ.OLz3kgIOFBS-6XwacLnuTwiUCFDQ82HjSw7OablnYy_G9pz2e11KuuLMV4vo8K_vpk30VXOQgpOQ89ZZm9EsfQ";
-      //jwtToken = "v1:eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJnYWlhQ2hhbGxlbmdlIjoiW1wiZ2FpYWh1YlwiLFwiMjAxOVwiLFwic3RvcmFnZTIuYmxvY2tzdGFjay5vcmdcIixcImJsb2Nrc3RhY2tfc3RvcmFnZV9wbGVhc2Vfc2lnblwiXSIsImh1YlVybCI6Imh0dHBzOi8vaHViLmJsb2Nrc3RhY2sub3JnIiwiaXNzIjoiMDNkYTdlODUxMGFiZWUxMjRlOTA2OGUyMDA4ZmUxYWRlM2FiYmI3ZTViM2U3ZDNmODhkY2EwMjNmYzg3ODJmMDU3Iiwic2FsdCI6IjljYTY4NzNiN2YyOTQxNzMwN2Y5MTE2MmNjMzc1ODI0In0.Y2l6Pnr8o4yQznPNp2rB1eWuDPLawXODOZ9V08z4zIc_MU804-G_2MUtzALyHAyZ7WpoOffxMzWXo6l_0xLVXQ"
-      //jwtToken = "v1:eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJnYWlhQ2hhbGxlbmdlIjoiW1wiZ2FpYWh1YlwiLFwiMjAxOVwiLFwic3RvcmFnZTIuYmxvY2tzdGFjay5vcmdcIixcImJsb2Nrc3RhY2tfc3RvcmFnZV9wbGVhc2Vfc2lnblwiXSIsImh1YlVybCI6Imh0dHBzOi8vaHViLmJsb2Nrc3RhY2sub3JnIiwiaXNzIjoiMDNkYTdlODUxMGFiZWUxMjRlOTA2OGUyMDA4ZmUxYWRlM2FiYmI3ZTViM2U3ZDNmODhkY2EwMjNmYzg3ODJmMDU3Iiwic2FsdCI6IjljYTY4NzNiN2YyOTQxNzMwN2Y5MTE2MmNjMzc1ODI0In0.Y2l6Pnr8o4yQznPNp2rB1eWuDPLawXODOZ9V08z4zIc_MU804-G_2MUtzALyHAyZ7WpoOffxMzWXo6l_0xLVXQ"
-    
-
-    getOrSetLocalGaiaHubConnection().then( hubConfig => {
-        hubConfig.token = jwtToken;
-        hubConfig.address = "1D9RzJwNHhsmaE8j1CdJ4XZYLyzczURXNM"
-        //hubConfig.server = TODO;
-        uploadToGaiaHub('bitPatron/test2.html','<html><body> loaded at: ' + Date.toString() + '</body></html>', hubConfig)
-          .then(res => alert(res));
-      }
-    )
   }
 }

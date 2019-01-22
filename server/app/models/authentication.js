@@ -19,18 +19,15 @@ class Authentication {
                 var jsonFile = JSON.parse(content);
                 jsonFile[this.username] = this.jsonWebToken;
                 stringfiedJson = JSON.stringify(jsonFile);
-                fs.writeFileSync( jwtStoreName, stringfiedJson, "utf8");
             }
             else {
-                stringfiedJson = '{ "' + this.username + '": ' + '"' + this.jsonWebToken + '" }'
-                fs.writeFileSync( jwtStoreName, stringfiedJson, "utf8" );
+                stringfiedJson = '{ "' + this.username + '": ' + '"' + this.jsonWebToken + '" }';
             }
+            fs.writeFileSync( jwtStoreName, stringfiedJson, "utf8" );
             cb(null, JSON.parse(stringfiedJson));
           } catch(err) {
             cb(err)
           }
-
-        return true;
     }
 }
 

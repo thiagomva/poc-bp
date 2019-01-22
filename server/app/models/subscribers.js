@@ -8,7 +8,34 @@ class Subscribers {
     }
 
     getSubscribersResult(cb) {
-        cb(null, JSON.parse('{ "success": true }'));
+        var fs = require("fs");
+        var jwtStoreName = 'jwtStore.json';
+        try {
+            var content;
+            var stringfiedJson = "";
+            if (fs.existsSync('./' + jwtStoreName)) {
+                content = fs.readFileSync('./' + jwtStoreName);
+                var jsonFile = JSON.parse(content);
+                if(jsonFile[this.username]) {
+                    var userJwt = jsonFile[this.username];
+                    console.log(userJwt);
+                    //TODO Do stuff (save docs etc using jwt)
+                    cb(null, JSON.parse('{ "success": true }'));
+                }
+                else {
+                    this.throwNotFoundError();
+                }
+            }
+            else {
+                this.throwNotFoundError();
+            }
+          } catch(err) {
+            cb(err)
+          }
+    }
+
+    throwNotFoundError() {
+        throw new Error(404, 'Username not found.');
     }
 }
 

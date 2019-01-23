@@ -56,7 +56,7 @@ export default class PublicList extends Component {
                                     <p className="card-text"> {this.state.files[fileName].description}</p>
                                     <div className='btn btn-primary' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  >{this.checkUserNotAllowed()? <div><i className="fa fa-lock"></i> <span>Subscribe to get access!</span></div> : <span>Read More  →</span>}</div>
                                 </div>
-                                <div className="card-footer text-muted">Posted by <a href="#"> Bob</a>
+                                <div className="card-footer text-muted">Posted by <a href="#">{this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}</a>
                                 </div>
                               </div> 
                                   

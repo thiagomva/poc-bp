@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PageEdit from './PageEdit.jsx';
 import NewPost from './NewPost.jsx';
 import PublicList from './PublicList.jsx';
+import Topbar from './TopBar.jsx';
 
 import {
   isSignInPending,
@@ -70,62 +71,69 @@ export default class Profile extends Component {
 
     return (
       !isSignInPending() && person ?
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12">
-            <div className="col-md-12 header-section">
-              <div className="avatar-section col-md-8">
-                <div className="">
-                  <h1>
-                    <span>
-                    { 
-                      this.state.isLoading ? "Loading..." :
-                      this.state.pageInfo && this.state.pageInfo.pageName ? 
-                      this.state.pageInfo.pageName : person.name() ? person.name()
-                      : username.split('.')[0]+"'s Page" }</span>&nbsp;&nbsp;
-                    </h1>
-                  <h4>
-                    { this.state.pageInfo && this.state.pageInfo.pageDescription ? this.state.pageInfo.pageDescription : "" }
-                  </h4>
-                </div>
-              </div>
-              <div className="col-md-4">
-              {
-                this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
-                <button
-                className="btn btn-primary btn-lg pull-left"
-                onClick={e => this.handleEditPage(e)}
-                >
-                Edit Page
-                </button>
-              }
-              {this.showNewPost() &&
-                <button
-                className="btn btn-primary btn-lg pull-right"
-                onClick={e => this.handleNewPost(e)}
-                >
-                {this.state.isCreatingPost ? 'Cancel' : 'New Post'}
-                </button>
-              }
-              </div>
-            </div>
+	  <div>
+		<Topbar handleSignOut={handleSignOut} username={username}/>
+		<div className="container">
+			<div className="row">
+			  <div className="col-md-12">
+				<div className="col-md-12 header-section">
+				  <div className="avatar-section col-md-8">
+					<img
+					  src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage }
+					  className="img-rounded avatar"
+					  id="avatar-image"
+					/>
+					<div className="username">
+					  <h1>
+						<span id="heading-name">{ person.name() ? person.name()
+						  : username.split('.')[0]+"'s Page" }</span>
+					  </h1>                  
+					  {this.isLocal() &&
+						<span>
+						  &nbsp;|&nbsp;
+						  <a className="clickable" onClick={ handleSignOut.bind(this) }>(Logout)</a>
+						</span>
+					  }
+					</div>
+				  </div>
+				  <div className="col-md-4">
+				  {
+					this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
+					<button
+					className="btn btn-primary btn-lg pull-left"
+					onClick={e => this.handleEditPage(e)}
+					>
+					Edit Page
+					</button>
+				  }
+				  {this.showNewPost() &&
+					<button
+					className="btn btn-primary btn-lg pull-right"
+					onClick={e => this.handleNewPost(e)}
+					>
+					{this.state.isCreatingPost ? 'Cancel' : 'New Post'}
+					</button>
+				  }
+				  </div>
+				</div>
             
-            {this.showNewPostForm() && 
-              <NewPost handleSavePage={handleNewPageSubmit}/>
-            }
-            {this.showPageEdit() &&
-              <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit}/>
-            }
+				{this.showNewPostForm() && 
+				  <NewPost handleSavePage={handleNewPageSubmit}/>
+				}
+				{this.showPageEdit() &&
+				  <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit}/>
+				}
             
-            {this.state.isLoading && <span>Loading...</span>}
-            <div className="col-md-12 statuses">
-            {
-              !this.showPageEdit() && 
-              <PublicList pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} handleSavePage={handleNewPageSubmit}/>
-            }
-            </div>
-          </div>
-        </div>
+				{this.state.isLoading && <span>Loading...</span>}
+				<div className="col-md-12 statuses">
+				{
+				  !this.showPageEdit() && 
+				  <PublicList pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername}/>
+				}
+				</div>
+			  </div>
+			</div>
+		</div>
       </div> : null
     );
   }

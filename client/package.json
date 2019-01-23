@@ -37,7 +37,7 @@
     "axios": "^0.18.0",
     "babel-preset-es2017": "^6.24.1",
     "blockstack": "^18.2.1",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.1.1",
     "font-awesome": "^4.7.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",

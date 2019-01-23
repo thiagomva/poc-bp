@@ -46,7 +46,8 @@ class Payment extends Component {
     return (
       <div>
         {
-          !failed && !this.state.paying && <button className="btn btn-primary btn-lg" onClick={e => this.onClick(e)}>SUBSCRIBE</button>
+          !failed && !this.state.paying && 
+          <button type="button" className="btn btn-primary btn-lg" onClick={e => this.onClick(e)}>{this.props.amount +" ETH / "+this.props.subscriptionDuration+" DAYS"}</button>
         }
         {
           !failed && !this.props.depositFetched && this.state.paying && <span className="btn btn-lg">Waiting confirm...</span>

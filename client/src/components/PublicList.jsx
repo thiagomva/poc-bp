@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import FroalaView from 'react-froala-wysiwyg';
 import Payment from './Payment.jsx';
 import {
     loadUserData,
@@ -52,8 +53,19 @@ export default class PublicList extends Component {
                     <div key={fileName} className={"file-card" + (this.checkUserNotAllowed() ? " locked" : "")} onClick={e => this.handleReadFile(fileName)}>{this.state.files[fileName].title}</div>
                 ))}
                 </div>
-
-                <div dangerouslySetInnerHTML={{ __html: this.state.currentFileContent }}></div>
+                {this.state.currentFileContent &&
+                <FroalaView
+                model={this.state.currentFileContent}
+                config={{
+                    toolbarButtons: [],
+                    events : {
+                        'froalaEditor.initialized' : function(e, editor) {
+                          editor.edit.off();
+                        }
+                      }
+                  }}
+                />
+                }
             </div>
         );
     }

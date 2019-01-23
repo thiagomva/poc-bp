@@ -31,11 +31,6 @@ export default class NewPost extends Component {
     };
 
     this.handleModelChange = this.handleModelChange.bind(this);
-
-    this.htmlEditorConfig = {
-      placeholderText: "Edit Me",
-      toolbarButtons: ['bold', 'italic', 'underline', 'embedly']
-    }
   }
 
   render() {
@@ -68,7 +63,9 @@ export default class NewPost extends Component {
           tag='textarea'
           config={{
             placeholderText: "Content",
-            toolbarButtons: ['bold', 'italic', 'underline', 'embedly']
+            toolbarButtons: ['bold', 'italic', 'underline', 'color', 'align', 'fontSize', 'insertLink', 'insertImage', 'embedly'],
+            imageInsertButtons: ['imageByURL'],
+            imageUploadRemoteUrls: false
           }}
           model={this.state.newFileContent}
           onModelChange={this.handleModelChange}

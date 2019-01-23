@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Topbar from './Topbar.jsx';
 
 export default class TopBar extends Component {
   constructor(props) {

@@ -40,14 +40,7 @@ export default class PublicList extends Component {
                 <div className="row">
                     <div className="col-md-8">
                             {this.state.isLoading &&
-                            <h1>Loading...</h1>
-                            }
-                            {this.state.subscriptionDuration && 
-                            <div>
-                                {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
-                                {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} confirmed={this.subscriptionConfirmed}></Payment>}
-                                
-                            </div>
+                                <h1>Loading...</h1>
                             }
                             <div className="file-container">
                             {Object.keys(this.state.files).map((fileName) => (<div className="card  mb-4">
@@ -56,7 +49,7 @@ export default class PublicList extends Component {
                                     <p className="card-text"> {this.state.files[fileName].description}</p>
                                     <div className='btn btn-primary' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  >{this.checkUserNotAllowed()? <div><i className="fa fa-lock"></i> <span>Subscribe to get access!</span></div> : <span>Read More  →</span>}</div>
                                 </div>
-                                <div className="card-footer text-muted">Posted by <a href="#"> Bob</a>
+                                <div className="card-footer text-muted">Posted by <a href="#">{this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}</a>
                                 </div>
                               </div> 
                                   
@@ -91,19 +84,22 @@ export default class PublicList extends Component {
                         <h5 className="card-title ">{this.state.pageOwner && this.state.pageOwner.name()}</h5>
                     </div>
                 </div>
-                
-                <div className="card my-4">
-                    <h5 className="card-header">{"Become BitPatron"}</h5>
-                    <div className="card-body">
-                        <div className="row">
-                        <div className="col-lg-12">
-                            {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
-                            {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} subscriptionDuration={this.state.subscriptionDuration} confirmed={this.subscriptionConfirmed}></Payment>}
-                            {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
-                        </div>
+                {this.state.subscriptionDuration && this.state.pageUserAddress && 
+                    this.state.pageUsername != loadUserData().username && 
+                    !this.state.subscriptionFile &&                            
+                    <div className="card my-4">
+                        <h5 className="card-header">{"Become BitPatron"}</h5>
+                        <div className="card-body">
+                            <div className="row">
+                            <div className="col-lg-12">
+                                {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
+                                {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} subscriptionDuration={this.state.subscriptionDuration} confirmed={this.subscriptionConfirmed}></Payment>}
+                                {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
+                            </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
                 </div>
             </div>
         </div>

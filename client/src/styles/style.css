@@ -17,8 +17,8 @@ body {
 .username{margin-left:20px;}
 
 /* Scaffolding */
-.site-wrapper{display:table;width:100%;height:100vh;min-height:100%;}
-.site-wrapper-inner{display:flex;flex-direction:column;justify-content:center;margin-right:auto;margin-left:auto;width:100%;min-height:100vh;}
+.site-wrapper{display:table;width:100%;}
+.site-wrapper-inner{display:flex;flex-direction:column;justify-content:center;margin-right:auto;margin-left:auto;width:100%;}
 .panel-authed{padding:0 0 0 0;}
 
 /* Home button */

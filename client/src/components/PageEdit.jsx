@@ -148,7 +148,8 @@ export default class PageEdit extends Component {
       let privateKey = loadUserData().appPrivateKey;
       let scopes = {
         scope : "putFilePrefix",
-        domain : loadUserData().username.replace('.','')+"bp/"
+        domain : "bp/",
+        appPrivateKey : privateKey
       }
       let hubUrl = loadUserData().hubUrl;
       fetch(hubUrl+'/hub_info')

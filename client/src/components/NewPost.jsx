@@ -155,7 +155,7 @@ export default class NewPost extends Component {
   }
 
   saveFilePrivateKeyToSubscribers(fileInfo){
-    getFile("subscribers.json").then((file)=>{
+    getFile("bp/subscribers.json").then((file)=>{
       var subscribers = JSON.parse(file || "{}");
       for (var key in subscribers){
         if(subscribers[key].expirationDate > new Date().getTime()){

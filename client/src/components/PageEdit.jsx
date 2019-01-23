@@ -32,7 +32,7 @@ export default class PageEdit extends Component {
       newSubscriptionDuration: undefined,
       isLoading: false,
       pageInfo: null,
-      hasEthereumAddress: false
+      hasEthereumAddress: undefined
     };
   }
 
@@ -109,10 +109,10 @@ export default class PageEdit extends Component {
           }
         }
       }
-      this.setState({ hasEthereumAddress: hasEthereumAddress });
-      if (!hasEthereumAddress) {
+      if (!hasEthereumAddress && this.state.hasEthereumAddress != undefined) {
         alert(this.noEthereumWalletWarningMessage);
       }
+      this.setState({ hasEthereumAddress: hasEthereumAddress });
     })
     .catch((error) => {
         console.log('could not resolve profile')

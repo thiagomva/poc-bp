@@ -183,7 +183,7 @@ export default class NewPost extends Component {
     getFile("bp/subscribers.json").then((file)=>{
       var subscribers = JSON.parse(file || "{}");
       for (var key in subscribers){
-        if(subscribers[key].expirationDate > new Date().getTime()){
+        if(Date.parse(subscribers[key].expirationDate) > new Date().getTime()){
           this.saveFilePrivateKeyToSubscriber(fileInfo, key);
         }
       }
@@ -192,14 +192,14 @@ export default class NewPost extends Component {
   }
 
   saveFilePrivateKeyToSubscriber(fileInfo, subscriberPublicKey){
-    getFile('bp/' + subscriberPublicKey, { decrypt: false }).then(
+    getFile('bp/' + subscriberPublicKey + '.json', { decrypt: false }).then(
       (file) => {
-        subscribedFiles = JSON.parse(file || "{}");
+        var subscribedFiles = JSON.parse(file || "{}");
         var encryptedFilePrivateKey = encryptContent(fileInfo.privateKey, {publicKey: subscriberPublicKey});
         subscribedFiles[fileInfo.fileName] = {
           decryptionPrivateKey: encryptedFilePrivateKey
         };
-        putFile('bp/' + subscriberPublicKey, JSON.stringify(subscribedFiles), {encrypt:false}).then();
+        putFile('bp/' + subscriberPublicKey + '.json', JSON.stringify(subscribedFiles), {encrypt:false}).then();
       }
     );
   }

@@ -37,7 +37,7 @@ import style from './styles/style.css';
 ReactDOM.render((
   <Provider store={createAppStore()}>
     <BrowserRouter>
-      <div className="container">
+      <div>
         <Web3Provider />
         <App />
       </div>

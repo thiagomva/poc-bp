@@ -51,6 +51,9 @@ export default class Profile extends Component {
     const { person } = this.state;
     const { username } = this.state;
     var handleNewPageSubmit = (pageInfo) =>{
+      if(!pageInfo.files){
+        pageInfo.files= {};
+      }
       let docOptions = {
         encrypt: false
       };

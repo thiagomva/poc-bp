@@ -77,7 +77,7 @@ export default class PublicList extends Component {
                     pageDescription: nextProps.pageInfo.pageDescription,
                     subscriptionPrice: nextProps.pageInfo.subscriptionPrice,
                     subscriptionDuration: nextProps.pageInfo.subscriptionDuration,
-                    files: nextProps.pageInfo.files
+                    files: nextProps.pageInfo.files ? nextProps.pageInfo.files : {}
                 }
             );
         }

@@ -78,23 +78,19 @@ export default class Profile extends Component {
 			  <div className="col-md-12">
 				<div className="col-md-12 header-section">
 				  <div className="avatar-section col-md-8">
-					<img
-					  src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage }
-					  className="img-rounded avatar"
-					  id="avatar-image"
-					/>
-					<div className="username">
-					  <h1>
-						<span id="heading-name">{ person.name() ? person.name()
-						  : username.split('.')[0]+"'s Page" }</span>
-					  </h1>                  
-					  {this.isLocal() &&
-						<span>
-						  &nbsp;|&nbsp;
-						  <a className="clickable" onClick={ handleSignOut.bind(this) }>(Logout)</a>
-						</span>
-					  }
-					</div>
+					  <div className="">
+                <h1>
+                  <span>
+                  { 
+                    this.state.isLoading ? "Loading..." :
+                    this.state.pageInfo && this.state.pageInfo.pageName ? 
+                    this.state.pageInfo.pageName : person.name() ? person.name()
+                    : username.split('.')[0]+"'s Page" }</span>&nbsp;&nbsp;
+                  </h1>
+                <h4>
+                  { this.state.pageInfo && this.state.pageInfo.pageDescription ? this.state.pageInfo.pageDescription : "" }
+                </h4>
+              </div>
 				  </div>
 				  <div className="col-md-4">
 				  {

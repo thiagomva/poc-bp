@@ -57,7 +57,7 @@ export default class PublicList extends Component {
                 <FroalaView
                 model={this.state.currentFileContent}
                 config={{
-                    toolbarButtons: ['|'],
+                    toolbarButtons: [],
                     events : {
                         'froalaEditor.initialized' : function(e, editor) {
                           editor.edit.off();

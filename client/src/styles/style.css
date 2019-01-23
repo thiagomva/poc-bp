@@ -39,7 +39,7 @@ input, textarea{color:#000;padding:10px;}
 
 /* Files */
 
-.post-container{padding: 5px 15px 10px 15px ; width: 50%; text-align: left; border: 1px lightslategrey solid; border-width: 1px 0 0 1px; margin-bottom: 15px}
+.post-container{padding: 5px 15px 10px 15px ; width: 90%; text-align: left; border: 1px solid rgba(0,0,0,.125); border-width: 1px 0 0 1px; margin-bottom: 15px}
 .post-title{ text-align: left}
 .post-description{ text-align: left;}
 .read-subscribe-btn{ margin: 60px 0 0 0;text-align: center; background-color: dodgerblue;color: white;height: 40px;padding: 9px;width: 200px; cursor: pointer;}

@@ -94,7 +94,7 @@ export default class Profile extends Component {
                   }
                 </div>
               </div>
-              <div className="col-md-8">
+              <div className="col-md-7">
               {
                 this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
                 <button

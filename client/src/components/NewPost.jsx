@@ -68,7 +68,8 @@ export default class NewPost extends Component {
           tag='textarea'
           config={{
             placeholderText: "Content",
-            toolbarButtons: ['bold', 'italic', 'underline', 'embedly']
+            toolbarButtons: ['bold', 'italic', 'underline', 'color', 'align', 'fontSize', 'insertLink', 'insertImage', 'embedly'],
+            imageInsertButtons: ['imageByURL']
           }}
           model={this.state.newFileContent}
           onModelChange={this.handleModelChange}

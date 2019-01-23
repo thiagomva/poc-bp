@@ -50,17 +50,17 @@ export default class PublicList extends Component {
                             }
                             <div className="file-container">
                             {Object.keys(this.state.files).map((fileName) => (
-                                <div key={fileName} className="post-container">
-                                    <h3 className="post-title"> {this.state.files[fileName].title}</h3>
-                                    <span className="post-description"> {this.state.files[fileName].description}</span>
-                                    <div className='read-subscribe-btn' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  >{this.checkUserNotAllowed() ? "Subscribe to get access!" : "Read More"}</div>
+                                <div key={fileName} className="card-body post-container">
+                                    <h2 className="card-title"> {this.state.files[fileName].title}</h2>
+                                    <p className="card-text"> {this.state.files[fileName].description}</p>
+                                    <div className='read-subscribe-btn' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  >{this.checkUserNotAllowed()? <div><i className="fa fa-lock"></i> <span>Subscribe to get access!</span></div> : <span>Read More  →</span>}</div>
                                 </div>
             //<div key={fileName} className={"file-card" + (this.checkUserNotAllowed() ? " locked" : "")} onClick={e => this.handleReadFile(fileName)}>{this.state.files[fileName].title}</div>
 
                             
                             ))}
                             </div>
-                            {this.state.currentFileContent &&
+                            {this.state.currentFileContent && 
                             <FroalaView
                             model={this.state.currentFileContent}
                             config={{

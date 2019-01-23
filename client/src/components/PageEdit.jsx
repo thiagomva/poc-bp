@@ -11,8 +11,11 @@ import Axios from 'axios';
 import { server_url } from '../config';
 
 export default class PageEdit extends Component {
+
   constructor(props) {
-  	super(props);
+    super(props);
+    
+    this.noEthereumWalletWarningMessage = 'You should set an Ethereum Wallet in your Blockstack account to create a page';
 
   	this.state = {
       person: {
@@ -109,7 +112,7 @@ export default class PageEdit extends Component {
       }
       this.setState({ hasEthereumAddress: hasEthereumAddress });
       if (!hasEthereumAddress) {
-        alert('You should set an Ethereum Wallet on your Blockstack account for create a page');
+        alert(this.noEthereumWalletWarningMessage);
       }
     })
     .catch((error) => {
@@ -141,7 +144,7 @@ export default class PageEdit extends Component {
     let _token = ""
     let _address = ""
     if (!this.state.hasEthereumAddress) {
-      alert('You should set an Ethereum address on your Blockstack account for create a page');
+      alert(this.noEthereumWalletWarningMessage);
     } else {
       var url = server_url + '/api/v1/authentication';
       

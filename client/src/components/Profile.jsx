@@ -69,6 +69,10 @@ export default class Profile extends Component {
         });
     }
 
+    var handleCancelEdition = () => {
+      this.setState({isLoading: false,isEditing:false,isCreatingPost:false});
+    }
+
     return (
       !isSignInPending() && person ?
 	  <div>
@@ -117,11 +121,10 @@ export default class Profile extends Component {
 				  <NewPost handleSavePage={handleNewPageSubmit}/>
 				}
 				{this.showPageEdit() &&
-				  <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit}/>
+				  <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit} handleCancelEdition={handleCancelEdition}/>
 				}
 				<div className="col-md-12">
-				{
-				  !this.showPageEdit() && 
+				{ 
 				  <PublicList pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername}/>
 				}
 				</div>

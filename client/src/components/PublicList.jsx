@@ -36,14 +36,14 @@ export default class PublicList extends Component {
 
     render() {
         return (
-            <div className="panel-landing" id="section-1">
+            <div>
                 <div className="row">
                     <div className="col-md-8">
                             {this.state.isLoading &&
                                 <h1>Loading...</h1>
                             }
                             <div className="file-container">
-                            {Object.keys(this.state.files).map((fileName) => (<div className="card  mb-4">
+                            {Object.keys(this.state.files).reverse().map((fileName) => (<div className="card  mb-4">
                                 <div key={fileName} className="card-body">
                                     <h2 className="card-title"> {this.state.files[fileName].title}</h2>
                                     <p className="card-text"> {this.state.files[fileName].description}</p>

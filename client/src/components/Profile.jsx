@@ -76,7 +76,7 @@ export default class Profile extends Component {
 		<div className="container">
 			<div className="row">
 			  <div className="col-md-12">
-				<div className="col-md-12 header-section">
+				<div className="row header-section">
 				  <div className="avatar-section col-md-8">
 					  <div className="">
                 <h1>
@@ -93,21 +93,21 @@ export default class Profile extends Component {
               </div>
 				  </div>
 				  <div className="col-md-4">
-				  {
-					this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
-					<button
-					className="btn btn-primary btn-lg pull-left"
-					onClick={e => this.handleEditPage(e)}
-					>
-					Edit Page
-					</button>
-				  }
 				  {this.showNewPost() &&
 					<button
-					className="btn btn-primary btn-lg pull-right"
+					className="btn btn-primary pull-right"
 					onClick={e => this.handleNewPost(e)}
 					>
 					{this.state.isCreatingPost ? 'Cancel' : 'New Post'}
+					</button>
+          }
+          {
+					this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
+					<button
+					className="btn btn-primary pull-right margin-right-10"
+					onClick={e => this.handleEditPage(e)}
+					>
+					Edit Page
 					</button>
 				  }
 				  </div>
@@ -119,8 +119,6 @@ export default class Profile extends Component {
 				{this.showPageEdit() &&
 				  <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit}/>
 				}
-            
-				{this.state.isLoading && <span>Loading...</span>}
 				<div className="col-md-12 statuses">
 				{
 				  !this.showPageEdit() && 

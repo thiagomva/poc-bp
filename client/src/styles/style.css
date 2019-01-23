@@ -8,6 +8,7 @@ body {
 .hide{display:none;}
 .landing-heading{font-family:'Lato',Sans-Serif;font-weight:400;}
 .clickable{cursor: pointer;}
+.margin-right-10 { margin-right:10px; }
 
 
 /* Avatar */

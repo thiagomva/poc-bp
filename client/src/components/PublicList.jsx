@@ -73,7 +73,7 @@ export default class PublicList extends Component {
                         }
                     </div>
                 <div className="col-md-4">
-                <div className="card my-4">
+                <div className="card">
                     <h5 className="card-header">{"Content Creator"} </h5>
                     <div className="card-body">
                         <img

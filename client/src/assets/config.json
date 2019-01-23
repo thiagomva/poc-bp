@@ -1,4 +1,4 @@
 {
-  "server_url": "https://pocbpserver.azurewebsites.net",
+  "server_url": "https://pocbpnodeserver.azurewebsites.net",
   "ethereum_network": "4"
 }

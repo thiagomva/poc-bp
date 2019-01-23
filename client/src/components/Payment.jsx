@@ -16,7 +16,8 @@ class Payment extends Component {
     }
   }
 
-  onClick() {
+  onClick(e) {
+    e.preventDefault();
     this.props.deposit(this.props.pageUsername, this.props.address, this.props.amount);
     this.setState({paying:true});
   }
@@ -45,7 +46,7 @@ class Payment extends Component {
     return (
       <div>
         {
-          !failed && !this.state.paying && <button className="btn btn-primary btn-lg" onClick={e => this.onClick()}>SUBSCRIBE</button>
+          !failed && !this.state.paying && <button className="btn btn-primary btn-lg" onClick={e => this.onClick(e)}>SUBSCRIBE</button>
         }
         {
           !failed && !this.props.depositFetched && this.state.paying && <span className="btn btn-lg">Waiting confirm...</span>

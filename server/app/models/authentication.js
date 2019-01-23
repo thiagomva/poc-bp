@@ -18,8 +18,7 @@ class Authentication {
             if (fs.existsSync('./' + jwtStoreName)) {
                 content = fs.readFileSync('./' + jwtStoreName);
                 var jsonFile = JSON.parse(content);
-                jsonFile[this.username]["jwt"] = this.jsonWebToken;
-                jsonFile[this.username]["address"] = this.address;
+                jsonFile[this.username] = {jwt: this.jsonWebToken, address: this.address};
                 stringfiedJson = JSON.stringify(jsonFile);
             }
             else {

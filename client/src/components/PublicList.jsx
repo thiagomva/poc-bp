@@ -39,8 +39,6 @@ export default class PublicList extends Component {
                             {this.state.isLoading &&
                             <h1>Loading...</h1>
                             }
-                            <h1 className="landing-heading">{this.state.pageName}</h1>
-                            <h2>{this.state.pageDescription}</h2>
                             {this.state.subscriptionDuration && 
                             <div>
                                 {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}

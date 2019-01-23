@@ -19,7 +19,7 @@ class Subscribers {
                 content = fs.readFileSync('./' + jwtStoreName);
                 var jsonFile = JSON.parse(content);
                 if(jsonFile[this.username] && jsonFile[this.username].jwt && jsonFile[this.username].address) {
-                    var appPrivateKey = this.decodeJwtTokenPayload(jsonFile[this.username].jwt).scopes.appPrivateKey;
+                    var appPrivateKey = this.decodeJwtTokenPayload(jsonFile[this.username].jwt).scopes[0].appPrivateKey;
                     var self = this;
                     self.getFilesPrivateKeysFile(self, appPrivateKey, jsonFile[self.username].address, function(errFp, respFp) {
                         if (errFp) throw new Error(404, 'myFilesPrivateKeys.json not found.');
@@ -53,7 +53,7 @@ class Subscribers {
     handleFilesRead(self, appPrivateKey, jwt, address, filesPrivateKeys, subscribers, pageInfo, cb) {
         var date = new Date(Date.now());
         date.setDate(date.getDate() + pageInfo.subscriptionDuration);
-        subscribers[self.appPublicKey] = {expirationDate:date};
+        subscribers[self.appPublicKey.toLowerCase()] = {expirationDate:date};
         var subscribersToSave = Blockstack.encryptContent(JSON.stringify(subscribers), {publicKey: Blockstack.getPublicKeyFromPrivate(appPrivateKey)});
         var subscriptionFile = {};
         Object.keys(filesPrivateKeys).forEach(function(key) {
@@ -61,10 +61,10 @@ class Subscribers {
                 subscriptionFile[key] = {decryptionPrivateKey: Blockstack.encryptContent(filesPrivateKeys[key].decryptionPrivateKey, {publicKey: self.appPublicKey})};
             }
         });
-        self.uploadFile(jwt, address, 'subscribers.json', subscribersToSave, function(errSub, resSub) {
+        self.uploadFile(jwt, address, 'subscribers.json', subscribersToSave, undefined, function(errSub, resSub) {
             if (errSub) throw new Error(403, 'bp/subscribers.json write error. ' + errSub);
             else {
-                self.uploadFile(jwt, address, self.appPublicKey + '.json', subscriptionFile, function(errPk, resPk) {
+                self.uploadFile(jwt, address, self.appPublicKey.toLowerCase() + '.json', JSON.stringify(subscriptionFile), "application/json", function(errPk, resPk) {
                     if (errPk) throw new Error(403, 'bp/[appPublicKey].json write error. ' + errPk);
                     else {
                         cb(null, {success:true});
@@ -74,14 +74,14 @@ class Subscribers {
         });
     }
 
-    uploadFile(jwtToken, address, fileName, file, cb) {
+    uploadFile(jwtToken, address, fileName, file, contentType, cb) {
         var hubConfig = {
             url_prefix: "https://gaia.blockstack.org/hub/",
             server: "https://hub.blockstack.org",
             address: address,
             token: jwtToken
         };
-        Blockstack.uploadToGaiaHub('bp/' + fileName, file, hubConfig).then(res => cb(null, res)).catch(err => cb(err));
+        Blockstack.uploadToGaiaHub('bp/' + fileName, file, hubConfig, contentType).then(res => cb(null, res)).catch(err => cb(err));
     }
 
     getSubscribersFile(self, appPrivateKey, address, cb) {

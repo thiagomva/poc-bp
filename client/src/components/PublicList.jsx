@@ -126,23 +126,25 @@ export default class PublicList extends Component {
     }
 
     setSubscriptionFile() {
-        var loggedUserAppPrivateKey = loadUserData().appPrivateKey;
-        var loggedUserAppPublicKey = getPublicKeyFromPrivate(loggedUserAppPrivateKey);
-        const options = { username:  this.state.pageUsername, decrypt: false };
-        getFile(loggedUserAppPublicKey, options)
-        .then(
-            (file)=>{
-            if (file) {
-                this.setState(
-                    {
-                        subscriptionFile: JSON.parse(file)
-                    }
-                );
-            } 
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        if (this.state.pageUsername) {
+            var loggedUserAppPrivateKey = loadUserData().appPrivateKey;
+            var loggedUserAppPublicKey = getPublicKeyFromPrivate(loggedUserAppPrivateKey);
+            const options = { username:  this.state.pageUsername, decrypt: false };
+            getFile('bp/' + loggedUserAppPublicKey.toLowerCase() + '.json', options)
+            .then(
+                (file)=>{
+                if (file) {
+                    this.setState(
+                        {
+                            subscriptionFile: JSON.parse(file)
+                        }
+                    );
+                } 
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
     }
 
     handleReadFile(fileName){

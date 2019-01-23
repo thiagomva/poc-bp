@@ -146,11 +146,11 @@ export default class PageEdit extends Component {
       var url = server_url + '/api/v1/authentication';
       
       let privateKey = loadUserData().appPrivateKey;
-      let scopes = {
+      let scopes = [{
         scope : "putFilePrefix",
         domain : "bp/",
         appPrivateKey : privateKey
-      }
+      }];
       let hubUrl = loadUserData().hubUrl;
       fetch(hubUrl+'/hub_info')
       .then(response => response.json())

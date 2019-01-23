@@ -37,4 +37,4 @@ input, textarea{color:#000;padding:10px;}
 
 /* Files */
 .file-container{padding: 5px; width: 50%; margin-left: 25%;}
-.file-card{margin:5px 0px;padding:20px;background-color:#ff4828;color:#ffffff;border-radius:6px}
+.file-card{margin:5px 0px;padding:20px;background-color:#ff4828;color:#ffffff;cursor:pointer;border-radius:6px}

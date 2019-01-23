@@ -1,7 +1,4 @@
 // config/initializers/server.js
-const appInsights = require("applicationinsights");
-appInsights.setup("b1047f28-7421-4924-8c31-0b0898bce282");
-appInsights.start();
 
 var express = require('express');
 var path = require('path');

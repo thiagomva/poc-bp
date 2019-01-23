@@ -4,8 +4,7 @@ import {
   Person,
   makeV1GaiaAuthToken,
   lookupProfile,
-  getOrSetLocalGaiaHubConnection,
-  uploadToGaiaHub
+  getOrSetLocalGaiaHubConnection
 } from 'blockstack';
 import Axios from 'axios';
 import { server_url } from '../config';
@@ -140,44 +139,41 @@ export default class PageEdit extends Component {
   }
 
   handleNewPageSubmit(event) {
-
-    let _token = ""
-    let _address = ""
+    event.preventDefault();
     if (!this.state.hasEthereumAddress) {
       alert(this.noEthereumWalletWarningMessage);
     } else {
       var url = server_url + '/api/v1/authentication';
-      
-      let privateKey = loadUserData().appPrivateKey;
-      let scopes = [{
-        scope : "putFilePrefix",
-        domain : "bp/",
-        appPrivateKey : privateKey
-      }];
+      var privateKey = loadUserData().appPrivateKey;
       let hubUrl = loadUserData().hubUrl;
-      fetch(hubUrl+'/hub_info')
-      .then(response => response.json())
-      .then((hubInfo) => {
-              _token =  makeV1GaiaAuthToken(hubInfo, privateKey, hubUrl, null, scopes);
-              getOrSetLocalGaiaHubConnection().then( hubConfig => {
-                _address = hubConfig.address;
-                Axios.post(url, {
-                  jwt: _token,
-                  address: _address,
-                  username: loadUserData().username
-                }).then(response => {
-                  let pageInfo = {
-                    pageName: this.state.newPageName,
-                    pageDescription: this.state.newPageDescription,
-                    subscriptionPrice: parseFloat(this.state.newSubscriptionPrice),
-                    subscriptionDuration: parseInt(this.state.newSubscriptionDuration),
-                    files: this.props.pageInfo ? this.props.pageInfo.files : {}
-                  };
-                  this.props.handleSavePage(pageInfo);
-                });
-              }
-            )
+      fetch(hubUrl + '/hub_info')
+        .then(response => response.json())
+        .then((hubInfo) => { 
+          getOrSetLocalGaiaHubConnection().then(hubConfig => {
+            var scopes = [{
+              scope : "putFilePrefix",
+              domain : "bp/",
+              appPrivateKey: privateKey,
+              address: hubConfig.address,
+              hubServerUrl: hubUrl,
+              hubUrlPrefix: hubInfo.read_url_prefix
+            }];
+            var token = makeV1GaiaAuthToken(hubInfo, privateKey, hubUrl, null, scopes);
+            Axios.post(url, {
+              jwt: token,
+              username: loadUserData().username
+            }).then(response => {
+              let pageInfo = {
+                pageName: this.state.newPageName,
+                pageDescription: this.state.newPageDescription,
+                subscriptionPrice: parseFloat(this.state.newSubscriptionPrice),
+                subscriptionDuration: parseInt(this.state.newSubscriptionDuration),
+                files: this.props.pageInfo ? this.props.pageInfo.files : {}
+              };
+              this.props.handleSavePage(pageInfo);
+            });
           });
+        });
     }
   }
 }

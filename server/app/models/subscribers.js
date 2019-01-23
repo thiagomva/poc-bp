@@ -53,11 +53,12 @@ class Subscribers {
     }
 
     handleFilesRead(self, appPrivateKey, jwt, address, hubServerUrl, hubUrlPrefix, filesPrivateKeys, subscribers, pageInfo, cb) {
-        var date = new Date(Date.now());
-        date.setDate(date.getDate() + pageInfo.subscriptionDuration);
-        subscribers[self.appPublicKey.toLowerCase()] = {expirationDate:date};
+        var date = new Date();
+        var expiration = date.getTime() + (86400000 * pageInfo.subscriptionDuration);
+        subscribers[self.appPublicKey.toLowerCase()] = {expirationDate:expiration};
         var subscribersToSave = Blockstack.encryptContent(JSON.stringify(subscribers), {publicKey: Blockstack.getPublicKeyFromPrivate(appPrivateKey)});
         var subscriptionFile = {};
+        subscriptionFile[self.appPublicKey.toLowerCase()] = {expirationDate:expiration};
         Object.keys(filesPrivateKeys).forEach(function(key) {
             if (filesPrivateKeys[key] && filesPrivateKeys[key].decryptionPrivateKey) {
                 subscriptionFile[key] = {decryptionPrivateKey: Blockstack.encryptContent(filesPrivateKeys[key].decryptionPrivateKey, {publicKey: self.appPublicKey})};

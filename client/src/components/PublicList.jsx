@@ -41,7 +41,8 @@ export default class PublicList extends Component {
                 <h2>{this.state.pageDescription}</h2>
                 {this.state.subscriptionDuration &&
                 <div>
-                    <span>Price: {this.state.subscriptionPrice} ETH - Valid Until: {this.getFormattedDateFromDuration(this.state.subscriptionDuration)}</span>
+                    <span>Price: {this.state.subscriptionPrice} ETH</span>
+                    {this.state.pageUsername != loadUserData().username && <span> - Valid Until: {this.getFormattedDateFromDuration()}</span>}
                     {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
                     {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} confirmed={this.subscriptionConfirmed}></Payment>}
                     {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
@@ -103,10 +104,16 @@ export default class PublicList extends Component {
         }
     }
 
-    getFormattedDateFromDuration(duration) {
-        var date = new Date(Date.now());
-        date.setDate(date.getDate() + duration);
-        return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+    getFormattedDateFromDuration() {
+        var duration;
+        var appPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey).toLowerCase();
+        if (this.state.subscriptionFile && this.state.subscriptionFile[appPublicKey]) {
+            duration = this.state.subscriptionFile[appPublicKey].expirationDate;
+        } else {
+            duration = (new Date()).getTime() + (this.state.subscriptionDuration * 86400000);
+        }
+        var date = new Date(duration);
+        return date.toLocaleDateString();
     }
 
     setSubscriptionData() {

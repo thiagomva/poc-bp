@@ -180,7 +180,7 @@ export default class NewPost extends Component {
     getFile("bp/subscribers.json").then((file)=>{
       var subscribers = JSON.parse(file || "{}");
       for (var key in subscribers){
-        if(Date.parse(subscribers[key].expirationDate) > new Date().getTime()){
+        if(subscribers[key].expirationDate > (new Date()).getTime()){
           this.saveFilePrivateKeyToSubscriber(fileInfo, key);
         }
       }

@@ -5,7 +5,8 @@ import {
     getFile,
     getPublicKeyFromPrivate,
     lookupProfile,
-    Person
+    Person,
+    decryptContent
   } from 'blockstack';
 
 export default class PublicList extends Component {
@@ -145,22 +146,36 @@ export default class PublicList extends Component {
     }
 
     handleReadFile(fileName){
-        if (!this.state.subscriptionFile) {
+        if (this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile) {
             alert("You need to subscribe to access this content");
             return;
         }
-        var currentFile = this.state.subscriptionFile[fileName];
-        if(currentFile == null){
+        if (!this.state.subscriptionFile) {
+            getFile("myFilesPrivateKeys.json").then((file)=>{
+                var keys = JSON.parse(file || "{}");
+                this.handleSelectedFile(fileName, keys[fileName]);
+              });
+        } else {
+            this.handleSelectedFile(fileName, this.state.subscriptionFile[fileName]);
+        }
+    }
+
+    handleSelectedFile(fileName, file) {
+        if (file == null) {
             alert("You don't have access to this content");
             return;
         }
-
-        var decryptedFilePrivateKey = decryptContent(currentFile.decryptionPrivateKey,{privateKey:loggedUserAppPrivateKey});
-
-        getFile(fileName, options).then(
+        var decryptedFilePrivateKey = null;
+        if (!this.state.subscriptionFile) {
+            decryptedFilePrivateKey = file.decryptionPrivateKey;
+        } else {
+            decryptedFilePrivateKey = decryptContent(file.decryptionPrivateKey,{privateKey:loadUserData().appPrivateKey});
+        }
+        const options = { username:  this.state.pageUsername, decrypt: false };
+        getFile('myFiles.json', options).then(
             (fileWithEncryptedContent) => {
                 var parsedFileWithEncryptedContent = JSON.parse(fileWithEncryptedContent || "{}");
-                var fileContent = decryptContent(parsedFileWithEncryptedContent.content, {privateKey:decryptedFilePrivateKey});
+                var fileContent = decryptContent(parsedFileWithEncryptedContent[fileName].content, {privateKey:decryptedFilePrivateKey});
                 this.setState(
                     {
                         currentFileContent: JSON.parse(fileContent)

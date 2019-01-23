@@ -34,39 +34,71 @@ export default class PublicList extends Component {
     render() {
         return (
             <div className="panel-landing" id="section-1">
-                {this.state.isLoading &&
-                <h1>Loading...</h1>
-                }
-                <h1 className="landing-heading">{this.state.pageName}</h1>
-                <h2>{this.state.pageDescription}</h2>
-                {this.state.subscriptionDuration &&
-                <div>
-                    <span>Price: {this.state.subscriptionPrice} ETH - Valid Until: {this.getFormattedDateFromDuration(this.state.subscriptionDuration)}</span>
-                    {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
-                    {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} confirmed={this.subscriptionConfirmed}></Payment>}
-                    {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
-                </div>
-                }
-                <div className="file-container">
-                {Object.keys(this.state.files).map((fileName) => (
-                
-                    <div key={fileName} className={"file-card" + (this.checkUserNotAllowed() ? " locked" : "")} onClick={e => this.handleReadFile(fileName)}>{this.state.files[fileName].title}</div>
-                ))}
-                </div>
-                {this.state.currentFileContent &&
-                <FroalaView
-                model={this.state.currentFileContent}
-                config={{
-                    toolbarButtons: [],
-                    events : {
-                        'froalaEditor.initialized' : function(e, editor) {
-                          editor.edit.off();
+                <div className="row">
+                    <div className="col-md-8">
+                            {this.state.isLoading &&
+                            <h1>Loading...</h1>
+                            }
+                            <h1 className="landing-heading">{this.state.pageName}</h1>
+                            <h2>{this.state.pageDescription}</h2>
+                            {this.state.subscriptionDuration && 
+                            <div>
+                                {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
+                                {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} confirmed={this.subscriptionConfirmed}></Payment>}
+                                {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
+                            </div>
+                            }
+                            <div className="file-container">
+                            {Object.keys(this.state.files).map((fileName) => (
+                                <div key={fileName} className="post-container">
+                                    <h3 className="post-title"> {this.state.files[fileName].title}</h3>
+                                    <span className="post-description"> {this.state.files[fileName].description}</span>
+                                    <div className='read-subscribe-btn' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  >{this.checkUserNotAllowed() ? "Subscribe to get access!" : "Read More"}</div>
+                                </div>
+            //<div key={fileName} className={"file-card" + (this.checkUserNotAllowed() ? " locked" : "")} onClick={e => this.handleReadFile(fileName)}>{this.state.files[fileName].title}</div>
+
+                            
+                            ))}
+                            </div>
+                            {this.state.currentFileContent &&
+                            <FroalaView
+                            model={this.state.currentFileContent}
+                            config={{
+                                toolbarButtons: [],
+                                events : {
+                                    'froalaEditor.initialized' : function(e, editor) {
+                                    editor.edit.off();
+                                    }
+                                }
+                            }}
+                            />
                         }
-                      }
-                  }}
-                />
-                }
+                    </div>
+                <div className="col-md-4">
+                <div className="card my-4">
+                    <h5 className="card-header">{"Content Creator"} </h5>
+                    <div className="card-body">
+                        <img src="https://pbs.twimg.com/profile_images/893200169654550528/vCRHqgMD_400x400.jpg" height="40px" width="40px"/>
+
+                        <h5 className="card-title ">{"Bob"}</h5>
+                    </div>
+                </div>
+                
+                <div className="card my-4">
+                    <h5 className="card-header">{"Become BitPatron"}</h5>
+                    <div className="card-body">
+                        <div className="row">
+                        <div className="col-lg-6">        
+                            <button type="button" className="btn btn-primary btn-lg">{this.state.subscriptionPrice +" ETH / "+this.state.subscriptionDuration+" DAYS"}</button>                        
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
             </div>
+        </div>
+        
+
         );
     }
 

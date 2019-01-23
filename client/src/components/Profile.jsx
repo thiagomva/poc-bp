@@ -72,9 +72,9 @@ export default class Profile extends Component {
       !isSignInPending() && person ?
       <div className="container">
         <div className="row">
-          <div className="col-md-offset-3 col-md-6">
-            <div className="col-md-12">
-              <div className="avatar-section">
+          <div className="col-md-12">
+            <div className="col-md-12 header-section">
+              <div className="avatar-section col-md-8">
                 <img
                   src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage }
                   className="img-rounded avatar"
@@ -83,9 +83,8 @@ export default class Profile extends Component {
                 <div className="username">
                   <h1>
                     <span id="heading-name">{ person.name() ? person.name()
-                      : 'Nameless Person' }</span>
-                  </h1>
-                  <span>{username}</span>
+                      : username.split('.')[0]+"'s Page" }</span>
+                  </h1>                  
                   {this.isLocal() &&
                     <span>
                       &nbsp;|&nbsp;
@@ -94,7 +93,7 @@ export default class Profile extends Component {
                   }
                 </div>
               </div>
-              <div className="col-md-7">
+              <div className="col-md-4">
               {
                 this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
                 <button

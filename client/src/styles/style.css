@@ -1,7 +1,7 @@
 /* Globals */
-a,a:focus,a:hover{color:#fff;}
-html,body{height:100%;text-align:center;background-color:#191b22;}
-body{color:#fff}
+a,a:focus,a:hover{color:#191b22;}
+html,body{height:100%;text-align:center;background-color:#fff;}
+body{color:#191b22}
 .hide{display:none;}
 .landing-heading{font-family:'Lato',Sans-Serif;font-weight:400;}
 .clickable{cursor: pointer;}
@@ -14,8 +14,9 @@ body{color:#fff}
 .btn-primary:hover,.btn-primary:focus,.btn-primary:active{color:#fff;border:1px solid #1a6ec0;background-color:#1a6ec0;}
 
 /* Avatar */
+.header-section{margin:25px 0;}
 .avatar{width:100px;height:100px;}
-.avatar-section{margin-bottom:25px;display:flex;text-align:left;}
+.avatar-section{display:flex;text-align:left;}
 .username{margin-left:20px;}
 
 /* Scaffolding */
@@ -37,6 +38,21 @@ input, textarea{color:#000;padding:10px;}
 .status{margin:15px 0px;padding:20px;background-color:#2e2e2e;border-radius:6px}
 
 /* Files */
-.file-container{padding: 5px; width: 50%; margin-left: 25%;}
-.file-card{margin:5px 0px;padding:20px;background-color:#ff4828;color:#ffffff;cursor:pointer;border-radius:6px}
+
+.post-container{padding: 5px 15px 10px 15px ; width: 50%; text-align: left; border: 1px lightslategrey solid; border-width: 1px 0 0 1px; margin-bottom: 15px}
+.post-title{ text-align: left}
+.post-description{ text-align: left;}
+.read-subscribe-btn{ margin: 60px 0 0 0;text-align: center; background-color: dodgerblue;color: white;height: 40px;padding: 9px;width: 200px; cursor: pointer;}
 .file-card.locked{cursor:not-allowed;opacity: 0.4;}
+
+
+.card{position: relative;display: -ms-flexbox;display: flex;-ms-flex-direction: column;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid rgba(0,0,0,.125);border-radius: .25rem;}
+.card-header:first-child {border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;}
+.card-header {padding: .75rem 1.25rem;margin-bottom: 0;background-color: rgba(0,0,0,.03);border-bottom: 1px solid rgba(0,0,0,.125);}
+
+.mb-4, .my-4 {margin-bottom: 1.5rem!important;}
+.mt-4, .my-4 {margin-top: 1.5rem!important;}
+
+.h5, h5 {font-size: 1.25rem;}
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {margin-bottom: .5rem;font-family: inherit;font-weight: 500;line-height: 1.2;color: inherit;}
+h1, h2, h3, h4, h5, h6 {margin-top: 0;margin-bottom: .5rem;}

@@ -45,7 +45,7 @@ export default class PublicList extends Component {
                             <div>
                                 {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
                                 {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} confirmed={this.subscriptionConfirmed}></Payment>}
-                                {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
+                                
                             </div>
                             }
                             <div className="file-container">

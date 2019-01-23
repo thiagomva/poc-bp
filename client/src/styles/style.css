@@ -1,6 +1,6 @@
 /* Globals */
 a,a:focus,a:hover{color:#191b22;}
-html,body{text-align:center;background-color:#fff;}
+html,body{background-color:#fff;}
 body{color:#191b22}
 body {
     padding-top: 56px;
@@ -49,14 +49,14 @@ input, textarea{color:#000;padding:10px;}
 
 
 .card{position: relative;display: -ms-flexbox;display: flex;-ms-flex-direction: column;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid rgba(0,0,0,.125);border-radius: .25rem;}
-.card-body {
-    -ms-flex: 1 1 auto;
-    flex: 1 1 auto;
-    padding: 1.25rem;
-}
+.card-body {-ms-flex: 1 1 auto;flex: 1 1 auto;padding: 1.25rem;}
 .card-header:first-child {border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;}
 .card-header {padding: .75rem 1.25rem;margin-bottom: 0;background-color: rgba(0,0,0,.03);border-bottom: 1px solid rgba(0,0,0,.125);}
 .card-title {margin-bottom: .75rem;}
+.card-text{min-height: 90px;}
+.card-footer:last-child {border-radius: 0 0 calc(.25rem - 1px) calc(.25rem - 1px);}
+.text-muted {color: #6c757d!important;}
+.card-footer {padding: .75rem 1.25rem;background-color: rgba(0,0,0,.03);border-top: 1px solid rgba(0,0,0,.125);}
 
 
 

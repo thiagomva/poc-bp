@@ -49,12 +49,18 @@ export default class PublicList extends Component {
                             </div>
                             }
                             <div className="file-container">
-                            {Object.keys(this.state.files).map((fileName) => (
-                                <div key={fileName} className="card-body post-container">
+                            {Object.keys(this.state.files).map((fileName) => (<div className="card  mb-4">
+                                <div key={fileName} className="card-body">
                                     <h2 className="card-title"> {this.state.files[fileName].title}</h2>
                                     <p className="card-text"> {this.state.files[fileName].description}</p>
-                                    <div className='read-subscribe-btn' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  >{this.checkUserNotAllowed()? <div><i className="fa fa-lock"></i> <span>Subscribe to get access!</span></div> : <span>Read More  →</span>}</div>
+                                    <div className='btn btn-primary btn-lg' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  >{this.checkUserNotAllowed()? <div><i className="fa fa-lock"></i> <span>Subscribe to get access!</span></div> : <span>Read More  →</span>}</div>
                                 </div>
+                                <div className="card-footer text-muted">
+                                Posted by 
+                                <a href="#"> Bob</a>
+                                </div>
+                              </div> 
+                                  
             //<div key={fileName} className={"file-card" + (this.checkUserNotAllowed() ? " locked" : "")} onClick={e => this.handleReadFile(fileName)}>{this.state.files[fileName].title}</div>
 
                             

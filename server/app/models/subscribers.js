@@ -20,16 +20,17 @@ class Subscribers {
                 var jsonFile = JSON.parse(content);
                 if(jsonFile[this.username] && jsonFile[this.username].jwt && jsonFile[this.username].address) {
                     var appPrivateKey = this.decodeJwtTokenPayload(jsonFile[this.username].jwt).scopes.appPrivateKey;
-                    this.getFilesPrivateKeysFile(appPrivateKey, jsonFile[this.username].address, function(errFp, respFp) {
+                    var self = this;
+                    self.getFilesPrivateKeysFile(self, appPrivateKey, jsonFile[self.username].address, function(errFp, respFp) {
                         if (errFp) throw new Error(404, 'myFilesPrivateKeys.json not found.');
                         else {
-                            this.getSubscribersFile(appPrivateKey, jsonFile[this.username].address, function(errSub, respSub) {
+                            self.getSubscribersFile(self, appPrivateKey, jsonFile[self.username].address, function(errSub, respSub) {
                                 if (errSub) throw new Error(404, 'bp/subscribers.json not found.');
                                 else {
-                                    this.getFileFromUrl(jsonFile[this.username].address, 'pageInfo.json', function(errPi, respPi) {
+                                    self.getFileFromUrl(jsonFile[self.username].address, 'pageInfo.json', function(errPi, respPi) {
                                         if (errPi) throw new Error(404, 'pageInfo.json not found.');
                                         else {
-                                            this.handleFilesRead(appPrivateKey, jsonFile[this.username].address, this.userName, respFp, respSub, respPi, cb);
+                                            self.handleFilesRead(self, appPrivateKey, jsonFile[self.username].jwt, jsonFile[self.username].address, respFp, respSub, respPi, cb);
                                         }
                                     });
                                 }
@@ -49,21 +50,21 @@ class Subscribers {
           }
     }
 
-    handleFilesRead(appPrivateKey, jwt, address, userName, filesPrivateKeys, subscribers, pageInfo, cb) {
+    handleFilesRead(self, appPrivateKey, jwt, address, filesPrivateKeys, subscribers, pageInfo, cb) {
         var date = new Date(Date.now());
         date.setDate(date.getDate() + pageInfo.subscriptionDuration);
-        subscribers[this.appPublicKey] = {expirationDate:date};
-        var subscribersToSave = Blockstack.encryptContent(subscribers, {publicKey: Blockstack.getPublicKeyFromPrivate(appPrivateKey)});
+        subscribers[self.appPublicKey] = {expirationDate:date};
+        var subscribersToSave = Blockstack.encryptContent(JSON.stringify(subscribers), {publicKey: Blockstack.getPublicKeyFromPrivate(appPrivateKey)});
         var subscriptionFile = {};
         Object.keys(filesPrivateKeys).forEach(function(key) {
             if (filesPrivateKeys[key] && filesPrivateKeys[key].decryptionPrivateKey) {
-                subscriptionFile[key] = {decryptionPrivateKey: Blockstack.encryptContent(filesPrivateKeys[key].decryptionPrivateKey, {publicKey: this.appPublicKey})};
+                subscriptionFile[key] = {decryptionPrivateKey: Blockstack.encryptContent(filesPrivateKeys[key].decryptionPrivateKey, {publicKey: self.appPublicKey})};
             }
         });
-        this.uploadFile(jwt, address, 'subscribers.json', subscribersToSave, function(errSub, resSub) {
+        self.uploadFile(jwt, address, 'subscribers.json', subscribersToSave, function(errSub, resSub) {
             if (errSub) throw new Error(403, 'bp/subscribers.json write error. ' + errSub);
             else {
-                this.uploadFile(jwt, address, this.appPublicKey + '.json', subscriptionFile, function(errPk, resPk) {
+                self.uploadFile(jwt, address, self.appPublicKey + '.json', subscriptionFile, function(errPk, resPk) {
                     if (errPk) throw new Error(403, 'bp/[appPublicKey].json write error. ' + errPk);
                     else {
                         cb(null, {success:true});
@@ -74,36 +75,42 @@ class Subscribers {
     }
 
     uploadFile(jwtToken, address, fileName, file, cb) {
-        Blockstack.getOrSetLocalGaiaHubConnection().then(hubConfig => {
-            hubConfig.token = jwtToken;
-            hubConfig.address = address;
-            Blockstack.uploadToGaiaHub('bp/' + fileName, file, hubConfig).then(res => cb(null, res)).catch(err => cb(err));;
-        }).catch(err => cb(err));
+        var hubConfig = {
+            url_prefix: "https://gaia.blockstack.org/hub/",
+            server: "https://hub.blockstack.org",
+            address: address,
+            token: jwtToken
+        };
+        Blockstack.uploadToGaiaHub('bp/' + fileName, file, hubConfig).then(res => cb(null, res)).catch(err => cb(err));
     }
 
-    getSubscribersFile(appPrivateKey, address, cb) {
-        this.getPrivateFile(appPrivateKey, address, 'bp/subscribers.json', function(error, response) {
-            if (error) cb(error);
-            else {
-                cb(null, response);
+    getSubscribersFile(self, appPrivateKey, address, cb) {
+        self.getPrivateFile(self, appPrivateKey, address, 'bp/subscribers.json', function(error, response) {
+            if (error) {
+                if (error.response && error.response.status == 404) cb(null, {});
+                else cb(error);
+            } else {
+                cb(null, JSON.parse(response));
             }
         });
     }
 
-    getFilesPrivateKeysFile(appPrivateKey, address, cb) {
-        this.getPrivateFile(appPrivateKey, address, 'myFilesPrivateKeys.json', function(error, response) {
-            if (error) cb(error);
-            else {
-                cb(null, response);
+    getFilesPrivateKeysFile(self, appPrivateKey, address, cb) {
+        self.getPrivateFile(self, appPrivateKey, address, 'myFilesPrivateKeys.json', function(error, response) {
+            if (error) {
+                if (error.response && error.response.status == 404) cb(null, {});
+                else cb(error);
+            } else {
+                cb(null, JSON.parse(response));
             }
         });
     }
 
-    getPrivateFile(appPrivateKey, address, fileName, cb) {
-        this.getFileFromUrl(address, fileName, function(error, response) {
+    getPrivateFile(self, appPrivateKey, address, fileName, cb) {
+        self.getFileFromUrl(address, fileName, function(error, response) {
             if (error) cb(error);
             else {
-                cb(null, Blockstack.decryptContent(response,{privateKey:appPrivateKey}));
+                cb(null, Blockstack.decryptContent(JSON.stringify(response),{privateKey:appPrivateKey}));
             }
         });
     }

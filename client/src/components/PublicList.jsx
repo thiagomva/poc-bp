@@ -47,7 +47,8 @@ export default class PublicList extends Component {
                                 <div key={fileName} className="card-body">
                                     <h2 className="card-title"> {this.state.files[fileName].title}</h2>
                                     <p className="card-text"> {this.state.files[fileName].description}</p>
-                                    <div className='btn btn-primary' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  >{this.checkUserNotAllowed()? <div><i className="fa fa-lock"></i> <span>Subscribe to get access!</span></div> : <span>Read More  →</span>}</div>
+                                    {this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} subscriptionDuration={this.state.subscriptionDuration} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
+                                    {!this.checkUserNotAllowed() &&<div className='btn btn-primary' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  ><span>Read More  →</span></div>}
                                 </div>
                                 <div className="card-footer text-muted">Posted by <a href="#">{this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}</a>
                                 </div>
@@ -93,7 +94,7 @@ export default class PublicList extends Component {
                             <div className="row">
                             <div className="col-lg-12">
                                 {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
-                                {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} subscriptionDuration={this.state.subscriptionDuration} confirmed={this.subscriptionConfirmed}></Payment>}
+                                {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} subscriptionDuration={this.state.subscriptionDuration} confirmed={this.subscriptionConfirmed} subscriptionMode={false}></Payment>}
                                 {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
                             </div>
                             </div>

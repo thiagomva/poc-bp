@@ -32,7 +32,7 @@ export default class PageEdit extends Component {
       newSubscriptionDuration: undefined,
       isLoading: false,
       pageInfo: null,
-      hasEthereumAddress: false
+      hasEthereumAddress: undefined
     };
   }
 
@@ -109,10 +109,10 @@ export default class PageEdit extends Component {
           }
         }
       }
-      this.setState({ hasEthereumAddress: hasEthereumAddress });
-      if (!hasEthereumAddress) {
+      if (!hasEthereumAddress && this.state.hasEthereumAddress != undefined) {
         alert(this.noEthereumWalletWarningMessage);
       }
+      this.setState({ hasEthereumAddress: hasEthereumAddress });
     })
     .catch((error) => {
         console.log('could not resolve profile')
@@ -142,6 +142,8 @@ export default class PageEdit extends Component {
     event.preventDefault();
     if (!this.state.hasEthereumAddress) {
       alert(this.noEthereumWalletWarningMessage);
+      var win = window.open("https://browser.blockstack.org/profiles", '_blank');
+      win.focus();
     } else {
       var url = server_url + '/api/v1/authentication';
       var privateKey = loadUserData().appPrivateKey;

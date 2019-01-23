@@ -40,6 +40,7 @@ export default class Profile extends Component {
       statusIndex: 0,
       isLoading: false,
       isEditing: false,
+      isCreatingPost: false,
       docPrivateKey: "",
       docPublicKey: "",
       pageInfo: null
@@ -63,7 +64,7 @@ export default class Profile extends Component {
           this.setState({pageInfo: pageInfo});
         })
         .finally(()=>{
-          this.setState({isLoading: false,isEditing:false});
+          this.setState({isLoading: false,isEditing:false,isCreatingPost:false});
         });
     }
 
@@ -93,6 +94,7 @@ export default class Profile extends Component {
                   }
                 </div>
               </div>
+              <div className="col-md-8">
               {
                 this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
                 <button
@@ -102,8 +104,18 @@ export default class Profile extends Component {
                 Edit Page
                 </button>
               }
+              {this.showNewPost() &&
+                <button
+                className="btn btn-primary btn-lg pull-right"
+                onClick={e => this.handleNewPost(e)}
+                >
+                {this.state.isCreatingPost ? 'Cancel' : 'New Post'}
+                </button>
+              }
+              </div>
             </div>
-            {this.showNewPost() && 
+            
+            {this.showNewPostForm() && 
               <NewPost handleSavePage={handleNewPageSubmit}/>
             }
             {this.showPageEdit() &&
@@ -140,6 +152,10 @@ export default class Profile extends Component {
 
   handleEditPage(event){
     this.setState({isEditing: true})
+  }
+
+  handleNewPost(event){
+    this.setState({isCreatingPost: !this.state.isCreatingPost})
   }
 
   fetchData() {
@@ -190,6 +206,10 @@ export default class Profile extends Component {
 
   showNewPost(){
     return !this.state.isLoading && this.isLocalAndHasConfiguredPage() && !this.state.isEditing;
+  }
+
+  showNewPostForm(){
+    return !this.state.isLoading && this.isLocalAndHasConfiguredPage() && !this.state.isEditing && this.state.isCreatingPost;
   }
 
   showPageEdit(){

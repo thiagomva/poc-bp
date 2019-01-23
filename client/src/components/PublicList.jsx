@@ -53,7 +53,7 @@ export default class PublicList extends Component {
                 ))}
                 </div>
 
-                <div>{this.state.currentFileContent}</div>
+                <div dangerouslySetInnerHTML={{ __html: this.state.currentFileContent }}></div>
             </div>
         );
     }

@@ -19,7 +19,7 @@ class Subscribers {
                 content = fs.readFileSync('./' + jwtStoreName);
                 var jsonFile = JSON.parse(content);
                 if(jsonFile[this.username] && jsonFile[this.username].jwt && jsonFile[this.username].address) {
-                    var appPrivateKey = this.decodeJwtTokenPayload(jsonFile[this.username].jwt).scopes.appPrivateKey;
+                    var appPrivateKey = this.decodeJwtTokenPayload(jsonFile[this.username].jwt).scopes[0].appPrivateKey;
                     var self = this;
                     self.getFilesPrivateKeysFile(self, appPrivateKey, jsonFile[self.username].address, function(errFp, respFp) {
                         if (errFp) throw new Error(404, 'myFilesPrivateKeys.json not found.');

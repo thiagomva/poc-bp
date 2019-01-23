@@ -1,6 +1,7 @@
 var config = require('nconf');
 var Error = require('../util/error.js');
 var Blockstack = require('blockstack');
+var JsonTokens = require('jsontokens');
 const axios = require('axios');
 
 class Subscribers {
@@ -107,6 +108,14 @@ class Subscribers {
     throwNotFoundError() {
         throw new Error(404, 'Username not found.');
     }
+
+    decodeJwtTokenPayload(v1JwtToken){
+        let token = v1JwtToken.replace('v1:','');
+        let payload =  (0, JsonTokens.decodeToken)(token).payload;
+        return payload;
+    }
 }
 
 module.exports = Subscribers;
+
+

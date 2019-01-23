@@ -31,7 +31,7 @@ class Payment extends Component {
 
     if (!web3) {
       failed = true;
-      error = "No web3!";
+      error = "Please Install a Web3 Provider such as Metamask!";
     }
 
     if (!failed && isEmpty(this.props.accounts)) {

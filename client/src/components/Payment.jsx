@@ -46,17 +46,17 @@ class Payment extends Component {
     return (
       <div>
         {
-          !failed && !this.state.paying && 
-          <button type="button" className="btn btn-primary btn-lg" onClick={e => this.onClick(e)}>{this.props.amount +" ETH / "+this.props.subscriptionDuration+" DAYS"}</button>
+          (!failed && !this.state.paying || this.props.subscriptionMode) && 
+          <button type="button" className="btn btn-primary btn-lg" onClick={e => this.onClick(e)}>{ this.props.subscriptionMode ?  <span><i className="fa fa-lock"></i> Subscribe to get access!</span> :   this.props.amount +" ETH / "+this.props.subscriptionDuration+" DAYS"}</button>
         }
         {
-          !failed && !this.props.depositFetched && this.state.paying && <span className="btn btn-lg">Waiting confirm...</span>
+          !failed && !this.props.depositFetched && this.state.paying && !this.props.subscriptionMode &&<span className="btn btn-lg">Waiting confirm...</span>
         }
         {
-          !failed && this.props.depositFetched && this.props.confirmed() && <span className="btn btn-lg">Subscription confirmed!</span>
+          !failed && this.props.depositFetched && this.props.confirmed() && !this.props.subscriptionMode &&<span className="btn btn-lg">Subscription confirmed!</span>
         }
         {
-          failed && <span className="btn btn-lg">{error}</span>
+          failed && !this.props.subscriptionMode && <span className="btn btn-lg">{error}</span>
         }
       </div>
     );

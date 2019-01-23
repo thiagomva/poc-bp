@@ -49,7 +49,7 @@ export default class PublicList extends Component {
                 <div className="file-container">
                 {Object.keys(this.state.files).map((fileName) => (
                 
-                    <div key={fileName} className="file-card" onClick={e => this.handleReadFile(fileName)}>{this.state.files[fileName].title}</div>
+                    <div key={fileName} className={"file-card" + (this.checkUserNotAllowed() ? " locked" : "")} onClick={e => this.handleReadFile(fileName)}>{this.state.files[fileName].title}</div>
                 ))}
                 </div>
 
@@ -77,7 +77,7 @@ export default class PublicList extends Component {
                     pageDescription: nextProps.pageInfo.pageDescription,
                     subscriptionPrice: nextProps.pageInfo.subscriptionPrice,
                     subscriptionDuration: nextProps.pageInfo.subscriptionDuration,
-                    files: nextProps.pageInfo.files
+                    files: nextProps.pageInfo.files ? nextProps.pageInfo.files : {}
                 }
             );
         }
@@ -147,8 +147,12 @@ export default class PublicList extends Component {
         }
     }
 
+    checkUserNotAllowed() {
+        return this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile;
+    }
+
     handleReadFile(fileName){
-        if (this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile) {
+        if (this.checkUserNotAllowed()) {
             alert("You need to subscribe to access this content");
             return;
         }

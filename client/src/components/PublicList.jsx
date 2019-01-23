@@ -10,12 +10,15 @@ import {
     decryptContent
   } from 'blockstack';
 
+const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
+
 export default class PublicList extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             pageUsername: "",
+            pageOwner: null,
             isLoading: false,
             pageName: "",
             pageDescription: "",
@@ -39,8 +42,6 @@ export default class PublicList extends Component {
                             {this.state.isLoading &&
                             <h1>Loading...</h1>
                             }
-                            <h1 className="landing-heading">{this.state.pageName}</h1>
-                            <h2>{this.state.pageDescription}</h2>
                             {this.state.subscriptionDuration && 
                             <div>
                                 {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
@@ -82,9 +83,12 @@ export default class PublicList extends Component {
                 <div className="card my-4">
                     <h5 className="card-header">{"Content Creator"} </h5>
                     <div className="card-body">
-                        <img src="https://pbs.twimg.com/profile_images/893200169654550528/vCRHqgMD_400x400.jpg" height="40px" width="40px"/>
-
-                        <h5 className="card-title ">{"Bob"}</h5>
+                        <img
+                            src={ (this.state.pageOwner && this.state.pageOwner.avatarUrl()) ? this.state.pageOwner.avatarUrl() : avatarFallbackImage }
+                            className="img-rounded avatar"
+                            id="avatar-image"
+                        />
+                        <h5 className="card-title ">{this.state.pageOwner && this.state.pageOwner.name()}</h5>
                     </div>
                 </div>
                 
@@ -92,8 +96,10 @@ export default class PublicList extends Component {
                     <h5 className="card-header">{"Become BitPatron"}</h5>
                     <div className="card-body">
                         <div className="row">
-                        <div className="col-lg-6">        
-                            <button type="button" className="btn btn-primary btn-lg">{this.state.subscriptionPrice +" ETH / "+this.state.subscriptionDuration+" DAYS"}</button>                        
+                        <div className="col-lg-12">
+                            {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
+                            {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} subscriptionDuration={this.state.subscriptionDuration} confirmed={this.subscriptionConfirmed}></Payment>}
+                            {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
                         </div>
                         </div>
                     </div>
@@ -155,6 +161,11 @@ export default class PublicList extends Component {
         lookupProfile(this.state.pageUsername)
         .then((profile) => {
             var owner = new Person(profile).toJSON();
+            this.setState(
+                {
+                    pageOwner: new Person(profile)
+                }
+            );
             var address = null;
             if (owner && owner.profile && owner.profile.account) {
                 for (var i = 0; i < owner.profile.account.length; ++i) {

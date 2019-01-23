@@ -57,5 +57,14 @@ module.exports = {
       { test: /\.css$/, loader: 'style-loader!css-loader' }
     ]
   },
-  plugins: [HtmlWebpackPluginConfig, ManifestAssetPlugin, ConfigAssetPlugin, IconAssetPlugin, WebConfigPlugin]
+  plugins: [
+    HtmlWebpackPluginConfig, 
+    ManifestAssetPlugin,
+     ConfigAssetPlugin, 
+     IconAssetPlugin, 
+     WebConfigPlugin,
+     new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery"
+    })]
 }

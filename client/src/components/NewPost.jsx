@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import FroalaEditor from 'react-froala-wysiwyg';
 import {
   makeECPrivateKey,
   getPublicKeyFromPrivate,
@@ -28,6 +29,8 @@ export default class NewPost extends Component {
       newFileContent: "",
       isLoading: false
     };
+
+    this.handleModelChange = this.handleModelChange.bind(this);
   }
 
   render() {
@@ -56,12 +59,25 @@ export default class NewPost extends Component {
           />
         </div>
         <div className="col-md-12">
+        <FroalaEditor
+          tag='textarea'
+          config={{
+            placeholderText: "Content",
+            toolbarButtons: ['bold', 'italic', 'underline', 'color', 'align', 'fontSize', 'insertLink', 'insertImage', 'embedly'],
+            imageInsertButtons: ['imageByURL'],
+            imageUploadRemoteUrls: false
+          }}
+          model={this.state.newFileContent}
+          onModelChange={this.handleModelChange}
+        />
+        </div>
+        {/* <div className="col-md-12">
           <textarea className="input-page-price" type="number"
             value={this.state.newFileContent}
             onChange={e => this.handleNewFileContentChange(e)}
             placeholder="Content"
           />
-        </div>
+        </div> */}
         <div className="col-md-12 text-right">
           <button 
             className="btn btn-primary btn-lg"
@@ -98,6 +114,12 @@ export default class NewPost extends Component {
 
   handleNewFileContentChange(event) {
     this.setState({newFileContent: event.target.value})
+  }
+
+  handleModelChange(content) {
+    this.setState({
+      newFileContent: content
+    });
   }
 
   handleNewPostSubmit(event) {

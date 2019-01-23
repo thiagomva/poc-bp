@@ -3,10 +3,9 @@ var Error = require('../util/error.js');
 
 class Authentication {
 
-    constructor(username, jsonWebToken, address) {
+    constructor(username, jsonWebToken) {
         this.username = username;
         this.jsonWebToken = jsonWebToken;
-        this.address = address;
     }
 
     getAuthenticationResult(cb) {
@@ -18,13 +17,13 @@ class Authentication {
             if (fs.existsSync('./' + jwtStoreName)) {
                 content = fs.readFileSync('./' + jwtStoreName);
                 var jsonFile = JSON.parse(content);
-                jsonFile[this.username] = {jwt: this.jsonWebToken, address: this.address};
+                jsonFile[this.username] = this.jsonWebToken;
                 stringfiedJson = JSON.stringify(jsonFile);
             }
             else {
-                stringfiedJson = '{"' + this.username + '":' + '{"jwt":"' + this.jsonWebToken + '","address":"' + this.address + '"}}';
+                stringfiedJson = '{"' + this.username + '":"' + this.jsonWebToken + '"}';
             }
-            fs.writeFileSync( jwtStoreName, stringfiedJson, "utf8");
+            fs.writeFileSync(jwtStoreName, stringfiedJson, "utf8");
             cb(null, JSON.parse(stringfiedJson));
           } catch(err) {
             cb(err)

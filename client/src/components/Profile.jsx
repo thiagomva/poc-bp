@@ -119,7 +119,7 @@ export default class Profile extends Component {
 				{this.showPageEdit() &&
 				  <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit}/>
 				}
-				<div className="col-md-12 statuses">
+				<div className="col-md-12">
 				{
 				  !this.showPageEdit() && 
 				  <PublicList pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername}/>

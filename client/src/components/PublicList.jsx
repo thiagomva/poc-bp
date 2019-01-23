@@ -47,6 +47,20 @@ export default class PublicList extends Component {
                                 <div key={fileName} className="card-body">
                                     <h2 className="card-title"> {this.state.files[fileName].title}</h2>
                                     <p className="card-text"> {this.state.files[fileName].description}</p>
+                                    {this.state.files[fileName].content && 
+                                    <FroalaView 
+                                        model={this.state.files[fileName].content}
+                                        config={{
+                                            toolbarButtons: [],
+                                            events : {
+                                                'froalaEditor.initialized' : function(e, editor) {
+                                                editor.edit.off();
+                                                }
+                                            }
+                                        }}
+                                    />
+                                    }
+
                                     {this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} subscriptionDuration={this.state.subscriptionDuration} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
                                     {!this.checkUserNotAllowed() &&<div className='btn btn-primary' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  ><span>Read More  →</span></div>}
                                 </div>
@@ -59,19 +73,6 @@ export default class PublicList extends Component {
                             
                             ))}
                             </div>
-                            {this.state.currentFileContent && 
-                            <FroalaView
-                            model={this.state.currentFileContent}
-                            config={{
-                                toolbarButtons: [],
-                                events : {
-                                    'froalaEditor.initialized' : function(e, editor) {
-                                    editor.edit.off();
-                                    }
-                                }
-                            }}
-                            />
-                        }
                     </div>
                 <div className="col-md-4">
                 <div className="card">
@@ -244,9 +245,14 @@ export default class PublicList extends Component {
             (fileWithEncryptedContent) => {
                 var parsedFileWithEncryptedContent = JSON.parse(fileWithEncryptedContent || "{}");
                 var fileContent = decryptContent(parsedFileWithEncryptedContent[fileName].content, {privateKey:decryptedFilePrivateKey});
+                var currentFileContent = JSON.parse(fileContent);
+                
+                var files = this.state.files;
+                files[fileName].content = currentFileContent;
                 this.setState(
                     {
-                        currentFileContent: JSON.parse(fileContent)
+                        files: files,
+                        currentFileContent: currentFileContent
                     }
                 );
             });

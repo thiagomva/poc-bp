@@ -1,7 +1,10 @@
 /* Globals */
 a,a:focus,a:hover{color:#191b22;}
-html,body{height:100%;text-align:center;background-color:#fff;}
+html,body{text-align:center;background-color:#fff;}
 body{color:#191b22}
+body {
+    padding-top: 56px;
+}
 .hide{display:none;}
 .landing-heading{font-family:'Lato',Sans-Serif;font-weight:400;}
 .clickable{cursor: pointer;}

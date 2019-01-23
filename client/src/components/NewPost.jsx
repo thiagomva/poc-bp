@@ -167,14 +167,14 @@ export default class NewPost extends Component {
   }
 
   saveFilePrivateKeyToSubscriber(fileInfo, subscriberPublicKey){
-    getFile(subscriberPublicKey, { decrypt: false }).then(
+    getFile('bp/' + subscriberPublicKey, { decrypt: false }).then(
       (file) => {
         subscribedFiles = JSON.parse(file || "{}");
         var encryptedFilePrivateKey = encryptContent(fileInfo.privateKey, {publicKey: subscriberPublicKey});
         subscribedFiles[fileInfo.fileName] = {
           decryptionPrivateKey: encryptedFilePrivateKey
         };
-        putFile(subscriberPublicKey, JSON.stringify(subscribedFiles), {encrypt:false}).then();
+        putFile('bp/' + subscriberPublicKey, JSON.stringify(subscribedFiles), {encrypt:false}).then();
       }
     );
   }

@@ -15,14 +15,13 @@ class Subscribers {
         var jwtStoreName = 'jwtStore.json';
         try {
             var content;
-            var stringfiedJson = "";
             if (fs.existsSync('./' + jwtStoreName)) {
                 content = fs.readFileSync('./' + jwtStoreName);
                 var jsonFile = JSON.parse(content);
                 if(jsonFile[this.username] && jsonFile[this.username].jwt && jsonFile[this.username].address) {
-                    var appPrivateKey = null; //TODO get appPrivateKey
+                    var appPrivateKey = this.decodeJwtTokenPayload(jsonFile[this.username].jwt).scopes.appPrivateKey;
                     this.getFilesPrivateKeysFile(appPrivateKey, jsonFile[this.username].address, function(errFp, respFp) {
-                        if (errFp) throw new Error(404, 'bp/myFilesPrivateKeys.json not found.');
+                        if (errFp) throw new Error(404, 'myFilesPrivateKeys.json not found.');
                         else {
                             this.getSubscribersFile(appPrivateKey, jsonFile[this.username].address, function(errSub, respSub) {
                                 if (errSub) throw new Error(404, 'bp/subscribers.json not found.');
@@ -37,8 +36,6 @@ class Subscribers {
                             });
                         }
                     });
-
-                    cb(null, JSON.parse('{ "success": true }'));
                 }
                 else {
                     this.throwNotFoundError();
@@ -52,20 +49,36 @@ class Subscribers {
           }
     }
 
-    handleFilesRead(appPrivateKey, address, userName, filesPrivateKeys, subscribers, pageInfo, cb) {
+    handleFilesRead(appPrivateKey, jwt, address, userName, filesPrivateKeys, subscribers, pageInfo, cb) {
         var date = new Date(Date.now());
         date.setDate(date.getDate() + pageInfo.subscriptionDuration);
         subscribers[this.appPublicKey] = {expirationDate:date};
-        //TODO save file bp/subscribers.json PRIVATE with subscribers
-
+        var subscribersToSave = Blockstack.encryptContent(subscribers, {publicKey: Blockstack.getPublicKeyFromPrivate(appPrivateKey)});
         var subscriptionFile = {};
         Object.keys(filesPrivateKeys).forEach(function(key) {
             if (filesPrivateKeys[key] && filesPrivateKeys[key].decryptionPrivateKey) {
                 subscriptionFile[key] = {decryptionPrivateKey: Blockstack.encryptContent(filesPrivateKeys[key].decryptionPrivateKey, {publicKey: this.appPublicKey})};
             }
         });
-        
-        //TODO save file bp/{this.appPublicKey}.json PUBLIC with subscriptionFile
+        this.uploadFile(jwt, address, 'subscribers.json', subscribersToSave, function(errSub, resSub) {
+            if (errSub) throw new Error(403, 'bp/subscribers.json write error. ' + errSub);
+            else {
+                this.uploadFile(jwt, address, this.appPublicKey + '.json', subscriptionFile, function(errPk, resPk) {
+                    if (errPk) throw new Error(403, 'bp/[appPublicKey].json write error. ' + errPk);
+                    else {
+                        cb(null, {success:true});
+                    }
+                });
+            }
+        });
+    }
+
+    uploadFile(jwtToken, address, fileName, file, cb) {
+        Blockstack.getOrSetLocalGaiaHubConnection().then(hubConfig => {
+            hubConfig.token = jwtToken;
+            hubConfig.address = address;
+            Blockstack.uploadToGaiaHub('bp/' + fileName, file, hubConfig).then(res => cb(null, res)).catch(err => cb(err));;
+        }).catch(err => cb(err));
     }
 
     getSubscribersFile(appPrivateKey, address, cb) {
@@ -78,7 +91,7 @@ class Subscribers {
     }
 
     getFilesPrivateKeysFile(appPrivateKey, address, cb) {
-        this.getPrivateFile(appPrivateKey, address, 'bp/myFilesPrivateKeys.json', function(error, response) {
+        this.getPrivateFile(appPrivateKey, address, 'myFilesPrivateKeys.json', function(error, response) {
             if (error) cb(error);
             else {
                 cb(null, response);
@@ -98,7 +111,7 @@ class Subscribers {
     getFileFromUrl(address, fileName, cb) {
         var url = 'https://gaia.blockstack.org/hub/' + address + '/' + fileName;
         axios.get(url).then(response => {
-            cb(null, JSON.parse(response));
+            cb(null, response.data);
           })
           .catch(error => {
             cb(error);

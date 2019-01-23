@@ -4,6 +4,7 @@ html,body{height:100%;text-align:center;background-color:#191b22;}
 body{color:#fff}
 .hide{display:none;}
 .landing-heading{font-family:'Lato',Sans-Serif;font-weight:400;}
+.clickable{cursor: pointer;}
 
 /* Buttons */
 .btn{font-family:'Lato',Sans-Serif;padding:0.5625rem 2.5rem;font-size:0.8125rem;font-weight:400;line-height:1.75rem;border-radius:0!important;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-ms-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;transition:all .2s ease-in-out;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}

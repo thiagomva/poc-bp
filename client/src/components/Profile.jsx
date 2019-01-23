@@ -89,7 +89,7 @@ export default class Profile extends Component {
                   {this.isLocal() &&
                     <span>
                       &nbsp;|&nbsp;
-                      <a onClick={ handleSignOut.bind(this) }>(Logout)</a>
+                      <a className="clickable" onClick={ handleSignOut.bind(this) }>(Logout)</a>
                     </span>
                   }
                 </div>

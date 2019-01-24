@@ -48,31 +48,16 @@ export default class PublicList extends Component {
                                     <h2 className="card-title"> {this.state.files[fileName].title}</h2>
                                     <p className="card-text"> {this.state.files[fileName].description}</p>
                                     {this.state.files[fileName].content && 
-                                    <FroalaView 
-                                        model={this.state.files[fileName].content}
-                                        config={{
-                                            toolbarButtons: [],
-                                            events : {
-                                                'froalaEditor.initialized' : function(e, editor) {
-                                                editor.edit.off();
-                                                }
-                                            }
-                                        }}
-                                    />
+                                    <div key={fileName + "-content"} className="fr-view" dangerouslySetInnerHTML={{ __html: this.state.files[fileName].content }}></div>
                                     }
-
                                     {this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} subscriptionDuration={this.state.subscriptionDuration} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
                                     {!this.checkUserNotAllowed() &&<div className='btn btn-primary' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  ><span>Read More  →</span></div>}
                                 </div>
                                 <div className="card-footer text-muted">Posted by <a href="#">{this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}</a>
                                 </div>
-                              </div> 
-                                  
-            //<div key={fileName} className={"file-card" + (this.checkUserNotAllowed() ? " locked" : "")} onClick={e => this.handleReadFile(fileName)}>{this.state.files[fileName].title}</div>
-
-                            
-                            ))}
                             </div>
+                            ))}
+                        </div>
                     </div>
                 <div className="col-md-4">
                 <div className="card">

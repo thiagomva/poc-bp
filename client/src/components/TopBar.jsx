@@ -27,7 +27,7 @@ export default class TopBar extends Component {
                 </a>
               </li>
               <li className="nav-item ">
-                <a className="nav-link" onClick={handleSignOut.bind(this)}>({username}) Logout</a>
+                <a className="nav-link clickable" onClick={handleSignOut.bind(this)}>({username}) Logout</a>
               </li>
             </ul>
           </div>

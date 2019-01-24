@@ -76,7 +76,7 @@ export default class Profile extends Component {
     return (
       !isSignInPending() && person ?
 	  <div>
-		<Topbar handleSignOut={handleSignOut} username={username}/>
+		<Topbar handleSignOut={handleSignOut} username={loadUserData().username}/>
 		<div className="container">
 			<div className="row">
 			  <div className="col-md-12">

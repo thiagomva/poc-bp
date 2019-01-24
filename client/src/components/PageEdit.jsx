@@ -69,6 +69,12 @@ export default class PageEdit extends Component {
           />
         </div>
         <div className="col-md-12 text-right">
+        <button 
+            className="btn btn-secondary btn-lg margin-right-10"
+            onClick={e => this.props.handleCancelEdition()}
+          >
+            Cancel
+          </button>
           <button 
             className="btn btn-primary btn-lg"
             onClick={e => this.handleNewPageSubmit(e)}

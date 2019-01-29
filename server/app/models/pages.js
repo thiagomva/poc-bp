@@ -9,6 +9,21 @@ class Pages {
         this.numberOfPosts = numberOfPosts ? numberOfPosts : 0;
     }
 
+    listPages(cb) {
+        var fs = require("fs");
+        var pageListFileName = 'pageList.json';
+
+        if (fs.existsSync('./' + pageListFileName)) {
+            content = fs.readFileSync('./' + pageListFileName);
+            var jsonFile = JSON.parse(content);
+            cb(null, jsonFile);
+        }
+
+        else {
+            cb(null, {});
+        }
+    }
+
     getPagesResult(cb) {
         var fs = require("fs");
         var pageListFileName = 'pageList.json';

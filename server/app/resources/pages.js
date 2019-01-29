@@ -8,5 +8,8 @@ module.exports = function (router) {
     router.route('/')
       .post(function (req, res, next) {
         new PagesController().savePage(req.body, baseResponse(res, next));
+      })
+      .get(function (req, res, next) {
+        new PagesController().listPages(baseResponse(res, next));
       });
   };

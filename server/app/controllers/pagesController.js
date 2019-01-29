@@ -14,6 +14,10 @@ class PagesController {
         this.valid(json);
         new Pages(json.userBlockstackId, json.pageName, json.pageDescription, json.numberOfPosts).getPagesResult(cb);
     }
+
+    listPages(cb) {
+        new Pages().getPagesResult(cb);
+    }
 }
 
 module.exports = PagesController;

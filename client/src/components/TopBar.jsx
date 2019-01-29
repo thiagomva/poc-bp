@@ -22,6 +22,9 @@ export default class TopBar extends Component {
           <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item active">
+                <a className="nav-link" href="/all-pages">All Pages</a>
+              </li>
+              <li className="nav-item active">
                 <a className="nav-link" href="/">My Page
                   <span className="sr-only">(current)</span>
                 </a>

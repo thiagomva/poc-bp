@@ -5,4 +5,7 @@
 /.vs
 server/jwtStore.json
 .vs/slnx.sqlite
-/server/chargesStore.json
+server/pageList.json
+server/chargesStore.json
+/server/config/environments/production.js
+/server/config/environments/dev.js

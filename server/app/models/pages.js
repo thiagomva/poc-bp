@@ -2,9 +2,10 @@ var config = require('nconf');
 var Error = require('../util/error.js');
 
 class Pages {
-    constructor(userBlockstackId, pageDescription) {
+    constructor(userBlockstackId, pageDescription, numberOfPosts) {
         this.userBlockstackId = userBlockstackId;
         this.pageDescription = pageDescription;
+        this.numberOfPosts = numberOfPosts;
     }
 
     getPagesResult(cb) {
@@ -20,14 +21,20 @@ class Pages {
 
                 if (!jsonFile[this.userBlockstackId]) {
                     jsonFile[this.userBlockstackId] = {};
-                    jsonFile[this.userBlockstackId].numberOfPosts = 0;
                 } 
+
+                if (this.numberOfPosts) {
+                    jsonFile[this.userBlockstackId].numberOfPosts = this.numberOfPosts;
+                }
                 
-                jsonFile[this.userBlockstackId].pageDescription = this.pageDescription;
+                if(this.pageDescription) {
+                    jsonFile[this.userBlockstackId].pageDescription = this.pageDescription;
+                }
+                
                 stringfiedJson = JSON.stringify(jsonFile);
             }
             else {
-                stringfiedJson = '{"' + this.userBlockstackId + '": { "pageDescription" : "' + this.pageDescription + '", "numberOfPosts" : 0 } }';
+                stringfiedJson = '{"' + this.userBlockstackId + '": { "pageDescription" : "' + this.pageDescription + '", "numberOfPosts" : ' + this.numberOfPosts + ' } }';
             }
 
             fs.writeFileSync(pageListFileName, stringfiedJson, "utf8");

@@ -4,8 +4,8 @@ var Error = require('../util/error.js');
 class Pages {
     constructor(userBlockstackId, pageName, pageDescription, numberOfPosts) {
         this.userBlockstackId = userBlockstackId;
-        this.pageName = pageName;
-        this.pageDescription = pageDescription;
+        this.pageName = pageName ? pageName : '';
+        this.pageDescription = pageDescription ? pageDescription : '';
         this.numberOfPosts = numberOfPosts ? numberOfPosts : 0;
     }
 

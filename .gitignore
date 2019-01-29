@@ -5,3 +5,4 @@
 /.vs
 server/jwtStore.json
 .vs/slnx.sqlite
+server/pageList.json

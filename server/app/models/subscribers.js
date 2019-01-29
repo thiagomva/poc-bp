@@ -5,9 +5,10 @@ var JsonTokens = require('jsontokens');
 const axios = require('axios');
 
 class Subscribers {
-    constructor(username, appPublicKey) {
+    constructor(username, appPublicKey, monthly) {
         this.username = username;
         this.appPublicKey = appPublicKey;
+        this.monthly = monthly;
     }
 
     getSubscribersResult(cb) {
@@ -52,9 +53,42 @@ class Subscribers {
           }
     }
 
+    getPageInfo(cb) {
+        var fs = require("fs");
+        var jwtStoreName = 'jwtStore.json';
+        try {
+            var content;
+            if (fs.existsSync('./' + jwtStoreName)) {
+                content = fs.readFileSync('./' + jwtStoreName);
+                var jsonFile = JSON.parse(content);
+                if (jsonFile[this.username]) {
+                    var payload = this.decodeJwtTokenPayload(jsonFile[this.username]);
+                    var appPrivateKey = payload.scopes[0].appPrivateKey;
+                    var address = payload.scopes[0].address;
+                    var hubServerUrl = payload.scopes[0].hubServerUrl;
+                    var hubUrlPrefix = payload.scopes[0].hubUrlPrefix;
+                    var self = this;
+                    
+                    self.getFileFromUrl(address, hubUrlPrefix, 'pageInfo.json', function(errPi, respPi) {
+                        if (errPi) throw new Error(404, 'pageInfo.json not found.');
+                        else {
+                            cb(null, respPi);
+                        }
+                    });
+                } else {
+                    this.throwNotFoundError();
+                }
+            } else {
+                this.throwNotFoundError();
+            }
+          } catch(err) {
+            cb(err);
+          }
+    }
+
     handleFilesRead(self, appPrivateKey, jwt, address, hubServerUrl, hubUrlPrefix, filesPrivateKeys, subscribers, pageInfo, cb) {
         var date = new Date();
-        var expiration = date.getTime() + (86400000 * pageInfo.subscriptionDuration);
+        var expiration = date.getTime() + (86400000 * (this.monthly ? 30 : 365));
         subscribers[self.appPublicKey.toLowerCase()] = {expirationDate:expiration};
         var subscribersToSave = Blockstack.encryptContent(JSON.stringify(subscribers), {publicKey: Blockstack.getPublicKeyFromPrivate(appPrivateKey)});
         var subscriptionFile = {};

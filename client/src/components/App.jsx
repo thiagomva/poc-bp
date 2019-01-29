@@ -11,6 +11,7 @@ import {
   signUserOut,
 } from 'blockstack';
 import PublicList from './PublicList.jsx';
+import PageList from './PageList.jsx';
 
 export default class App extends Component {
 
@@ -38,6 +39,11 @@ export default class App extends Component {
             : 
             <Switch>
               <Route path='/public-list' component={PublicList} />
+              <Route path='/all-pages'
+                render={
+                  routeProps => <PageList handleSignOut={ this.handleSignOut } {...routeProps} />
+                }
+              />
               <Route
                 path='/:username?'
                 render={

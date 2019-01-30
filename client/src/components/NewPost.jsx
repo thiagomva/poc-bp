@@ -9,6 +9,8 @@ import {
   loadUserData,
   Person,
 } from 'blockstack';
+import Axios from 'axios';
+import { server_url } from '../config';
 
 export default class NewPost extends Component {
   constructor(props) {
@@ -157,6 +159,15 @@ export default class NewPost extends Component {
     putFile('myFiles.json', JSON.stringify(myFiles), docOptions)
     .then(() => {
       this.addFileToPrivateList(fileInfo);
+    });
+
+    var url = server_url + '/api/v1/pages';
+
+    Axios.post(url, {
+      userBlockstackId: this.state.username,
+      numberOfPosts: Object.keys(myFiles).length
+    }).then(response => {
+      
     });
   }
 

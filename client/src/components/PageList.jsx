@@ -20,16 +20,38 @@ export default class PageList extends Component {
         return (
             <div>
                 <Topbar handleSignOut={handleSignOut} username={loadUserData().username}/>
-                <div>Page List Works!</div>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="header-section title-section">
+                                <div>
+                                    <h1><span>All Pages</span></h1>
+                                    <h4>Find the best content on BitPatron</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-12">
+                        {Object.keys(this.state.pages).map((userId) => (
+                            <div><h3>{userId}</h3><h4>{this.state.pages[userId].pageName}</h4></div>
+                        ))}
+                        </div>
+                    </div>
+                </div>
             </div>
         );
+    }
+
+    componentDidMount() {
+      this.fetchData();
     }
 
     fetchData() {
         var url = server_url + '/api/v1/pages';
 
         Axios.get(url).then(response => {
-            this.state.pages = response;
+            this.setState({pages:response.data});
           });
     }
 }

@@ -14,7 +14,7 @@ body {
 /* Avatar */
 .header-section{margin:25px 0;}
 .avatar{width:100px;height:100px;}
-.avatar-section{display:flex;text-align:left;}
+.title-section{display:flex;text-align:left;}
 .username{margin-left:20px;}
 
 /* Scaffolding */

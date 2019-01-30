@@ -92,7 +92,7 @@ export default class Profile extends Component {
 			<div className="row">
 			  <div className="col-md-12">
 				<div className="row header-section">
-				  <div className="avatar-section col-md-8">
+				  <div className="title-section col-md-8">
 					  <div className="">
                 <h1>
                   <span>

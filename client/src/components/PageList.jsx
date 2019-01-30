@@ -34,7 +34,13 @@ export default class PageList extends Component {
                     <div className="row">
                         <div className="col-md-12">
                         {Object.keys(this.state.pages).map((userId) => (
-                            <div><h3>{userId}</h3><h4>{this.state.pages[userId].pageName}</h4></div>
+                            <a key={userId} className="card clickable mb-4" href={"/"+userId} target="_blank">
+                                <h3 className="card-header">{this.state.pages[userId].pageName}<i className="pull-right fa fa-external-link"></i></h3>
+                                <div className="card-body">
+                                    <h4>{this.state.pages[userId].pageDescription}</h4>
+                                    <span>Number of Posts: {this.state.pages[userId].numberOfPosts}</span>
+                                </div>
+                            </a>
                         ))}
                         </div>
                     </div>

@@ -34,6 +34,16 @@ class ChargesController {
         this.validCreate(json);
         new Charges().getCreateResult(json, cb);
     }
+
+    validCheck(json){
+        if (!json) throw new Error(400, 'no body in request');
+        if (!json.appPublicKey) throw new Error(400, 'appPublicKey is mandatory');
+    }
+
+    check(json, cb) {
+        this.validCheck(json);
+        new Charges().getCheckResult(json, cb);
+    }
 }
 
 module.exports = ChargesController;

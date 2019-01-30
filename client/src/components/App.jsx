@@ -12,6 +12,7 @@ import {
 } from 'blockstack';
 import PublicList from './PublicList.jsx';
 import PageList from './PageList.jsx';
+import Axios from 'axios';
 
 export default class App extends Component {
 

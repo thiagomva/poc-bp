@@ -28,8 +28,8 @@ export default class PageEdit extends Component {
       username: "",
       newPageName: "",
       newPageDescription: "",
-      newSubscriptionPrice:undefined,
-      newSubscriptionDuration: undefined,
+      newMonthlyPrice:undefined,
+      newYearlyPrice: undefined,
       isLoading: false,
       pageInfo: null,
       hasEthereumAddress: undefined
@@ -56,16 +56,16 @@ export default class PageEdit extends Component {
         </div>
         <div className="col-md-6">
           <input className="input-page-price" type="number"
-            value={this.state.newSubscriptionPrice}
-            onChange={e => this.handleNewSubscriptionPriceChange(e)}
-            placeholder="Subscription price (ETH)"
+            value={this.state.newMonthlyPrice}
+            onChange={e => this.handleNewMonthlyPriceChange(e)}
+            placeholder="Monthly price (USD)"
           />
         </div>
         <div className="col-md-6">
           <input className="input-page-duration" type="number"
-            value={this.state.newSubscriptionDuration}
-            onChange={e => this.handleNewSubscriptionDurationChange(e)}
-            placeholder="Subscription duration (days)"
+            value={this.state.newYearlyPrice}
+            onChange={e => this.handleNewYearlyPriceChange(e)}
+            placeholder="Yearly price (USD)"
           />
         </div>
         <div className="col-md-12 text-right">
@@ -96,8 +96,8 @@ export default class PageEdit extends Component {
       this.setState({
         newPageName : this.props.pageInfo.pageName,
         newPageDescription : this.props.pageInfo.pageDescription,
-        newSubscriptionPrice : this.props.pageInfo.subscriptionPrice,
-        newSubscriptionDuration : this.props.pageInfo.subscriptionDuration,
+        newMonthlyPrice : this.props.pageInfo.monthlyPrice,
+        newYearlyPrice : this.props.pageInfo.yearlyPrice,
       })
     }
    /* this.saveJwtToken();
@@ -136,12 +136,12 @@ export default class PageEdit extends Component {
     this.setState({newPageDescription: event.target.value})
   }
 
-  handleNewSubscriptionPriceChange(event) {
-    this.setState({newSubscriptionPrice: event.target.value})
+  handleNewMonthlyPriceChange(event) {
+    this.setState({newMonthlyPrice: event.target.value})
   }
 
-  handleNewSubscriptionDurationChange(event) {
-    this.setState({newSubscriptionDuration: event.target.value})
+  handleNewYearlyPriceChange(event) {
+    this.setState({newYearlyPrice: event.target.value})
   }
 
   handleNewPageSubmit(event) {
@@ -174,8 +174,8 @@ export default class PageEdit extends Component {
               let pageInfo = {
                 pageName: this.state.newPageName,
                 pageDescription: this.state.newPageDescription,
-                subscriptionPrice: parseFloat(this.state.newSubscriptionPrice),
-                subscriptionDuration: parseInt(this.state.newSubscriptionDuration),
+                monthlyPrice: parseFloat(this.state.newMonthlyPrice),
+                yearlyPrice: parseInt(this.state.newYearlyPrice),
                 files: this.props.pageInfo ? this.props.pageInfo.files : {}
               };
               this.props.handleSavePage(pageInfo);

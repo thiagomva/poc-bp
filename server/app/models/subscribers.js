@@ -50,7 +50,7 @@ class Subscribers {
             }
           } catch(err) {
             cb(err);
-          }
+        }
     }
 
     getPageInfo(cb) {

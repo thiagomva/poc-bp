@@ -70,3 +70,7 @@ h1, h2, h3, h4, h5, h6 {margin-top: 0;margin-bottom: .5rem;}*/
 .panel-landing { text-align: center; }
 
 .new-page {margin-bottom: 10px;}
+
+.payment-option-modal{text-align: center;}
+
+.payment-buttons-row{margin-top: 10px;}

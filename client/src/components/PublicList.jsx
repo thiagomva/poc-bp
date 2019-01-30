@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import FroalaView from 'react-froala-wysiwyg';
 import Payment from './Payment.jsx';
 import {
     loadUserData,
@@ -23,8 +22,8 @@ export default class PublicList extends Component {
             pageName: "",
             pageDescription: "",
 
-            subscriptionPrice: undefined,
-            subscriptionDuration: undefined,
+            monthlyPrice: undefined,
+            yearlyPrice: undefined,
             files: {},
             currentFileContent:"",
             pageUserAddress: undefined,
@@ -44,16 +43,16 @@ export default class PublicList extends Component {
                             }
                             <div className="file-container">
                             {Object.keys(this.state.files).reverse().map((fileName) => (<div className="card  mb-4">
-                                <div key={fileName} className="card-body">
+                                <div className="card-body">
                                     <h2 className="card-title"> {this.state.files[fileName].title}</h2>
                                     <p className="card-text"> {this.state.files[fileName].description}</p>
                                     {this.state.files[fileName].content && 
-                                    <div key={fileName + "-content"} className="fr-view" dangerouslySetInnerHTML={{ __html: this.state.files[fileName].content + '&nbsp;<br>&nbsp;' }}></div>
+                                    <div className="fr-view" dangerouslySetInnerHTML={{ __html: this.state.files[fileName].content + '&nbsp;<br>&nbsp;' }}></div>
                                     }
-                                    {this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} subscriptionDuration={this.state.subscriptionDuration} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
+                                    {this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
                                     {!this.checkUserNotAllowed() && !this.state.files[fileName].content &&<div className='btn btn-primary' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  ><span>Read More  →</span></div>}
                                 </div>
-                                <div className="card-footer text-muted">Posted by <a href="#">{this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}</a>
+                                <div className="card-footer text-muted">Posted by <a href="#">{this.state.pageOwner && this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}</a>
                                 </div>
                             </div>
                             ))}
@@ -71,7 +70,7 @@ export default class PublicList extends Component {
                         <h5 className="card-title ">{this.state.pageOwner && this.state.pageOwner.name()}</h5>
                     </div>
                 </div>
-                {this.state.subscriptionDuration && this.state.pageUserAddress && 
+                {this.state.yearlyPrice && this.state.pageUserAddress && 
                     this.state.pageUsername != loadUserData().username && 
                     !this.state.subscriptionFile &&                            
                     <div className="card my-4">
@@ -80,7 +79,7 @@ export default class PublicList extends Component {
                             <div className="row">
                             <div className="col-lg-12">
                                 {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
-                                {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} amount={this.state.subscriptionPrice} subscriptionDuration={this.state.subscriptionDuration} confirmed={this.subscriptionConfirmed} subscriptionMode={false}></Payment>}
+                                {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={false}></Payment>}
                                 {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
                             </div>
                             </div>
@@ -107,25 +106,27 @@ export default class PublicList extends Component {
     }
 
     fetchData(nextProps) {
+        var newState = {}
         if(nextProps.pageInfo != null){
-            this.setState(
-                {
-                    pageName: nextProps.pageInfo.pageName,
-                    pageDescription: nextProps.pageInfo.pageDescription,
-                    subscriptionPrice: nextProps.pageInfo.subscriptionPrice,
-                    subscriptionDuration: nextProps.pageInfo.subscriptionDuration,
-                    files: nextProps.pageInfo.files ? nextProps.pageInfo.files : {}
-                }
-            );
+            newState = {
+                pageName: nextProps.pageInfo.pageName,
+                pageDescription: nextProps.pageInfo.pageDescription,
+                monthlyPrice: nextProps.pageInfo.monthlyPrice,
+                yearlyPrice: nextProps.pageInfo.yearlyPrice,
+                files: nextProps.pageInfo.files ? nextProps.pageInfo.files : {}
+            }
         }
         if(nextProps.pageUsername != null){
-            this.setState(
-                {
-                    pageUsername: nextProps.pageUsername
-                }
-            );
-            this.setSubscriptionData();
+            newState["pageUsername"] = nextProps.pageUsername;
+            
         }
+        
+        this.setState(newState, () => {
+            if(nextProps.pageUsername != null)
+            {
+                this.setSubscriptionData();
+            }
+        });
     }
 
     getFormattedDateFromDuration() {
@@ -134,7 +135,7 @@ export default class PublicList extends Component {
         if (this.state.subscriptionFile && this.state.subscriptionFile[appPublicKey]) {
             duration = this.state.subscriptionFile[appPublicKey].expirationDate;
         } else {
-            duration = (new Date()).getTime() + (this.state.subscriptionDuration * 86400000);
+            duration = (new Date()).getTime() + (this.state.yearlyPrice * 86400000);
         }
         var date = new Date(duration);
         return date.toLocaleDateString();
@@ -143,28 +144,24 @@ export default class PublicList extends Component {
     setSubscriptionData() {
         lookupProfile(this.state.pageUsername)
         .then((profile) => {
-            var owner = new Person(profile).toJSON();
-            this.setState(
-                {
-                    pageOwner: new Person(profile)
-                }
-            );
+            var person = new Person(profile);
+            var ownerJson = person.toJSON();
             var address = null;
-            if (owner && owner.profile && owner.profile.account) {
-                for (var i = 0; i < owner.profile.account.length; ++i) {
-                    if (owner.profile.account[i].service == "ethereum") {
-                        address = owner.profile.account[i].identifier;
+            if (ownerJson && ownerJson.profile && ownerJson.profile.account) {
+                for (var i = 0; i < ownerJson.profile.account.length; ++i) {
+                    if (ownerJson.profile.account[i].service == "ethereum") {
+                        address = ownerJson.profile.account[i].identifier;
                         break;
                     }
                 }
             }
-            if (address) {
-                this.setState(
-                    {
-                        pageUserAddress: address
-                    }
-                );
-            }
+            var pageUserAddress = address ? address : this.state.pageUserAddress;
+            this.setState(
+                {
+                    pageOwner: person,
+                    pageUserAddress: pageUserAddress
+                }, 
+            );
            })
         .catch((error) => {
             console.log('could not resolve profile')

@@ -54,7 +54,7 @@ class Charges {
                         amount: price,
                         currency: 'USD',
                         callback_url: config.get('OPEN_NODE_CALLBACK_URL'),
-                        success_url: config.get('OPEN_NODE_SUCCESS_URL') + json.username
+                        success_url: config.get('OPEN_NODE_SUCCESS_URL') + json.username + "?handler=openNode"
                     };
                     let httpConfig = {
                         headers: {
@@ -62,7 +62,7 @@ class Charges {
                         }
                     };
                     try {
-                        var url = config.get('OPEN_NODE_API_URL');
+                        var url = config.get('OPEN_NODE_API_URL') + "v1/charges";
                         axios.post(url, body, httpConfig).then(response => {
                             var data = response && response.data && response.data.data;
                             var jsonFile = {};
@@ -83,6 +83,52 @@ class Charges {
                 }
             }
         );
+    }
+
+    getCheckResult(check, cb) {
+        var fs = require("fs");
+        try {
+            var content;
+            var stringfiedJson = "";
+            if (fs.existsSync('./' + chargesStoreName)) {
+                content = fs.readFileSync('./' + chargesStoreName);
+                var jsonFile = JSON.parse(content);
+                let httpConfig = {
+                    headers: {
+                        Authorization: config.get('OPEN_NODE_API_KEY')
+                    }
+                };
+                var url = config.get('OPEN_NODE_API_URL') + "v1/charge/";
+                var apiCalls = 0;
+                Object.keys(jsonFile).map((chargeId) => {
+                    if(jsonFile[chargeId].status != "paid" && jsonFile[chargeId].appPublicKey == check.appPublicKey){
+                        apiCalls++;
+                        axios.get(url + chargeId, httpConfig).then(response => {
+                            var data = response && response.data && response.data.data;
+                            if(jsonFile[chargeId].status != data.status){
+                                jsonFile[chargeId].status = data.status;
+                                if(jsonFile[chargeId].status == "paid" || jsonFile[chargeId].status == "processing"){
+                                    new Subscribers(jsonFile[chargeId].username, jsonFile[chargeId].appPublicKey, jsonFile[chargeId].monthly).getSubscribersResult(cb);
+                                }
+                            }
+                            apiCalls--;
+                            if(apiCalls <= 0){
+                                fs.writeFileSync(chargesStoreName, JSON.stringify(jsonFile), "utf8");
+                                cb(null,null);
+                            }
+                        })
+                        .catch(error => {
+                            cb(error);
+                        });
+                    }
+                });
+            }
+            else {
+                throw new Error("chargesStore not found.")
+            }
+        } catch(err) {
+            cb(err)
+        }
     }
 }
 

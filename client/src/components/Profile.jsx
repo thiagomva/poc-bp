@@ -92,7 +92,7 @@ export default class Profile extends Component {
 			<div className="row">
 			  <div className="col-md-12">
 				<div className="row header-section">
-				  <div className="avatar-section col-md-8">
+				  <div className="avatar-section col-md-12">
 					  <div className="">
                 <h1>
                   <span>
@@ -154,7 +154,20 @@ export default class Profile extends Component {
   }
 
   componentDidMount() {
-    this.fetchData();
+    if(this.props.location.search == "?handler=openNode"){
+      var url = server_url + '/api/v1/charges/check';
+      var loggedUserAppPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey);
+      Axios.post(url, {
+        appPublicKey: loggedUserAppPublicKey
+      }).then(response => {
+        this.fetchData();
+      }).catch((err) => {
+        alert('Sorry, an error ocurred.');
+      });
+    }
+    else{
+      this.fetchData();
+    }
   }
 
   handleNewStatusChange(event) {

@@ -13,4 +13,9 @@ module.exports = function (router) {
     .post(function (req, res, next) {
       new ChargesController().create(req.body, baseResponse(res, next));
     });
+
+  router.route('/check')
+    .post(function (req, res, next) {
+      new ChargesController().check(req.body, baseResponse(res, next));
+    });
 };

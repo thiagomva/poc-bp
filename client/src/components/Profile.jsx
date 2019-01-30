@@ -3,6 +3,8 @@ import PageEdit from './PageEdit.jsx';
 import NewPost from './NewPost.jsx';
 import PublicList from './PublicList.jsx';
 import Topbar from './TopBar.jsx';
+import { server_url } from '../config';
+import Axios from 'axios';
 
 import {
   isSignInPending,
@@ -63,6 +65,15 @@ export default class Profile extends Component {
       putFile('pageInfo.json', JSON.stringify(pageInfo), docOptions)
         .then(() => {
           this.setState({pageInfo: pageInfo});
+          var url = server_url + '/api/v1/pages';
+          Axios.post(url, {
+            userBlockstackId: loadUserData().username,
+            pageName: pageInfo.pageName,
+            pageDescription: pageInfo.pageDescription,
+            numberOfPosts: Object.keys(pageInfo.files).length
+          }).then(response => {
+            
+          });
         })
         .finally(()=>{
           this.setState({isLoading: false,isEditing:false,isCreatingPost:false});

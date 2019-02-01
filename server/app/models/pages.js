@@ -15,6 +15,11 @@ class Pages {
 
     listPages(cb) {
         new PageInfoData().list().then(result => {
+            result = result.map(function(item) { 
+                item = item.toJSON();
+                delete item.jwt; 
+                return item; 
+            });
             cb(null, result);
         }).catch(err => cb(err));
     }

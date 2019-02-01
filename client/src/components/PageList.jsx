@@ -11,7 +11,7 @@ export default class PageList extends Component {
         super(props);
 
         this.state = {
-            pages: {}
+            pages: []
         }
     }
 
@@ -33,12 +33,12 @@ export default class PageList extends Component {
                     </div>
                     <div className="row">
                         <div className="col-md-12">
-                        {Object.keys(this.state.pages).map((userId) => (
-                            <a key={userId} className="card clickable mb-4" href={"/"+userId} target="_blank">
-                                <h3 className="card-header">{this.state.pages[userId].pageName}<i className="pull-right fa fa-external-link"></i></h3>
+                        {this.state.pages.map((page) => (
+                            <a key={page.username} className="card clickable mb-4" href={"/"+page.username}>
+                                <h3 className="card-header">{page.pageName}<i className="pull-right fa fa-external-link"></i></h3>
                                 <div className="card-body">
-                                    <h4>{this.state.pages[userId].pageDescription}</h4>
-                                    <span>Number of Posts: {this.state.pages[userId].numberOfPosts}</span>
+                                    <h4>{page.pageDescription}</h4>
+                                    <span>Number of Posts: {page.numberOfPosts}</span>
                                 </div>
                             </a>
                         ))}

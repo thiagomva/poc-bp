@@ -26,7 +26,6 @@ var start = function (cb) {
   require('../../app/helpers/authenticationHelper')(app);
   require('../../app/helpers/requestIntervalHelper')(app);
   require('../../app/resources/index')(app);
-
   app.use(express.static(path.join(__dirname, 'public')));
 
   app.use(function (err, req, res, next) {

@@ -12,4 +12,9 @@ module.exports = function (router) {
       .get(function (req, res, next) {
         new PagesController().listPages(baseResponse(res, next));
       });
+      
+    router.route('/numberOfPosts')
+      .post(function (req, res, next) {
+        new PagesController().updateNumberOfPosts(req.body, baseResponse(res, next));
+      })
   };

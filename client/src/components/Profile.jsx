@@ -58,26 +58,64 @@ export default class Profile extends Component {
       if(!pageInfo.files){
         pageInfo.files= {};
       }
+      var isNewPost = this.state.pageInfo && this.state.pageInfo.files ? this.state.pageInfo.files.length != pageInfo.files.length : false;
+
+      this.setState({isLoading: true});
+      savePageInfoOnGaia(pageInfo)
+        .then(() => {
+          this.setState({pageInfo: pageInfo});
+          if(isNewPost){
+            var serverPageInfo = {
+              numberOfPosts: Object.keys(pageInfo.files).length
+            };
+            var url = server_url + '/api/v1/pages/numberOfPosts';
+            Axios.post(url, serverPageInfo).then(response => {}).finally(()=>{
+              this.setState({isLoading: false,isEditing:false,isCreatingPost:false});
+            });
+          }
+          else{
+            var serverPageInfo = {
+              userBlockstackId: loadUserData().username,
+              pageName: pageInfo.pageName,
+              pageDescription: pageInfo.pageDescription,
+              numberOfPosts: Object.keys(pageInfo.files).length,
+              monthlyPrice: pageInfo.monthlyPrice,
+              yearlyPrice: pageInfo.yearlyPrice
+            };
+            var privateKey = loadUserData().appPrivateKey;
+            let hubUrl = loadUserData().hubUrl;
+            fetch(hubUrl + '/hub_info')
+              .then(response => response.json())
+              .then((hubInfo) => { 
+                getOrSetLocalGaiaHubConnection().then(hubConfig => {
+                  var scopes = [{
+                    scope : "putFilePrefix",
+                    domain : "bp/",
+                    appPrivateKey: privateKey,
+                    address: hubConfig.address,
+                    hubServerUrl: hubUrl,
+                    hubUrlPrefix: hubInfo.read_url_prefix
+                  }];
+                  var token = makeV1GaiaAuthToken(hubInfo, privateKey, hubUrl, null, scopes);
+                  serverPageInfo.jwt = token;
+                  savePageInfoOnServer(serverPageInfo);
+            })})
+            }          
+        });
+    }
+
+    var savePageInfoOnGaia = (pageInfo) => {      
       let docOptions = {
         encrypt: false
       };
-      this.setState({isLoading: true});
-      putFile('pageInfo.json', JSON.stringify(pageInfo), docOptions)
-        .then(() => {
-          this.setState({pageInfo: pageInfo});
-          var url = server_url + '/api/v1/pages';
-          Axios.post(url, {
-            userBlockstackId: loadUserData().username,
-            pageName: pageInfo.pageName,
-            pageDescription: pageInfo.pageDescription,
-            numberOfPosts: Object.keys(pageInfo.files).length
-          }).then(response => {
-            
-          });
-        })
-        .finally(()=>{
-          this.setState({isLoading: false,isEditing:false,isCreatingPost:false});
-        });
+      return putFile('pageInfo.json', JSON.stringify(pageInfo), docOptions);
+    }
+
+    var savePageInfoOnServer = (pageInfo) => {
+      var url = server_url + '/api/v1/pages';
+      Axios.post(url, pageInfo).then(response => {}).finally(()=>{
+        this.setState({isLoading: false,isEditing:false,isCreatingPost:false});
+      });
     }
 
     var handleCancelEdition = () => {
@@ -92,7 +130,7 @@ export default class Profile extends Component {
 			<div className="row">
 			  <div className="col-md-12">
 				<div className="row header-section">
-				  <div className="title-section col-md-12">
+				  <div className="title-section col-md-8">
 					  <div className="">
                 <h1>
                   <span>

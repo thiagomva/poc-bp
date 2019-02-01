@@ -1,68 +1,76 @@
 var config = require('nconf');
 var Error = require('../util/error.js');
+var PageInfoData = require('../data/pageInfoData.js');
 
 class Pages {
-    constructor(userBlockstackId, pageName, pageDescription, numberOfPosts) {
+    constructor(jwt, userBlockstackId, pageName, pageDescription, numberOfPosts, monthlyPrice, yearlyPrice) {
+        this.jwt = jwt;
         this.userBlockstackId = userBlockstackId;
         this.pageName = pageName ? pageName : '';
         this.pageDescription = pageDescription ? pageDescription : '';
         this.numberOfPosts = numberOfPosts ? numberOfPosts : 0;
+        this.monthlyPrice = monthlyPrice;
+        this.yearlyPrice = yearlyPrice;
     }
 
     listPages(cb) {
-        var fs = require("fs");
-        var pageListFileName = 'pageList.json';
+        new PageInfoData().list().then(result => {
+            cb(null, result);
+        }).catch(err => cb(err));
+    }
 
-        if (fs.existsSync('./' + pageListFileName)) {
-            content = fs.readFileSync('./' + pageListFileName);
-            var jsonFile = JSON.parse(content);
-            cb(null, jsonFile);
-        }
-
-        else {
-            cb(null, {});
-        }
+    getNumberOfPostsResult(cb){
+        var pageInfoData = new PageInfoData();
+        var _this = this;
+        pageInfoData.get(this.userBlockstackId).then(pageInfo => {
+            if (_this.numberOfPosts != null) {
+                pageInfo.numberOfPosts = _this.numberOfPosts;
+            }
+            pageInfoData.update(pageInfo).then(result => cb(null, null)).catch(err => cb(err));
+        }).catch(err => cb(err));
     }
 
     getPagesResult(cb) {
-        var fs = require("fs");
-        var pageListFileName = 'pageList.json';
-
-        try {
-            var content;
-            var stringfiedJson = "";
-            if (fs.existsSync('./' + pageListFileName)) {
-                content = fs.readFileSync('./' + pageListFileName);
-                var jsonFile = JSON.parse(content);
-
-                if (!jsonFile[this.userBlockstackId]) {
-                    jsonFile[this.userBlockstackId] = {};
-                }
-                
-                if(this.pageName) {
-                    jsonFile[this.userBlockstackId].pageName = this.pageName;
-                }
-
-                if(this.pageDescription) {
-                    jsonFile[this.userBlockstackId].pageDescription = this.pageDescription;
-                }
-
-                if (this.numberOfPosts) {
-                    jsonFile[this.userBlockstackId].numberOfPosts = this.numberOfPosts;
-                }
-                
-                stringfiedJson = JSON.stringify(jsonFile);
-            }
-            else {
-                stringfiedJson = '{"' + this.userBlockstackId + '": { "pageName" : "' + this.pageName + '", "pageDescription" : "' + this.pageDescription + '", "numberOfPosts" : ' + this.numberOfPosts + ' } }';
+        var pageInfoData = new PageInfoData();
+        var _this = this;
+        pageInfoData.get(this.userBlockstackId).then(pageInfo => {
+            var shouldCreate = !pageInfo;
+            if(shouldCreate){
+                pageInfo = {};
             }
 
-            fs.writeFileSync(pageListFileName, stringfiedJson, "utf8");
-            cb(null, JSON.parse(stringfiedJson));
+            pageInfo.username = _this.userBlockstackId;
+            
+            if(_this.jwt) {
+                pageInfo.jwt = _this.jwt;
+            }
 
-          } catch(err) {
-            cb(err)
-          }
+            if(_this.pageName) {
+                pageInfo.pageName = _this.pageName;
+            }
+
+            if(_this.pageDescription) {
+                pageInfo.pageDescription = _this.pageDescription;
+            }
+
+            if (_this.numberOfPosts != null) {
+                pageInfo.numberOfPosts = _this.numberOfPosts;
+            }
+
+            if (_this.monthlyPrice != null) {
+                pageInfo.monthlyPrice = _this.monthlyPrice;
+            }
+
+            if (_this.yearlyPrice != null) {
+                pageInfo.yearlyPrice = _this.yearlyPrice;
+            }
+            if(shouldCreate){
+                pageInfoData.insert(pageInfo).then(result => cb(null, null)).catch(err => cb(err));
+            }
+            else{
+                pageInfoData.update(pageInfo).then(result => cb(null, null)).catch(err => cb(err));
+            }
+        }).catch(err => cb(err));
     }
 }
 

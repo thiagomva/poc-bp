@@ -13,8 +13,6 @@ export default class PageEdit extends Component {
 
   constructor(props) {
     super(props);
-    
-    this.noEthereumWalletWarningMessage = 'You should set an Ethereum Wallet in your Blockstack account to create a page';
 
   	this.state = {
       person: {
@@ -31,8 +29,7 @@ export default class PageEdit extends Component {
       newMonthlyPrice:undefined,
       newYearlyPrice: undefined,
       isLoading: false,
-      pageInfo: null,
-      hasEthereumAddress: undefined
+      pageInfo: null
     };
   }
 
@@ -100,25 +97,10 @@ export default class PageEdit extends Component {
         newYearlyPrice : this.props.pageInfo.yearlyPrice,
       })
     }
-   /* this.saveJwtToken();
-    this.writeUsingJwt();*/
 
     lookupProfile(loadUserData().username)
     .then((profile) => {
       var owner = new Person(profile).toJSON();
-      var hasEthereumAddress = false;
-      if (owner && owner.profile && owner.profile.account) {
-        for (var i = 0; i < owner.profile.account.length; ++i) {
-          if (owner.profile.account[i].service == "ethereum") {
-            hasEthereumAddress = true;
-            break;
-          }
-        }
-      }
-      if (!hasEthereumAddress && this.state.hasEthereumAddress != undefined) {
-        alert(this.noEthereumWalletWarningMessage);
-      }
-      this.setState({ hasEthereumAddress: hasEthereumAddress });
     })
     .catch((error) => {
         console.log('could not resolve profile')
@@ -146,42 +128,13 @@ export default class PageEdit extends Component {
 
   handleNewPageSubmit(event) {
     event.preventDefault();
-    if (!this.state.hasEthereumAddress) {
-      alert(this.noEthereumWalletWarningMessage);
-      var win = window.open("https://browser.blockstack.org/profiles", '_blank');
-      win.focus();
-    } else {
-      var url = server_url + '/api/v1/authentication';
-      var privateKey = loadUserData().appPrivateKey;
-      let hubUrl = loadUserData().hubUrl;
-      fetch(hubUrl + '/hub_info')
-        .then(response => response.json())
-        .then((hubInfo) => { 
-          getOrSetLocalGaiaHubConnection().then(hubConfig => {
-            var scopes = [{
-              scope : "putFilePrefix",
-              domain : "bp/",
-              appPrivateKey: privateKey,
-              address: hubConfig.address,
-              hubServerUrl: hubUrl,
-              hubUrlPrefix: hubInfo.read_url_prefix
-            }];
-            var token = makeV1GaiaAuthToken(hubInfo, privateKey, hubUrl, null, scopes);
-            Axios.post(url, {
-              jwt: token,
-              username: loadUserData().username
-            }).then(response => {
-              let pageInfo = {
-                pageName: this.state.newPageName,
-                pageDescription: this.state.newPageDescription,
-                monthlyPrice: parseFloat(this.state.newMonthlyPrice),
-                yearlyPrice: parseInt(this.state.newYearlyPrice),
-                files: this.props.pageInfo ? this.props.pageInfo.files : {}
-              };
-              this.props.handleSavePage(pageInfo);
-            });
-          });
-        });
-    }
+    let pageInfo = {
+      pageName: this.state.newPageName,
+      pageDescription: this.state.newPageDescription,
+      monthlyPrice: parseFloat(this.state.newMonthlyPrice),
+      yearlyPrice: parseFloat(this.state.newYearlyPrice),
+      files: this.props.pageInfo ? this.props.pageInfo.files : {}
+    };
+    this.props.handleSavePage(pageInfo);
   }
 }

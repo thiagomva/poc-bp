@@ -49,8 +49,8 @@ export default class PublicList extends Component {
                                     {this.state.files[fileName].content && 
                                     <div className="fr-view" dangerouslySetInnerHTML={{ __html: this.state.files[fileName].content + '&nbsp;<br>&nbsp;' }}></div>
                                     }
-                                    {this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
-                                    {!this.checkUserNotAllowed() && !this.state.files[fileName].content &&<div className='btn btn-primary' onClick={e => {if(this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName)}}  ><span>Read More  →</span></div>}
+                                    {!this.state.files[fileName].isPublic && this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
+                                    {(this.state.files[fileName].isPublic || !this.checkUserNotAllowed()) && !this.state.files[fileName].content &&<div className='btn btn-primary' onClick={e => {if(!this.state.files[fileName].isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName, this.state.files[fileName].isPublic)}}  ><span>Read More  →</span></div>}
                                 </div>
                                 <div className="card-footer text-muted">Posted by <a href="#">{this.state.pageOwner && this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}</a>
                                 </div>
@@ -196,12 +196,14 @@ export default class PublicList extends Component {
         return this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile;
     }
 
-    handleReadFile(fileName){
-        if (this.checkUserNotAllowed()) {
+    handleReadFile(fileName, isPublic){
+        if (!isPublic && this.checkUserNotAllowed()) {
             alert("You need to subscribe to access this content");
             return;
         }
-        if (!this.state.subscriptionFile) {
+        if (isPublic) {
+            this.handleSelectedFile(fileName, null, isPublic);
+        } else if (!this.state.subscriptionFile) {
             getFile("myFilesPrivateKeys.json").then((file)=>{
                 var keys = JSON.parse(file || "{}");
                 this.handleSelectedFile(fileName, keys[fileName]);
@@ -211,22 +213,31 @@ export default class PublicList extends Component {
         }
     }
 
-    handleSelectedFile(fileName, file) {
-        if (file == null) {
+    handleSelectedFile(fileName, file, isPublic) {
+        if (!isPublic && file == null) {
             alert("You don't have access to this content");
             return;
         }
-        var decryptedFilePrivateKey = null;
-        if (!this.state.subscriptionFile) {
-            decryptedFilePrivateKey = file.decryptionPrivateKey;
-        } else {
-            decryptedFilePrivateKey = decryptContent(file.decryptionPrivateKey,{privateKey:loadUserData().appPrivateKey});
-        }
+        
         const options = { username:  this.state.pageUsername, decrypt: false };
         getFile('myFiles.json', options).then(
             (fileWithEncryptedContent) => {
                 var parsedFileWithEncryptedContent = JSON.parse(fileWithEncryptedContent || "{}");
-                var fileContent = decryptContent(parsedFileWithEncryptedContent[fileName].content, {privateKey:decryptedFilePrivateKey});
+                var fileContent = '';
+                if (isPublic) {
+                    fileContent = parsedFileWithEncryptedContent[fileName].content;
+                } else {
+                    var decryptedFilePrivateKey = null;
+
+                    if (!this.state.subscriptionFile) {
+                        decryptedFilePrivateKey = file.decryptionPrivateKey;
+                    } else {
+                        decryptedFilePrivateKey = decryptContent(file.decryptionPrivateKey,{privateKey:loadUserData().appPrivateKey});
+                    }
+
+                    fileContent = decryptContent(parsedFileWithEncryptedContent[fileName].content, {privateKey:decryptedFilePrivateKey});
+                }
+                
                 var currentFileContent = JSON.parse(fileContent);
                 
                 var files = this.state.files;

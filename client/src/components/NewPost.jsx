@@ -180,9 +180,16 @@ export default class NewPost extends Component {
     let encryptOptions = {
       publicKey: fileInfo.publicKey
     };
-    myFiles[fileInfo.fileName] = {
-      content: encryptContent(JSON.stringify(fileInfo.fileContent),encryptOptions)
-    };
+
+    if (fileInfo.isPublic) {
+      myFiles[fileInfo.fileName] = {
+        content: JSON.stringify(fileInfo.fileContent)
+      };
+    } else {
+      myFiles[fileInfo.fileName] = {
+        content: encryptContent(JSON.stringify(fileInfo.fileContent),encryptOptions)
+      };
+    }
 
     let docOptions = { encrypt: false };
     putFile('myFiles.json', JSON.stringify(myFiles), docOptions)
@@ -250,7 +257,8 @@ export default class NewPost extends Component {
       pageInfo.files[fileInfo.fileName] = {
         title: fileInfo.fileTitle,
         name: fileInfo.fileName,
-        description: fileInfo.fileDescription
+        description: fileInfo.fileDescription,
+        isPublic: fileInfo.isPublic
       }
       this.props.handleSavePage(pageInfo);
     });

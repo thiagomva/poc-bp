@@ -29,6 +29,7 @@ export default class NewPost extends Component {
       newFileName: "",
       newFileTitle: "",
       newFileContent: "",
+      newFileIsPublic: false,
       isLoading: false
     };
 
@@ -59,6 +60,29 @@ export default class NewPost extends Component {
             onChange={e => this.handleNewFileDescriptionChange(e)}
             placeholder="What's your post description?"
           />
+        </div>
+        <div className="col-md-12"><span>This file is:</span></div>
+        <div className="col-md-12">
+          <label>
+            <input
+              type="radio"
+              name="fileIsPublic"
+              value="public"
+              onChange={e => this.handleFileIsPublicChange(e)}
+            />
+            &nbsp;Public
+          </label>
+        </div>
+        <div className="col-md-12">
+          <label>
+            <input
+              type="radio"
+              name="fileIsPublic"
+              value="paid"
+              onChange={e => this.handleFileIsPublicChange(e)}
+            />
+            &nbsp;Only for paying subscribers
+          </label>
         </div>
         <div className="col-md-12">
         <FroalaEditor
@@ -114,6 +138,10 @@ export default class NewPost extends Component {
     this.setState({newFileDescription: event.target.value})
   }
 
+  handleFileIsPublicChange(event) {
+    this.setState({ newFileIsPublic: event.target.value === 'public' && event.target.checked })
+  }
+
   handleNewFileContentChange(event) {
     this.setState({newFileContent: event.target.value})
   }
@@ -132,6 +160,7 @@ export default class NewPost extends Component {
       fileName: this.state.newFileName,
       fileTitle: this.state.newFileTitle,
       fileDescription: this.state.newFileDescription,
+      isPublic: this.state.newFileIsPublic,
       fileContent: this.state.newFileContent,
       privateKey:privateKey,
       publicKey: publicKey
@@ -151,9 +180,16 @@ export default class NewPost extends Component {
     let encryptOptions = {
       publicKey: fileInfo.publicKey
     };
-    myFiles[fileInfo.fileName] = {
-      content: encryptContent(JSON.stringify(fileInfo.fileContent),encryptOptions)
-    };
+
+    if (fileInfo.isPublic) {
+      myFiles[fileInfo.fileName] = {
+        content: JSON.stringify(fileInfo.fileContent)
+      };
+    } else {
+      myFiles[fileInfo.fileName] = {
+        content: encryptContent(JSON.stringify(fileInfo.fileContent),encryptOptions)
+      };
+    }
 
     let docOptions = { encrypt: false };
     putFile('myFiles.json', JSON.stringify(myFiles), docOptions)
@@ -221,7 +257,8 @@ export default class NewPost extends Component {
       pageInfo.files[fileInfo.fileName] = {
         title: fileInfo.fileTitle,
         name: fileInfo.fileName,
-        description: fileInfo.fileDescription
+        description: fileInfo.fileDescription,
+        isPublic: fileInfo.isPublic
       }
       this.props.handleSavePage(pageInfo);
     });

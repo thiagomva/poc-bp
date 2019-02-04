@@ -42,7 +42,7 @@ export default class PublicList extends Component {
                                 <h1>Loading...</h1>
                             }
                             <div className="file-container">
-                            {Object.keys(this.state.files).reverse().map((fileName) => (<div className="card  mb-4">
+                            {Object.keys(this.state.files).reverse().map((fileName) => (<div key={fileName} className="card mb-4">
                                 <div className="card-body">
                                     <h2 className="card-title"> {this.state.files[fileName].title}</h2>
                                     <p className="card-text"> {this.state.files[fileName].description}</p>
@@ -59,17 +59,6 @@ export default class PublicList extends Component {
                         </div>
                     </div>
                 <div className="col-md-4">
-                <div className="card">
-                    <h5 className="card-header">{"Content Creator"} </h5>
-                    <div className="card-body">
-                        <img
-                            src={ (this.state.pageOwner && this.state.pageOwner.avatarUrl()) ? this.state.pageOwner.avatarUrl() : avatarFallbackImage }
-                            className="img-rounded avatar"
-                            id="avatar-image"
-                        />
-                        <h5 className="card-title ">{this.state.pageOwner && this.state.pageOwner.name()}</h5>
-                    </div>
-                </div>
                 {this.state.yearlyPrice && this.state.pageUserAddress && 
                     this.state.pageUsername != loadUserData().username && 
                     !this.state.subscriptionFile &&                            

@@ -15,22 +15,22 @@ export default class TopBar extends Component {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div className="container">
-          <a className="navbar-brand" href="/">BitPatron</a>
+          <a className="nav-logo" href="/"><img src="./logowhite.svg"/></a>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav ml-auto">
+              {username && 
+                <li class="nav-item active">
+                  <a class="nav-link clickable" href="/"><span>PROFILE:</span><span class="username">{username}</span></a>
+                </li>
+              }
               <li className="nav-item active">
-                <a className="nav-link" href="/all-pages">All Pages</a>
-              </li>
-              <li className="nav-item active">
-                <a className="nav-link" href="/">My Page
-                  <span className="sr-only">(current)</span>
-                </a>
+                <a className="nav-link" href="/all-pages">Explore</a>
               </li>
               <li className="nav-item ">
-                <a className="nav-link clickable" onClick={handleSignOut.bind(this)}>({username}) Logout</a>
+                <a className="nav-link clickable" onClick={handleSignOut.bind(this)}>Logout</a>
               </li>
             </ul>
           </div>

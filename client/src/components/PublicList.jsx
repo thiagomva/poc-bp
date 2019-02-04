@@ -44,15 +44,29 @@ export default class PublicList extends Component {
                             <div className="file-container">
                             {Object.keys(this.state.files).reverse().map((fileName) => (<div className="card  mb-4">
                                 <div className="card-body">
-                                    <h2 className="card-title"> {this.state.files[fileName].title}</h2>
-                                    <p className="card-text"> {this.state.files[fileName].description}</p>
+                                    <div className="row">
+                                        <div className="col-md">
+                                            <div className="post-date pull-left">JAN 14 AT 8:30PM</div>
+                                            <div className="post-visibility float-right"><i class="fa fa-lock"></i>&nbsp;Locked</div>
+                                        </div>
+                                    </div>
+                                    <div className="post-title"> {this.state.files[fileName].title}</div>
+                                    <div className="post-description"> {this.state.files[fileName].description}</div>
                                     {this.state.files[fileName].content && 
                                     <div className="fr-view" dangerouslySetInnerHTML={{ __html: this.state.files[fileName].content + '&nbsp;<br>&nbsp;' }}></div>
                                     }
-                                    {!this.state.files[fileName].isPublic && this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
-                                    {(this.state.files[fileName].isPublic || !this.checkUserNotAllowed()) && !this.state.files[fileName].content &&<div className='btn btn-primary' onClick={e => {if(!this.state.files[fileName].isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName, this.state.files[fileName].isPublic)}}  ><span>Read More  →</span></div>}
                                 </div>
-                                <div className="card-footer text-muted">Posted by <a href="#">{this.state.pageOwner && this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}</a>
+                                <div className="card-footer">
+                                    <div className="pull-left post-user">
+                                    <img src={ (this.state.pageOwner && this.state.pageOwner.avatarUrl()) ? this.state.pageOwner.avatarUrl() : avatarFallbackImage }
+                                        className="img-rounded avatar mini-avatar"
+                                        id="avatar-image"/>
+                                        Posted by {this.state.pageOwner && this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}
+                                    </div>
+                                    <div className="pull-right">
+                                        {!this.state.files[fileName].isPublic && this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
+                                        {(this.state.files[fileName].isPublic || !this.checkUserNotAllowed()) && !this.state.files[fileName].content &&<div className='btn btn-primary' onClick={e => {if(!this.state.files[fileName].isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName, this.state.files[fileName].isPublic)}}  ><span>Read More</span></div>}
+                                    </div>
                                 </div>
                             </div>
                             ))}

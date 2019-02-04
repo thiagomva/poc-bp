@@ -61,7 +61,7 @@ export default class Payment extends Component {
   render() {
     return (
       <div>
-          <button type="button" className="btn btn-primary btn-lg" onClick={e => this.onClick(e)}>{ this.props.subscriptionMode ?  <span><i className="fa fa-lock"></i> Subscribe to get access!</span> :  "$"+this.props.monthlyPrice +"/month OR $"+this.props.yearlyPrice+"/year"}</button>
+          <button type="button" className="btn btn-primary" onClick={e => this.onClick(e)}>{ this.props.subscriptionMode ?  <span><i className="fa fa-lock"></i> Subscribe to get access!</span> :  "$"+this.props.monthlyPrice +"/month OR $"+this.props.yearlyPrice+"/year"}</button>
           <Modal show={this.state.showModal} onHide={this.handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>Subscribe</Modal.Title>

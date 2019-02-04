@@ -129,53 +129,64 @@ export default class Profile extends Component {
 		<div className="container">
 			<div className="row">
 			  <div className="col-md-12">
-				<div className="row header-section">
-				  <div className="title-section col-md-8">
-					  <div className="">
-                <h1>
-                  <span>
-                  { 
-                    this.state.isLoading ? "Loading..." :
-                    this.state.pageInfo && this.state.pageInfo.pageName ? 
-                    this.state.pageInfo.pageName : person.name() ? person.name()
-                    : username.split('.')[0]+"'s Page" }</span>&nbsp;&nbsp;
-                  </h1>
-                <h4>
-                  { this.state.pageInfo && this.state.pageInfo.pageDescription ? this.state.pageInfo.pageDescription : "" }
-                </h4>
+          <div className="row header-section">
+            <div className="title-section col-md-8">
+              <div className="container no-padding">
+                <div className="row">
+                  <div className="col-md-auto">
+                    <img src={ (this.state.pageOwner && this.state.pageOwner.avatarUrl()) ? this.state.pageOwner.avatarUrl() : avatarFallbackImage } 
+                    className="img-rounded avatar" id="avatar-image"/>
+                  </div>
+                  <div className="col-md">
+                    <h1>
+                      <span>
+                      { 
+                        this.state.isLoading ? "Loading..." :
+                        this.state.pageInfo && this.state.pageInfo.pageName ? 
+                        this.state.pageInfo.pageName : person.name() ? person.name()
+                        : username.split('.')[0]+"'s Page" }</span>&nbsp;&nbsp;
+                      </h1>
+                    <h4>
+                      { this.state.pageInfo && this.state.pageInfo.pageDescription ? this.state.pageInfo.pageDescription : "" }
+                    </h4>
+                  </div>
+                </div>
+                <hr class="divider"></hr>
               </div>
-				  </div>
-				  <div className="col-md-4">
-				  {this.showNewPost() &&
-					<button
-					className="btn btn-primary pull-right"
-					onClick={e => this.handleNewPost(e)}
-					>
-					{this.state.isCreatingPost ? 'Cancel' : 'New Post'}
-					</button>
-          }
-          {
-					this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
-					<button
-					className="btn btn-primary pull-right margin-right-10"
-					onClick={e => this.handleEditPage(e)}
-					>
-					Edit Page
-					</button>
-				  }
-				  </div>
-				</div>
+              
+            </div>
             
-				{this.showNewPostForm() && 
-				  <NewPost handleSavePage={handleNewPageSubmit}/>
-				}
-				{this.showPageEdit() &&
-				  <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit} handleCancelEdition={handleCancelEdition}/>
-				}
-				<div className="col-md-12">
-				{ 
-				  <PublicList pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername}/>
-				}
+            <div className="col-md-4">
+            {this.showNewPost() &&
+            <button
+            className="btn btn-primary pull-right"
+            onClick={e => this.handleNewPost(e)}
+            >
+            {this.state.isCreatingPost ? 'Cancel' : 'New Post'}
+            </button>
+            }
+            {
+            this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
+            <button
+            className="btn btn-primary pull-right margin-right-10"
+            onClick={e => this.handleEditPage(e)}
+            >
+            Edit Page
+            </button>
+            }
+            </div>
+          </div>
+              
+          {this.showNewPostForm() && 
+            <NewPost handleSavePage={handleNewPageSubmit}/>
+          }
+          {this.showPageEdit() &&
+            <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit} handleCancelEdition={handleCancelEdition}/>
+          }
+          <div className="col-md-12">
+          { 
+            <PublicList pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername}/>
+          }
 				</div>
 			  </div>
 			</div>

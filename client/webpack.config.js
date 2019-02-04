@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ManifestAssetPlugin = new CopyWebpackPlugin([ { from: 'src/assets/manifest.json', to: 'manifest.json' } ]);
 const ConfigAssetPlugin = new CopyWebpackPlugin([ { from: 'src/assets/config.json', to: 'config.json' } ]);
 const IconAssetPlugin = new CopyWebpackPlugin([ { from: 'src/images/icon-192x192.png', to: 'icon-192x192.png' } ]);
+const ImagesAssetPlugin = new CopyWebpackPlugin([ { from: 'src/images/'} ]);
 const WebConfigPlugin = new CopyWebpackPlugin([ { from: 'src/web.config', to: 'web.config' } ]);
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -62,6 +63,7 @@ module.exports = {
     ManifestAssetPlugin,
      ConfigAssetPlugin, 
      IconAssetPlugin, 
+     ImagesAssetPlugin,
      WebConfigPlugin,
      new webpack.ProvidePlugin({
       $: "jquery",

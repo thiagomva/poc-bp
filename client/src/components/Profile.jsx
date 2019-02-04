@@ -142,9 +142,9 @@ export default class Profile extends Component {
                       <span>
                       { 
                         this.state.isLoading ? "Loading..." :
-                        this.state.pageInfo && this.state.pageInfo.pageName ? 
-                        this.state.pageInfo.pageName : person.name() ? person.name()
-                        : username.split('.')[0]+"'s Page" }</span>&nbsp;&nbsp;
+						this.state.pageInfo && this.state.pageInfo.pageName ? 
+						this.state.pageInfo.pageName : person.name() ? person.name()
+						: username && username.includes('.') ? username.split('.')[0]+"'s Page" : username }</span>&nbsp;&nbsp;
                       </h1>
                     <h4>
                       { this.state.pageInfo && this.state.pageInfo.pageDescription ? this.state.pageInfo.pageDescription : "" }

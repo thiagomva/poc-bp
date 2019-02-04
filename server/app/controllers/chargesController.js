@@ -44,6 +44,10 @@ class ChargesController {
         this.validCheck(json);
         new Charges().getCheckResult(json, cb);
     }
+
+    updateAll(cb) {
+        new Charges().updateAllChargesInfo(cb);
+    }
 }
 
 module.exports = ChargesController;

@@ -18,4 +18,9 @@ module.exports = function (router) {
     .post(function (req, res, next) {
       new ChargesController().check(req.body, baseResponse(res, next));
     });
+
+  router.route('/updateAll')
+    .post(function (req, res, next) {
+      new ChargesController().updateAll(baseResponse(res, next));
+    });
 };

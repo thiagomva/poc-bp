@@ -101,6 +101,36 @@ class Charges {
             }
         });
     }
+
+
+    updateAllChargesInfo(cb){
+        var chargeData = new PageInfoData();
+        chargeData.listPending().then(charges => {
+            let httpConfig = {
+                headers: {
+                    Authorization: config.get('OPEN_NODE_API_KEY')
+                }
+            };
+            var url = config.get('OPEN_NODE_API_URL') + "v1/charge/";
+            var apiCalls = 0;
+            charges.forEach((charge) => {
+                apiCalls++;
+                axios.get(url + charge.chargeId, httpConfig).then(response => {
+                    var data = response && response.data && response.data.data;
+                    updateChargeStatusIfNecessary(charge, data.status, () => {});
+                    if(apiCalls <= 0){
+                        cb(null,null);
+                    }
+                })
+                .catch(error => {
+                    cb(error);
+                });
+            });
+            if(charges.length <= 0){
+                cb(null,null);
+            }
+        });
+    }
 }
 
 module.exports = Charges;

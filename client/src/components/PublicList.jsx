@@ -37,7 +37,7 @@ export default class PublicList extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className="col-md-8">
+                    <div className="col-md-12">
                             {this.state.isLoading &&
                                 <h1>Loading...</h1>
                             }

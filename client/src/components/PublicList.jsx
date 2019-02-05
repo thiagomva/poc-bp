@@ -52,7 +52,14 @@ export default class PublicList extends Component {
                                             <div className="post-date pull-left">
                                             {this.state.files[fileName].postTime && new Date(this.state.files[fileName].postTime).toLocaleDateString({}, { year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute:'numeric' })}
                                             </div>
-                                            <div className="post-visibility float-right"><i class="fa fa-lock"></i>&nbsp;Locked</div>
+                                            <div className="post-visibility float-right">
+                                                {!this.state.files[fileName].isPublic && (this.isLoggedUserPage() || this.checkUserNotAllowed()) && <div><i class="fa fa-lock"></i> Locked</div>}
+                                                {!this.state.files[fileName].isPublic && !this.checkUserNotAllowed() && !this.isLoggedUserPage() && <div><i class="fa fa-unlock"></i> Unlocked</div>}
+                                                {this.state.files[fileName].isPublic && <div><i class="fa fa-globe"></i> Public</div>}
+                                            </div>
+                                            <div className="post-visibility edit-post float-right">
+                                                {this.isLoggedUserPage() && <div><i class="fa fa-edit"></i> Edit Post</div>}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="post-title"> {this.state.files[fileName].title}</div>
@@ -200,8 +207,12 @@ export default class PublicList extends Component {
         }
     }
 
+    isLoggedUserPage() {
+        return this.state.pageUsername == loadUserData().username;
+    }
+
     checkUserNotAllowed() {
-        return this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile;
+        return !this.isLoggedUserPage() && !this.state.subscriptionFile;
     }
 
     handleReadFile(fileName, isPublic){

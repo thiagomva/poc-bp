@@ -115,6 +115,11 @@ input, textarea{color:#000;padding:10px;}
   color: #8c8c8c;
 }
 
+.post-visibility.edit-post {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
 .btn-primary{
     background-color: #ff4828;
     border-color: #ff4828;

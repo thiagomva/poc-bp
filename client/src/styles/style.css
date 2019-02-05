@@ -34,7 +34,7 @@ body {
 
 
 /* Avatar */
-.header-section{margin:25px 0 0;}
+.header-section{margin:50px 0 0;}
 .avatar{width:100px;height:100px; border-radius: 50%;}
 .mini-avatar{width:36px;height:36px;margin-right: 10px;}
 .title-section{display:flex;text-align:left;}

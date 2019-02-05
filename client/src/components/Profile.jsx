@@ -177,10 +177,33 @@ export default class Profile extends Component {
             <span>Choose a subscription plan</span>
           </div>
           <div className="card my-4">
-            <div className="card-body">
+            <div className="card-body prices">
               <div className="row">
-                <div className="col-lg-12">Oi</div>
+                <div className="col-md-12">
+                  <label>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="yearly"
+                    />
+                    &nbsp;100 ETH per year
+                  </label>
+                </div>
               </div>
+              <div className="row">
+                <div className="col-md-12">
+                  <label>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="monthly"
+                    />
+                    &nbsp;10 ETH per month
+                  </label>
+                </div>
+              </div>
+              <div className="btn btn-primary subscription-btn">Subscribe</div>
+              <div className="subscription-terms">By registering you agree to our<br />Terms of Service and privacy</div>
             </div>
           </div>
         </div>

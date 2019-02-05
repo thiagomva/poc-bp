@@ -123,6 +123,35 @@ input, textarea{color:#000;padding:10px;}
 }
 .become-bitpatron img{width:30px;}
 
+.prices {
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+    text-align: left;
+    color: #404040;
+}
+
+.subscription-btn {
+    height: 32px;
+    width: 82%;
+    font-family: Montserrat-SemiBold;
+    font-size: 12px;
+    text-align: center;
+    letter-spacing: 0.6px;
+    margin: 20px 0;
+    margin-left: 9%;
+    text-transform: uppercase;
+}
+
+.subscription-terms {
+    font-family: Montserrat-Light;
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #4d4d4d;
+}
+
 .nav-item.separator{
     width: 1px;
     background: white;

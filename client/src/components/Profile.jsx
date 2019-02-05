@@ -176,6 +176,7 @@ export default class Profile extends Component {
           <div className="row pl-5 pt-3">
             <span>Choose a subscription plan</span>
           </div>
+          {this.state.pageInfo &&
           <div className="card my-4">
             <div className="card-body prices">
               <div className="row">
@@ -186,7 +187,7 @@ export default class Profile extends Component {
                       name="payment"
                       value="yearly"
                     />
-                    &nbsp;100 ETH per year
+                    &nbsp;{this.state.pageInfo.yearlyPrice} ETH per year
                   </label>
                 </div>
               </div>
@@ -198,14 +199,14 @@ export default class Profile extends Component {
                       name="payment"
                       value="monthly"
                     />
-                    &nbsp;10 ETH per month
+                    &nbsp;{this.state.pageInfo.monthlyPrice} ETH per month
                   </label>
                 </div>
               </div>
               <div className="btn btn-primary subscription-btn">Subscribe</div>
               <div className="subscription-terms">By registering you agree to our<br />Terms of Service and privacy</div>
             </div>
-          </div>
+          </div>}
         </div>
       </div>
       </div>

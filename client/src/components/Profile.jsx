@@ -170,8 +170,13 @@ export default class Profile extends Component {
 				</div>
 			  </div>
         <div className="col-md-4">
+          <div className="row header-section become-bitpatron" href="/">
+            <img src="./Icon_Star.png"/>&nbsp;Become BitPatron
+          </div>
+          <div className="row pl-5 pt-3">
+            <span>Choose a subscription plan</span>
+          </div>
           <div className="card my-4">
-            <h5 className="card-header">{"Become BitPatron"}</h5>
             <div className="card-body">
               <div className="row">
                 <div className="col-lg-12">Oi</div>

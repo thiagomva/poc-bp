@@ -37,40 +37,63 @@ export default class PublicList extends Component {
         return (
             <div>
                 <div className="row">
-                    <div className="col-md-12">
-                        {this.state.isLoading &&
-                            <h1>Loading...</h1>
-                        }
-                        <div className="file-container">
-                        {Object.keys(this.state.files).reverse().map((fileName) => (<div key={fileName} className="card mb-4">
-                            <div className="card-body">
-                                <div className="row">
-                                    <div className="col-md">
-                                        <div className="post-date pull-left">JAN 14 AT 8:30PM</div>
-                                        <div className="post-visibility float-right"><i class="fa fa-lock"></i>&nbsp;Locked</div>
+                    <div className="col-md-8">
+                            {this.state.isLoading &&
+                                <h1>Loading...</h1>
+                            }
+                            <div className="file-container">
+                            <div class="posts-title">
+                                <i className="fa fa-bullhorn rotate-315"></i>POSTS
+                            </div>
+                            {Object.keys(this.state.files).reverse().map((fileName) => (<div key={fileName} className="card  mb-4">
+                                <div className="card-body">
+                                    <div className="row">
+                                        <div className="col-md">
+                                            <div className="post-date pull-left">
+                                            {this.state.files[fileName].postTime && new Date(this.state.files[fileName].postTime).toLocaleDateString({}, { year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute:'numeric' })}
+                                            </div>
+                                            <div className="post-visibility float-right"><i class="fa fa-lock"></i>&nbsp;Locked</div>
+                                        </div>
+                                    </div>
+                                    <div className="post-title"> {this.state.files[fileName].title}</div>
+                                    <div className="post-description"> {this.state.files[fileName].description}</div>
+                                    {this.state.files[fileName].content && 
+                                    <div className="fr-view" dangerouslySetInnerHTML={{ __html: this.state.files[fileName].content + '&nbsp;<br>&nbsp;' }}></div>
+                                    }
+                                </div>
+                                <div className="card-footer">
+                                    <div className="pull-left post-user">
+                                    <img src={ (this.state.pageOwner && this.state.pageOwner.avatarUrl()) ? this.state.pageOwner.avatarUrl() : avatarFallbackImage }
+                                        className="img-rounded avatar mini-avatar"
+                                        id="avatar-image"/>
+                                        Posted by {this.state.pageOwner && this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}
+                                    </div>
+                                    <div className="pull-right">
+                                        {!this.state.files[fileName].isPublic && this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
+                                        {(this.state.files[fileName].isPublic || !this.checkUserNotAllowed()) && !this.state.files[fileName].content &&<div className='btn btn-primary' onClick={e => {if(!this.state.files[fileName].isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName, this.state.files[fileName].isPublic)}}  ><span>Read More</span></div>}
                                     </div>
                                 </div>
-                                <div className="post-title"> {this.state.files[fileName].title}</div>
-                                <div className="post-description"> {this.state.files[fileName].description}</div>
-                                {this.state.files[fileName].content && 
-                                <div className="fr-view" dangerouslySetInnerHTML={{ __html: this.state.files[fileName].content + '&nbsp;<br>&nbsp;' }}></div>
-                                }
                             </div>
-                            <div className="card-footer">
-                                <div className="pull-left post-user">
-                                <img src={ (this.state.pageOwner && this.state.pageOwner.avatarUrl()) ? this.state.pageOwner.avatarUrl() : avatarFallbackImage }
-                                    className="img-rounded avatar mini-avatar"
-                                    id="avatar-image"/>
-                                    Posted by {this.state.pageOwner && this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}
-                                </div>
-                                <div className="pull-right">
-                                    {!this.state.files[fileName].isPublic && this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
-                                    {(this.state.files[fileName].isPublic || !this.checkUserNotAllowed()) && !this.state.files[fileName].content &&<div className='btn btn-primary' onClick={e => {if(!this.state.files[fileName].isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName, this.state.files[fileName].isPublic)}}  ><span>Read More</span></div>}
-                                </div>
+                            ))}
+                        </div>
+                    </div>
+                <div className="col-md-4">
+                {this.state.yearlyPrice && this.state.pageUserAddress && 
+                    this.state.pageUsername != loadUserData().username && 
+                    !this.state.subscriptionFile &&                            
+                    <div className="card my-4">
+                        <h5 className="card-header">{"Become BitPatron"}</h5>
+                        <div className="card-body">
+                            <div className="row">
+                            <div className="col-lg-12">
+                                {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
+                                {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={false}></Payment>}
+                                {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
+                            </div>
                             </div>
                         </div>
-                        ))}
                     </div>
+                }
                 </div>
             </div>
         </div>

@@ -254,11 +254,13 @@ export default class NewPost extends Component {
       if(pageInfo.files == null){
         pageInfo.files={};
       }
+      var isNew = pageInfo.files[fileInfo.fileName] == undefined;
       pageInfo.files[fileInfo.fileName] = {
         title: fileInfo.fileTitle,
         name: fileInfo.fileName,
         description: fileInfo.fileDescription,
-        isPublic: fileInfo.isPublic
+        isPublic: fileInfo.isPublic,
+        postTime: isNew ? new Date().getTime() : pageInfo.files[fileInfo.fileName].postTime
       }
       this.props.handleSavePage(pageInfo);
     });

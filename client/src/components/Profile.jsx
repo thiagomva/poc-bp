@@ -128,9 +128,9 @@ export default class Profile extends Component {
 		<Topbar handleSignOut={handleSignOut} username={loadUserData().username}/>
 		<div className="container">
 			<div className="row">
-			  <div className="col-md-12">
+			  <div className="col-md-8">
           <div className="row header-section">
-            <div className="title-section col-md-8">
+            <div className="title-section col-md-12">
               <div className="container no-padding">
                 <div className="row">
                   <div className="col-md-auto">
@@ -155,26 +155,6 @@ export default class Profile extends Component {
               </div>
               
             </div>
-            
-            <div className="col-md-4">
-            {this.showNewPost() &&
-            <button
-            className="btn btn-primary pull-right"
-            onClick={e => this.handleNewPost(e)}
-            >
-            {this.state.isCreatingPost ? 'Cancel' : 'New Post'}
-            </button>
-            }
-            {
-            this.isLocalAndHasConfiguredPage() && !this.state.isEditing &&
-            <button
-            className="btn btn-primary pull-right margin-right-10"
-            onClick={e => this.handleEditPage(e)}
-            >
-            Edit Page
-            </button>
-            }
-            </div>
           </div>
               
           {this.showNewPostForm() && 
@@ -189,8 +169,18 @@ export default class Profile extends Component {
           }
 				</div>
 			  </div>
-			</div>
-		</div>
+        <div className="col-md-4">
+          <div className="card my-4">
+            <h5 className="card-header">{"Become BitPatron"}</h5>
+            <div className="card-body">
+              <div className="row">
+                <div className="col-lg-12">Oi</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
       </div> : null
     );
   }

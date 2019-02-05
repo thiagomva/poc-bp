@@ -125,6 +125,19 @@ input, textarea{color:#000;padding:10px;}
     border-color: #ff4828;
 }
 
+.btn-outline-primary {
+    color: #ff4828;
+    border-color: #ff4828;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:active,
+.btn-outline-primary:not(:disabled):not(.disabled):active {
+    color: #fff;
+    background-color: #ff4828;
+    border-color: #ff4828;
+}
+
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary:not(:disabled):not(.disabled):active {
@@ -165,4 +178,44 @@ input, textarea{color:#000;padding:10px;}
 .posts-title i{
     color: #4d4d4d;
     margin-right: 8px;
+}
+
+.page-card .card-title{
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-align: center;
+    color: #383b43;
+}
+
+.page-card .card-description{
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.4px;
+    text-align: left;
+    color: #4d4d4d;
+    line-height: 16px;
+    height: 80px;
+}
+
+.page-card .card-footer{
+    text-align: center;
+    padding-top: 0;
+    padding-bottom: 1.25rem;
+}
+
+.page-title{
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 0.6px;
+    text-align: left;
+    color: #ff4828;
+    margin: 30px 0;
+}
+
+.multiline-truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }

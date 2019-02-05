@@ -178,14 +178,45 @@ export default class Profile extends Component {
 				</div>
 			  </div>
         <div className="col-md-4">
-          <div className="card my-4">
-            <h5 className="card-header">{"Become BitPatron"}</h5>
-            <div className="card-body">
-              <div className="row">
-                <div className="col-lg-12">Oi</div>
+          {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != loadUserData().username && 
+          <div>
+            <div className="row header-section become-bitpatron" href="/">
+              <img src="./Icon_Star.png"/>&nbsp;Become BitPatron
+            </div>
+            <div className="row pl-5 pt-3">
+              <span>Choose a subscription plan</span>
+            </div>
+            <div className="card my-4">
+              <div className="card-body prices">
+                <div className="row">
+                  <div className="col-md-12">
+                    <label>
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="yearly"
+                      />
+                      &nbsp;{this.state.pageInfo.yearlyPrice} ETH per year
+                    </label>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-12">
+                    <label>
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="monthly"
+                      />
+                      &nbsp;{this.state.pageInfo.monthlyPrice} ETH per month
+                    </label>
+                  </div>
+                </div>
+                <div className="btn btn-primary subscription-btn">Subscribe</div>
+                <div className="subscription-terms">By registering you agree to our<br />Terms of Service and privacy</div>
               </div>
             </div>
-          </div>
+          </div>}
         </div>
       </div>
       </div>

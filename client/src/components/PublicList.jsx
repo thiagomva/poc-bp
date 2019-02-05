@@ -42,11 +42,16 @@ export default class PublicList extends Component {
                                 <h1>Loading...</h1>
                             }
                             <div className="file-container">
+                            <div class="posts-title">
+                                <i className="fa fa-bullhorn rotate-315"></i>POSTS
+                            </div>
                             {Object.keys(this.state.files).reverse().map((fileName) => (<div className="card  mb-4">
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-md">
-                                            <div className="post-date pull-left">JAN 14 AT 8:30PM</div>
+                                            <div className="post-date pull-left">
+                                            {this.state.files[fileName].postTime && new Date(this.state.files[fileName].postTime).toLocaleDateString({}, { year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute:'numeric' })}
+                                            </div>
                                             <div className="post-visibility float-right"><i class="fa fa-lock"></i>&nbsp;Locked</div>
                                         </div>
                                     </div>

@@ -13,7 +13,7 @@ body {
 
 
 /* Avatar */
-.header-section{margin:25px 0;}
+.header-section{margin:25px 0 0;}
 .avatar{width:100px;height:100px; border-radius: 50%;}
 .mini-avatar{width:36px;height:36px;margin-right: 10px;}
 .title-section{display:flex;text-align:left;}
@@ -138,4 +138,26 @@ input, textarea{color:#000;padding:10px;}
 .no-padding{
     padding-left: 0px;
     padding-right: 0px;
+}
+
+.rotate-45 {
+    transform: rotate(45deg);
+}
+
+.rotate-315 {
+    transform: rotate(315deg);
+}
+
+.posts-title{
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 0.6px;
+    text-align: left;
+    color: #ff4828;
+    margin-bottom: 14px;
+}
+
+.posts-title i{
+    color: #4d4d4d;
+    margin-right: 8px;
 }

@@ -15,20 +15,23 @@ export default class PublicList extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            pageUsername: "",
+        var defaultState = {
+            currentFileContent:"",
+            subscriptionFile: null,
             pageOwner: null,
-            isLoading: false,
+            isLoading: false,            
             pageName: "",
             pageDescription: "",
-
             monthlyPrice: undefined,
             yearlyPrice: undefined,
             files: {},
-            currentFileContent:"",
-            pageUserAddress: undefined,
-            subscriptionFile: null
+            pageUsername: ""
         }
+        var newState = this.getStateFromProps(props);
+        
+        this.state = Object.assign({}, defaultState, newState);
+
+        newState
 
         this.subscriptionConfirmed = this.subscriptionConfirmed.bind(this);
     }
@@ -42,10 +45,20 @@ export default class PublicList extends Component {
                                 <h1>Loading...</h1>
                             }
                             <div className="file-container">
-                            <div class="posts-title">
-                                <i className="fa fa-bullhorn rotate-315"></i>POSTS
+                            <div className="row">
+                                <div className="col-md-12 mb-2">
+                                    <div className="posts-title pull-left">
+                                        <i className="fa fa-bullhorn rotate-315"></i>POSTS
+                                    </div>
+                                    {this.isLoggedUserPage() && <div className="new-post-btn pull-right">
+                                        <div className='btn btn-primary' onClick={e => {this.props.handleNewPost()}}>
+                                            <i className="fa fa-edit"></i><span>NEW POST</span>
+                                        </div>
+                                    </div>}
+                                </div>
                             </div>
-                            {Object.keys(this.state.files).reverse().map((fileName) => (<div key={fileName} className="card  mb-4">
+                            
+                            {this.getFilesNamesDescOrderdByDate().map((fileName) => (<div key={fileName} className="card  mb-4">
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-md">
@@ -53,12 +66,12 @@ export default class PublicList extends Component {
                                             {this.state.files[fileName].postTime && new Date(this.state.files[fileName].postTime).toLocaleDateString({}, { year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute:'numeric' })}
                                             </div>
                                             <div className="post-visibility float-right">
-                                                {!this.state.files[fileName].isPublic && (this.isLoggedUserPage() || this.checkUserNotAllowed()) && <div><i class="fa fa-lock"></i> Locked</div>}
-                                                {!this.state.files[fileName].isPublic && !this.checkUserNotAllowed() && !this.isLoggedUserPage() && <div><i class="fa fa-unlock"></i> Unlocked</div>}
-                                                {this.state.files[fileName].isPublic && <div><i class="fa fa-globe"></i> Public</div>}
+                                                {!this.state.files[fileName].isPublic && (this.isLoggedUserPage() || this.checkUserNotAllowed()) && <div><i className="fa fa-lock"></i> Locked</div>}
+                                                {!this.state.files[fileName].isPublic && !this.checkUserNotAllowed() && !this.isLoggedUserPage() && <div><i className="fa fa-unlock"></i> Unlocked</div>}
+                                                {this.state.files[fileName].isPublic && <div><i className="fa fa-globe"></i> Public</div>}
                                             </div>
                                             <div className="post-visibility edit-post float-right">
-                                                {this.isLoggedUserPage() && <div><i class="fa fa-edit"></i> Edit Post</div>}
+                                                {this.isLoggedUserPage() && <div onClick={e => {this.handleEditPost(fileName)}} ><i className="fa fa-edit"></i> Edit Post</div>}
                                             </div>
                                         </div>
                                     </div>
@@ -76,7 +89,7 @@ export default class PublicList extends Component {
                                         Posted by {this.state.pageOwner && this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}
                                     </div>
                                     <div className="pull-right">
-                                        {!this.state.files[fileName].isPublic && this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
+                                        {!this.state.files[fileName].isPublic && this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername}  monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
                                         {(this.state.files[fileName].isPublic || !this.checkUserNotAllowed()) && !this.state.files[fileName].content &&<div className='btn btn-primary' onClick={e => {if(!this.state.files[fileName].isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName, this.state.files[fileName].isPublic)}}  ><span>Read More</span></div>}
                                     </div>
                                 </div>
@@ -85,7 +98,7 @@ export default class PublicList extends Component {
                         </div>
                     </div>
                 <div className="col-md-4">
-                {this.state.yearlyPrice && this.state.pageUserAddress && 
+                {this.state.yearlyPrice &&
                     this.state.pageUsername != loadUserData().username && 
                     !this.state.subscriptionFile &&                            
                     <div className="card my-4">
@@ -93,8 +106,7 @@ export default class PublicList extends Component {
                         <div className="card-body">
                             <div className="row">
                             <div className="col-lg-12">
-                                {!this.state.pageUserAddress && <span><br/><b><u>Ethereum address not defined.</u></b></span>}
-                                {this.state.pageUserAddress && this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} address={this.state.pageUserAddress} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={false}></Payment>}
+                                {this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={false}></Payment>}
                                 {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
                             </div>
                             </div>
@@ -109,6 +121,18 @@ export default class PublicList extends Component {
         );
     }
 
+    getFilesNamesDescOrderdByDate(){
+        var _this = this;
+        return Object.keys(this.state.files).sort(function (a, b) { 
+            var dif = (_this.state.files[b].postTime || 0) - (_this.state.files[a].postTime || 0);
+            return dif;
+        });
+    }
+
+    handleEditPost(fileName){
+        this.props.handleEditPost(this.state.files[fileName]);
+    }
+
     componentWillReceiveProps(nextProps) {
         this.fetchData(nextProps)
     }
@@ -121,27 +145,33 @@ export default class PublicList extends Component {
     }
 
     fetchData(nextProps) {
-        var newState = {}
-        if(nextProps.pageInfo != null){
-            newState = {
-                pageName: nextProps.pageInfo.pageName,
-                pageDescription: nextProps.pageInfo.pageDescription,
-                monthlyPrice: nextProps.pageInfo.monthlyPrice,
-                yearlyPrice: nextProps.pageInfo.yearlyPrice,
-                files: nextProps.pageInfo.files ? nextProps.pageInfo.files : {}
-            }
-        }
-        if(nextProps.pageUsername != null){
-            newState["pageUsername"] = nextProps.pageUsername;
-            
-        }
-        
+        var newState = this.getStateFromProps(nextProps);        
         this.setState(newState, () => {
             if(nextProps.pageUsername != null)
             {
                 this.setSubscriptionData();
             }
         });
+    }
+
+    getStateFromProps(props){
+        var newState = {}
+        if(props.pageInfo != null){
+            newState = {
+                pageName: props.pageInfo.pageName,
+                pageDescription: props.pageInfo.pageDescription,
+                monthlyPrice: props.pageInfo.monthlyPrice,
+                yearlyPrice: props.pageInfo.yearlyPrice,
+                files: props.pageInfo.files ? props.pageInfo.files : {}
+            }
+        }
+        if(props.pageUsername != null){
+            newState["pageUsername"] = props.pageUsername;
+        }
+        if(props.pageOwner != null){
+            newState["pageOwner"] = props.pageOwner;
+        }
+        return newState;
     }
 
     getFormattedDateFromDuration() {
@@ -160,21 +190,9 @@ export default class PublicList extends Component {
         lookupProfile(this.state.pageUsername)
         .then((profile) => {
             var person = new Person(profile);
-            var ownerJson = person.toJSON();
-            var address = null;
-            if (ownerJson && ownerJson.profile && ownerJson.profile.account) {
-                for (var i = 0; i < ownerJson.profile.account.length; ++i) {
-                    if (ownerJson.profile.account[i].service == "ethereum") {
-                        address = ownerJson.profile.account[i].identifier;
-                        break;
-                    }
-                }
-            }
-            var pageUserAddress = address ? address : this.state.pageUserAddress;
             this.setState(
                 {
                     pageOwner: person,
-                    pageUserAddress: pageUserAddress
                 }, 
             );
            })

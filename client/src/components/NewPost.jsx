@@ -8,6 +8,7 @@ import {
   encryptContent,
   loadUserData,
   Person,
+  decryptContent
 } from 'blockstack';
 import Axios from 'axios';
 import { server_url } from '../config';
@@ -28,8 +29,9 @@ export default class NewPost extends Component {
       username: "",
       newFileName: "",
       newFileTitle: "",
+      newFileDescription: "",
       newFileContent: "",
-      newFileIsPublic: false,
+      newFileIsPublic: true,
       isLoading: false
     };
 
@@ -37,16 +39,8 @@ export default class NewPost extends Component {
   }
 
   render() {
-
     return (
       <div className="new-page">
-        <div className="col-md-12">
-          <input className="input-page-name"
-            value={this.state.newFileName}
-            onChange={e => this.handleNewFileNameChange(e)}
-            placeholder="What's your post file name?"
-          />
-        </div>
         <div className="col-md-12">
           <input className="input-page-name"
             value={this.state.newFileTitle}
@@ -54,20 +48,14 @@ export default class NewPost extends Component {
             placeholder="What's your post title?"
           />
         </div>
-        <div className="col-md-12">
-          <input className="input-page-description"
-            value={this.state.newFileDescription}
-            onChange={e => this.handleNewFileDescriptionChange(e)}
-            placeholder="What's your post description?"
-          />
-        </div>
-        <div className="col-md-12"><span>This file is:</span></div>
+        <div className="col-md-12"><span>This post is:</span></div>
         <div className="col-md-12">
           <label>
             <input
               type="radio"
               name="fileIsPublic"
               value="public"
+              checked={this.state.newFileIsPublic}
               onChange={e => this.handleFileIsPublicChange(e)}
             />
             &nbsp;Public
@@ -79,11 +67,19 @@ export default class NewPost extends Component {
               type="radio"
               name="fileIsPublic"
               value="paid"
+              checked={!this.state.newFileIsPublic}
               onChange={e => this.handleFileIsPublicChange(e)}
             />
             &nbsp;Only for paying subscribers
           </label>
         </div>
+        {!this.state.newFileIsPublic && <div className="col-md-12">
+          <input className="input-page-description"
+            value={this.state.newFileDescription}
+            onChange={e => this.handleNewFileDescriptionChange(e)}
+            placeholder="What's your post hint?"
+          />
+        </div>}
         <div className="col-md-12">
         <FroalaEditor
           tag='textarea'
@@ -97,14 +93,11 @@ export default class NewPost extends Component {
           onModelChange={this.handleModelChange}
         />
         </div>
-        {/* <div className="col-md-12">
-          <textarea className="input-page-price" type="number"
-            value={this.state.newFileContent}
-            onChange={e => this.handleNewFileContentChange(e)}
-            placeholder="Content"
-          />
-        </div> */}
-        <div className="col-md-12 text-right">
+        <div className="col-md-12 text-right my-4">
+          <button className="btn btn-secondary btn-lg margin-right-10"
+            onClick={e => this.props.handleCancel()}>
+            Cancel
+          </button>
           <button 
             className="btn btn-primary btn-lg"
             onClick={e => this.handleNewPostSubmit(e)}
@@ -120,15 +113,62 @@ export default class NewPost extends Component {
     this.setState({
       person: new Person(loadUserData().profile),
       username: loadUserData().username
-    })
+    });
+    this.fetchData(this.props);
   }
 
   componentDidMount() {
   }
-  
-  handleNewFileNameChange(event) {
-    this.setState({newFileName: event.target.value})
+
+  componentWillReceiveProps(nextProps) {
+    this.fetchData(nextProps)
   }
+
+  fetchData(props) {
+    if(props && props.editingFile){
+      this.loadFileInfoWithContent(props.editingFile);
+    }
+  }
+
+  loadFileInfoWithContent(editingFile){
+    if(!editingFile.isPublic){
+      getFile("myFilesPrivateKeys.json").then((file)=>{
+          var keys = JSON.parse(file || "{}");
+          this.handleSelectedFile(editingFile, keys[editingFile.name]);
+      });
+    }
+    else{
+      this.handleSelectedFile(editingFile, null, true);
+    }
+  }
+
+  handleSelectedFile(editingFile, file, isPublic) {
+    const options = { decrypt: false };
+    getFile('myFiles.json', options).then(
+        (fileWithEncryptedContent) => {
+            var parsedFileWithEncryptedContent = JSON.parse(fileWithEncryptedContent || "{}");
+            var fileContent = '';
+            if (isPublic) {
+                fileContent = parsedFileWithEncryptedContent[editingFile.name].content;
+            } else {
+                var decryptedFilePrivateKey = null;
+                decryptedFilePrivateKey = file.decryptionPrivateKey;
+                fileContent = decryptContent(parsedFileWithEncryptedContent[editingFile.name].content, {privateKey:decryptedFilePrivateKey});
+            }
+            
+            var currentFileContent = JSON.parse(fileContent);
+
+            var newState = {
+              newFileName: editingFile.name,
+              newFileTitle: editingFile.title,
+              newFileContent: currentFileContent,
+              newFileDescription: editingFile.description,
+              newFileIsPublic: editingFile.isPublic,
+              newFileTime: editingFile.postTime,
+            }
+            this.setState(newState);
+        });
+    }
 
   handleNewFileTitleChange(event) {
     this.setState({newFileTitle: event.target.value})
@@ -172,6 +212,11 @@ export default class NewPost extends Component {
   addNewFile(fileInfo){
     getFile("myFiles.json", {decrypt:false}).then((file)=>{
       var myFiles = JSON.parse(file || "{}");
+      if(!fileInfo.fileName){
+        var currentId = myFiles.currentFileName || 0;
+        myFiles.currentFileName = currentId + 1;
+        fileInfo.fileName = myFiles.currentFileName;
+      }
       this.addNewFileToList(myFiles, fileInfo);
     })    
   }

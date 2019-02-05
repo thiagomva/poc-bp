@@ -22,8 +22,8 @@ export default class TopBar extends Component {
           <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav ml-auto">
               {username && 
-                <li class="nav-item active">
-                  <a class="nav-link clickable" href="/"><span>PROFILE:</span><span class="username">{username}</span></a>
+                <li className="nav-item active">
+                  <a className="nav-link clickable" href="/"><span>PROFILE:</span><span className="username">{username}</span></a>
                 </li>
               }
               <li className="nav-item active">

@@ -54,6 +54,14 @@ export default class Profile extends Component {
     const { handleSignOut } = this.props;
     const { person } = this.state;
     const { username } = this.state;
+    var handleNewPost = () =>{
+      this.setState({isCreatingPost: true});
+    }
+
+    var handleEditPost = (file) =>{
+      this.setState({isCreatingPost: true, editingFile: file});
+    }
+
     var handleNewPageSubmit = (pageInfo) =>{
       if(!pageInfo.files){
         pageInfo.files= {};
@@ -134,7 +142,7 @@ export default class Profile extends Component {
               <div className="container no-padding">
                 <div className="row">
                   <div className="col-md-auto">
-                    <img src={ (this.state.pageOwner && this.state.pageOwner.avatarUrl()) ? this.state.pageOwner.avatarUrl() : avatarFallbackImage } 
+                    <img src={ (this.state.person && this.state.person.avatarUrl()) ? this.state.person.avatarUrl() : avatarFallbackImage } 
                     className="img-rounded avatar" id="avatar-image"/>
                   </div>
                   <div className="col-md">
@@ -142,30 +150,30 @@ export default class Profile extends Component {
                       <span>
                       { 
                         this.state.isLoading ? "Loading..." :
-						this.state.pageInfo && this.state.pageInfo.pageName ? 
-						this.state.pageInfo.pageName : person.name() ? person.name()
-						: username && username.includes('.') ? username.split('.')[0]+"'s Page" : username }</span>&nbsp;&nbsp;
+                        this.state.pageInfo && this.state.pageInfo.pageName ? 
+                        this.state.pageInfo.pageName : person.name() ? person.name()
+                        : username && username.includes('.') ? username.split('.')[0]+"'s Page" : username }</span>&nbsp;&nbsp;
                       </h1>
                     <h4>
                       { this.state.pageInfo && this.state.pageInfo.pageDescription ? this.state.pageInfo.pageDescription : "" }
                     </h4>
                   </div>
                 </div>
-                <hr class="divider"></hr>
+                <hr className="divider"></hr>
               </div>
               
             </div>
           </div>
               
           {this.showNewPostForm() && 
-            <NewPost handleSavePage={handleNewPageSubmit}/>
+            <NewPost handleSavePage={handleNewPageSubmit} handleCancel={handleCancelEdition} editingFile={this.state.editingFile}/>
           }
           {this.showPageEdit() &&
             <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit} handleCancelEdition={handleCancelEdition}/>
           }
           <div className="col-md-12">
-          { 
-            <PublicList pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername}/>
+          {!this.showNewPostForm() &&  !this.showPageEdit() &&
+            <PublicList handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person}/>
           }
 				</div>
 			  </div>
@@ -217,10 +225,6 @@ export default class Profile extends Component {
     this.setState({isEditing: true})
   }
 
-  handleNewPost(event){
-    this.setState({isCreatingPost: !this.state.isCreatingPost})
-  }
-
   fetchData() {
     this.setState({ isLoading: true });
     var username = this.state.username;
@@ -256,7 +260,7 @@ export default class Profile extends Component {
   }
 
   isLocal() {
-    return this.props.match.params.username ? false : true
+    return this.props.match.params.username ? (this.props.match.params.username == loadUserData().username) : true
   }
 
   isLocalAndHasConfiguredPage() {

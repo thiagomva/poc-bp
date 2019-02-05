@@ -11,6 +11,7 @@ import { server_url } from '../config';
 
 export default class Payment extends Component {
   constructor(props) {
+    
     super(props);
     this.onClick = this.onClick.bind(this);
     this.handleClose = this.handleClose.bind(this);

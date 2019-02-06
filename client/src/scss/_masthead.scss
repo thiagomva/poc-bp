@@ -1,0 +1,136 @@
+
+header.masthead {
+    width: 100%;
+    text-align: center;
+    min-height: 550px;
+
+    .top-right-image {
+        z-index: -1;
+        position: absolute;
+        right: 0;
+        top: 0;
+        max-width: 100%;
+    }
+
+    .center-logo {
+        width: 200px;
+        height: 200px;
+        margin-top: 270px;
+        margin-bottom: 50px;
+
+        @media(max-width: 960px) {
+            margin-top: 25%;
+            width: 30%;
+            min-width: 115px;
+        }
+
+        @media(max-width: 600px) {
+            margin-top: 15%;
+        }
+    }
+
+    .center-text {
+        width: 100%;
+
+        h4 {
+            font-family: Montserrat-Bold;
+            letter-spacing: 0.6px;
+            font-size: 24px;
+
+            @media(max-width: 600px) {
+                font-size: 20px;
+            }
+        }
+
+        span {
+            font-size: 20px;
+            letter-spacing: 0.5px;
+
+            @media(max-width: 600px) {
+                font-size: 16px;
+            }
+        }
+    }
+
+    .signup-button {
+        margin: 40px auto;
+        width: 300px;
+        height: 48px;
+        border-radius: 4px;
+        color: #ffffff;
+        font-family: Montserrat-SemiBold;
+        font-size: 14px;
+        background-color: #ff4828;
+        padding-top: 15px;
+        cursor: pointer;
+
+        @media(max-width: 600px) {
+            margin: 20px auto;
+            max-width: 84%;
+        }
+
+        @media(max-width: 640px) {
+            letter-spacing: 0.6px;
+        }
+
+        .arrow {
+            margin-left: 15px;
+        }
+    }
+
+    .countdown-box {
+        width: 486px;
+        height: 256px;
+        margin: 42px auto;
+        padding-top: 30px;
+        border-radius: 6px;
+        background-color: #ff4828;
+        font-family: Montserrat-SemiBold;
+        text-align: center;
+        color: #ffffff;
+
+        @media(max-width: 640px) {
+            width: 96%;
+            height: 200px;
+        }
+
+        h4 {
+            font-size: 22px;
+        }
+
+        .countdown {
+            margin: 30px auto;
+
+            @media(max-width: 640px) {
+                margin: 10px auto;
+            }
+
+            div {
+                padding-right: 0px;
+                padding-left: 0px;
+            }
+        }
+
+        .countdown-label {
+            font-family: Montserrat-Light;
+            font-size: 12px;
+            line-height: 1;
+        }
+
+        .countdown-value {
+            font-family: Montserrat-Bold;
+            font-size: 50px;
+            line-height: 1;
+
+            @media(max-width: 640px) {
+                font-size: 24px;
+            }
+        }
+
+        .split {
+            border-left: 1px solid #ffffff;
+        }
+
+        
+    }
+}

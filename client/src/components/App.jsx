@@ -2,6 +2,7 @@ import React, { Component, Link } from 'react';
 import { Switch, Route } from 'react-router-dom'
 import Profile from './Profile.jsx';
 import Signin from './Signin.jsx';
+import Site from './Site.jsx';
 
 import {
   isSignInPending,
@@ -36,7 +37,7 @@ export default class App extends Component {
       <div className="site-wrapper">
         <div className="site-wrapper-inner">
           { !isUserSignedIn() ?
-            <Signin handleSignIn={ this.handleSignIn } />
+            <Route path='/' render={routeProps => <Site handleSignIn={ this.handleSignIn } />}/>
             : 
             <Switch>
               <Route path='/public-list' component={PublicList} />

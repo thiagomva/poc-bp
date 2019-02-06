@@ -1,0 +1,55 @@
+
+section.use-cases {
+    height: unset;
+    text-align: center;
+
+    h2 {
+        margin: 60px auto 85px auto;
+        font-size: 38px;
+        letter-spacing: 1.9px;
+        text-align: center;
+        color: #262626;
+    }
+
+    .boxes {
+        margin: 85px auto;
+        display: flex;
+        flex-direction: row;
+        place-content: center space-around;
+        align-items: center;
+        text-align: center;
+        align-content: center;
+        justify-content: space-around;
+        
+        @media(max-width: 959px){
+            flex-direction: column;
+        }
+        
+        .box {
+            max-width: 255px;
+
+            > * {
+                margin-bottom: 30px;
+            }
+
+            img {
+                height: 76px;
+            }
+
+            .title span {
+                color: #404040;
+                font-family: Montserrat-SemiBold;
+                font-size: 24px;
+                letter-spacing: 1.2px;
+                text-align: center;
+            }
+
+            .description span {
+                font-size: 13px;
+                line-height: 1.38;
+                letter-spacing: 0.3px;
+                text-align: center;
+            }
+        }
+    }
+}

@@ -1,0 +1,69 @@
+// Global styling for this template
+html,
+body {
+    width: 100%;
+    height: 100%;
+    font-family: Montserrat-Light,Montserrat-SemiBold, Calibri, 'Trebuchet MS', sans-serif;
+    color: #4d4d4d;
+    max-width: 1440px;
+    margin: auto;
+}
+
+a{
+    cursor: pointer;
+    color:inherit !important;
+}
+
+.page{
+    margin-top:-82px;
+}
+
+section {
+
+    @media(max-width:600px) {
+        height: unset;
+    }
+}
+.container {
+    height: 100%;
+
+    @media (min-width: 576px) and (max-width: 600px){
+        width: unset;
+        max-width: unset;
+    }
+}
+.center{
+    text-align:center;
+}
+
+.turn-white-blue {
+    filter: brightness(75%) sepia(100) saturate(100) hue-rotate(210deg);
+}
+
+@media (max-width: 600px) {
+    .web-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: 601px) {
+    .mobile-only {
+        display: none !important;
+    }
+}
+
+a:hover{
+    text-decoration:none !important;
+}
+
+.copyright {
+    margin:20px auto;
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+footer{
+    background-color: #fafafa;
+}

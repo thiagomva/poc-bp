@@ -1,0 +1,43 @@
+
+section.features {
+    height:unset;
+    .boxes {
+        display: flex;
+        flex-direction: row;
+        place-content: center space-around;
+        align-items: center;
+        text-align: center;
+        align-content: center;
+        justify-content: space-around;
+        
+        @media(max-width: 959px){
+            flex-direction: column;
+        }
+
+        .box {
+            max-width: 270px;
+            > *{
+                margin-bottom:30px;
+            }
+            img {
+                height: 76px;
+            }
+
+
+            .title span {
+                color: #ff4828;
+                font-family: Montserrat-Bold;
+                font-size: 24px;
+                letter-spacing: 1.2px;
+                text-align: center;
+            }
+
+            .description span {
+                font-size: 13px;
+                line-height: 1.38;
+                letter-spacing: 0.3px;
+                text-align: center;
+            }
+        }
+    }
+}

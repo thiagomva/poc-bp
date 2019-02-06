@@ -181,7 +181,7 @@ export default class Profile extends Component {
           {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != loadUserData().username && 
           <div>
             <div className="row header-section become-bitpatron" href="/">
-              <img src="./Icon_Star.png"/>&nbsp;Become BitPatron
+              <img src="./images/Icon_Star.png"/>&nbsp;Become BitPatron
             </div>
             <div className="row pl-5 pt-3">
               <span>Choose a subscription plan</span>

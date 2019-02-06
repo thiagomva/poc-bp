@@ -13,9 +13,9 @@ export default class Site extends Component {
     return (
       <div className="page">
         <header className="masthead">
-          <img src="./top-right.png" className="top-right-image" />
+          <img src="./images/top-right.png" className="top-right-image" />
           <div>
-              <img src="./logo.svg" className="center-logo" />
+              <img src="./images/logo.svg" className="center-logo" />
           </div>
           <div className="center-text">
               <h4>THE FIRST DECENTRALIZED PATREON ALTERNATIVE<br/>Powered by Blockstack & Bitcoin</h4>
@@ -24,7 +24,7 @@ export default class Site extends Component {
               <span>controlled by big corporates.</span>
           </div>        
           <div className="signup-button" id="myBtn" onClick={ handleSignIn.bind(this) }>
-              <span>CREATE YOUR PAGE <img src="./icons/arrow.png" className="arrow" /></span>
+              <span>CREATE YOUR PAGE <img src="./images/icons/arrow.png" className="arrow" /></span>
           </div>
       </header>
       <div id="myModal" className="modal">
@@ -43,7 +43,7 @@ export default class Site extends Component {
           <div className="boxes">
               <div className="box">
                   <div>
-                      <img src="./icons/free-speech.png" />
+                      <img src="./images/icons/free-speech.png" />
                   </div>
                   <div className="title">
                       <span>Free Speech</span>
@@ -54,7 +54,7 @@ export default class Site extends Component {
               </div>
               <div className="box">
                   <div>
-                      <img src="./icons/cheap-fast.png" />
+                      <img src="./images/icons/cheap-fast.png" />
                   </div>
                   <div className="title">
                       <span>Cheap & Fast</span>
@@ -65,7 +65,7 @@ export default class Site extends Component {
               </div>
               <div className="box">
                   <div>
-                      <img src="./icons/no-charge.png" />
+                      <img src="./images/icons/no-charge.png" />
                   </div>
                   <div className="title">
                       <span>No Chargebacks</span>
@@ -83,7 +83,7 @@ export default class Site extends Component {
           <div className="boxes">
               <div className="box">
                   <div>
-                      <img src="./icons/your-pay.png" />
+                      <img src="./images/icons/your-pay.png" />
                   </div>
                   <div className="title">
                       <span>Your Payment Terms</span>
@@ -94,7 +94,7 @@ export default class Site extends Component {
               </div>
               <div className="box">
                   <div>
-                      <img src="./icons/cont-freedom.png" />
+                      <img src="./images/icons/cont-freedom.png" />
                   </div>
                   <div className="title">
                       <span>Content Freedom</span>
@@ -105,7 +105,7 @@ export default class Site extends Component {
               </div>
               <div className="box">
                   <div>
-                      <img src="./icons/cont-own.png" />
+                      <img src="./images/icons/cont-own.png" />
                   </div>
                   <div className="title">
                       <span>Content Ownership</span>
@@ -116,7 +116,7 @@ export default class Site extends Component {
               </div>
               <div className="box">
                   <div>
-                      <img src="./icons/cont-protect.png" />
+                      <img src="./images/icons/cont-protect.png" />
                   </div>
                   <div className="title">
                       <span>Content Encryption</span>
@@ -133,7 +133,7 @@ export default class Site extends Component {
                   <h2>Support Free Speech &amp; Bitcoin Adoption</h2>
                   <span>By using BitPatron, you help to shape the future of Free Speech and Bitcoin adoption while creating a meaningful revenue stream</span>
                   <div className="arrow">
-                      <img src="./icons/arrow_.svg" />
+                      <img src="./images/icons/arrow_.svg" />
                   </div>
               </div>
               <div className="right-panel">
@@ -172,7 +172,7 @@ export default class Site extends Component {
           <div className="boxes">
               <div className="box">
                   <div>
-                      <img src="./icons/podcaster.png" />
+                      <img src="./images/icons/podcaster.png" />
                   </div>
                   <div className="title">
                       <span>Podcasters</span>
@@ -183,7 +183,7 @@ export default class Site extends Component {
               </div>
               <div className="box">
                   <div>
-                      <img src="./icons/video.png" />
+                      <img src="./images/icons/video.png" />
                   </div>
                   <div className="title">
                       <span>Video Creators</span>
@@ -194,7 +194,7 @@ export default class Site extends Component {
               </div>
               <div className="box">
                   <div>
-                      <img src="./icons/discor.png" />
+                      <img src="./images/icons/discor.png" />
                   </div>
                   <div className="title">
                       <span>Discord Groups</span>

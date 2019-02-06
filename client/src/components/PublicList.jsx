@@ -99,15 +99,15 @@ export default class PublicList extends Component {
                     </div>
                 <div className="col-md-4">
                 {this.state.yearlyPrice &&
-                    this.state.pageUsername != loadUserData().username && 
+                    this.state.pageUsername != this.getLoggedUsername() && 
                     !this.state.subscriptionFile &&                            
                     <div className="card my-4">
                         <h5 className="card-header">{"Become BitPatron"}</h5>
                         <div className="card-body">
                             <div className="row">
                             <div className="col-lg-12">
-                                {this.state.pageUsername != loadUserData().username && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={false}></Payment>}
-                                {(this.state.pageUsername == loadUserData().username || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
+                                {this.state.pageUsername != this.getLoggedUsername() && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={false}></Payment>}
+                                {(this.state.pageUsername == this.getLoggedUsername() || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
                             </div>
                             </div>
                         </div>
@@ -204,7 +204,7 @@ export default class PublicList extends Component {
     }
 
     setSubscriptionFile() {
-        if (this.state.pageUsername) {
+        if (this.state.pageUsername && loadUserData()) {
             var loggedUserAppPrivateKey = loadUserData().appPrivateKey;
             var loggedUserAppPublicKey = getPublicKeyFromPrivate(loggedUserAppPrivateKey);
             const options = { username:  this.state.pageUsername, decrypt: false };
@@ -225,8 +225,16 @@ export default class PublicList extends Component {
         }
     }
 
+    getLoggedUsername(){
+        var userData = loadUserData();
+        if(userData){
+            return userData.username;
+        }
+        return null;
+    }
+
     isLoggedUserPage() {
-        return this.state.pageUsername == loadUserData().username;
+        return this.state.pageUsername == this.getLoggedUsername();
     }
 
     checkUserNotAllowed() {

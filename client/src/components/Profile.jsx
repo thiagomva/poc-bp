@@ -133,7 +133,6 @@ export default class Profile extends Component {
     return (
       !isSignInPending() && person ?
 	  <div>
-		<Topbar handleSignOut={handleSignOut} username={loadUserData().username}/>
 		<div className="container">
 			<div className="row">
 			  <div className="col-md-8">
@@ -178,7 +177,7 @@ export default class Profile extends Component {
 				</div>
 			  </div>
         <div className="col-md-4">
-          {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != loadUserData().username && 
+          {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != this.getLoggedUserName() && 
           <div>
             <div className="row header-section become-bitpatron" href="/">
               <img src="./images/Icon_Star.png"/>&nbsp;Become BitPatron
@@ -225,10 +224,13 @@ export default class Profile extends Component {
   }
 
   componentWillMount() {
-    this.setState({
-      person: new Person(loadUserData().profile),
-      username: loadUserData().username
-    });
+    var userData = loadUserData();
+    if(userData){
+      this.setState({
+        person: new Person(userData.profile),
+        username: userData.username
+      });
+    }
   }
 
   componentDidMount() {
@@ -246,6 +248,13 @@ export default class Profile extends Component {
     else{
       this.fetchData();
     }
+  }
+
+  getLoggedUserName(){
+    var userData = loadUserData();
+    if(userData)
+      return userData.username;
+    return null;
   }
 
   handleNewStatusChange(event) {
@@ -291,7 +300,7 @@ export default class Profile extends Component {
   }
 
   isLocal() {
-    return this.props.match.params.username ? (this.props.match.params.username == loadUserData().username) : true
+    return this.props.match.params.username ? (this.props.match.params.username == this.getLoggedUserName()) : true
   }
 
   isLocalAndHasConfiguredPage() {

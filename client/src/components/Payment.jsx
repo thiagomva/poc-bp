@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   getPublicKeyFromPrivate,
-  loadUserData
+  loadUserData,
+  redirectToSignIn
 } from 'blockstack';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -23,7 +24,13 @@ export default class Payment extends Component {
 
   onClick(e) {
     e.preventDefault();
-    this.setState({paying:true,showModal:true});
+    if(!loadUserData()){
+      const origin = window.location.origin
+      redirectToSignIn(origin, origin + '/manifest.json', ['store_write', 'publish_data', 'email'])
+    }
+    else{
+      this.setState({paying:true,showModal:true});
+    }
   }
 
   handleClose() {

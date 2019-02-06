@@ -9,13 +9,11 @@ body {
     margin: auto;
 }
 
-a{
-    cursor: pointer;
-    color:inherit !important;
-}
-
 .page{
-    margin-top:-82px;
+    a{
+        cursor: pointer;
+        color:inherit !important;
+    }
 }
 
 section {

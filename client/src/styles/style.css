@@ -152,6 +152,10 @@ input, textarea{color:#000;padding:10px;}
     color: #4d4d4d;
 }
 
+.nav-item{
+    height: 34px;
+}
+
 .nav-item.separator{
     width: 1px;
     background: white;
@@ -283,4 +287,37 @@ input, textarea{color:#000;padding:10px;}
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.navbar-dark .navbar-nav .show > .nav-link,
+.navbar-dark .navbar-nav .active > .nav-link,
+.navbar-dark .navbar-nav .nav-link.show, 
+.navbar-dark .navbar-nav .nav-link.active {
+    color: #fc6449;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+}
+
+li.nav-item.active:after {
+    height: 8px;
+    content: ' ';
+    width: 100%;
+    background: #fc6449;
+    display: block;
+    bottom: -16px;
+    position: relative;
+}
+
+.twitter-nav-item i{
+    font-size: 30px;
+    margin-top: -6px;
+}
+
+.nav-separator{
+    width: 1px;
+    height: 34px;
+    background: white;
+    display: block;
 }

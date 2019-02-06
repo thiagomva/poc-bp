@@ -19,7 +19,6 @@ export default class PageList extends Component {
         const { handleSignOut } = this.props;
         return (
             <div>
-                <Topbar handleSignOut={handleSignOut} username={loadUserData().username}/>
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12">

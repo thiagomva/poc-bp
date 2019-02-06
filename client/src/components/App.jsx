@@ -1,7 +1,7 @@
 import React, { Component, Link } from 'react';
 import { Switch, Route } from 'react-router-dom'
 import Profile from './Profile.jsx';
-import Signin from './Signin.jsx';
+import TopBar from './TopBar.jsx';
 import Site from './Site.jsx';
 
 import {
@@ -13,7 +13,6 @@ import {
 } from 'blockstack';
 import PublicList from './PublicList.jsx';
 import PageList from './PageList.jsx';
-import Axios from 'axios';
 
 export default class App extends Component {
 
@@ -35,23 +34,25 @@ export default class App extends Component {
   render() {
     return (
       <div className="site-wrapper">
+        <TopBar handleSignOut={this.handleSignOut} handleSignIn={ this.handleSignIn }/>
         <div className="site-wrapper-inner">
-          { !isUserSignedIn() ?
-            <Route path='/' render={routeProps => <Site handleSignIn={ this.handleSignIn } />}/>
-            : 
+          {
             <Switch>
-              <Route path='/public-list' component={PublicList} />
-              <Route path='/all-pages'
+              <Route path='/explore'
                 render={
                   routeProps => <PageList handleSignOut={ this.handleSignOut } {...routeProps} />
                 }
               />
               <Route
-                path='/:username?'
+                path='/:username'
                 render={
                   routeProps => <Profile handleSignOut={ this.handleSignOut } {...routeProps} />
                 }
               />
+              {!isUserSignedIn() ?
+              <Route path='/' render={routeProps => <Site handleSignIn={ this.handleSignIn } />}/>
+              : <Route path='/' render={routeProps => <Profile handleSignIn={ this.handleSignIn } {...routeProps}/>}/>
+              }
             </Switch>
           }
         </div>

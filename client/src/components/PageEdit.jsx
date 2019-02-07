@@ -48,7 +48,7 @@ export default class PageEdit extends Component {
             </div>
         </div>
         <div className="row">
-          <div className="col-md-auto">
+          <div className="col-lg-2">
             <div className="row">
               <div className="col-md-12 paid-subscription-title">&nbsp;</div>
               <div className="col-md-12">
@@ -56,7 +56,7 @@ export default class PageEdit extends Component {
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-lg-6">
             <div className="row">
               <div className="col-md-12 paid-subscription-title">&nbsp;</div>
               <div className="col-md-12 mb-3">
@@ -75,7 +75,7 @@ export default class PageEdit extends Component {
               </div>
             </div>
           </div>
-          <div className="col-md-4">
+          <div className="col-lg-4">
             <div className="row">
               <div className="col-md-12 paid-subscription-title">Set up paid subscriptions</div>
               <div className="col-md-12 mb-3">
@@ -118,7 +118,7 @@ export default class PageEdit extends Component {
                   </label>
                 </div>
               </div>
-              <div className="col-md-12 text-center">
+              <div className="col-md-12 text-center buttons-row">
                 {this.props.pageInfo && <button 
                     className="btn btn-secondary btn-lg margin-right-10"
                     onClick={e => this.props.handleCancelEdition()}
@@ -126,7 +126,7 @@ export default class PageEdit extends Component {
                     Cancel
                   </button>
                 }
-                <button className="btn btn-primary btn-lg my-4 btn-large-width" 
+                <button className="btn btn-primary btn-lg my-4" 
                   onClick={e => this.handleNewPageSubmit(e)}>
                   Save
                 </button>

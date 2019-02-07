@@ -456,3 +456,7 @@ body {
 .uploader .empty-img.activeBox{
     box-shadow: 0 0 9px #17c723;
 }
+
+.buttons-row .btn{
+    width: 120px;
+}

@@ -216,6 +216,7 @@ export default class Profile extends Component {
 
   componentDidMount() {
     if(this.props.location.search == "?handler=openNode"){
+      this.setState({ isLoading: true });
       var url = server_url + '/api/v1/charges/check';
       var loggedUserAppPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey);
       Axios.post(url, {

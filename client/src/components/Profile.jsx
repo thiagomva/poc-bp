@@ -22,6 +22,7 @@ import {
 import {decodeToken} from 'jsontokens';
 
 import { listFiles, decryptContent, encryptContent } from 'blockstack/lib/storage';
+import SubscriptionOptions from './SubscriptionOptions.jsx';
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
@@ -48,7 +49,8 @@ export default class Profile extends Component {
       isCreatingPost: false,
       docPrivateKey: "",
       docPublicKey: "",
-      pageInfo: null
+      pageInfo: null,
+      subscriptionFile: null
     };
   }
 
@@ -186,48 +188,18 @@ export default class Profile extends Component {
           }
 				</div>
 			  </div>
-        {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != this.getLoggedUserName() && 
+        {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != this.getLoggedUserName() && !this.state.subscriptionFile &&
         <div className="col-md-4">
           <div>
             <div className="row header-section become-bitpatron" href="/">
               <img src="./images/Icon_Star.png"/>&nbsp;Become BitPatron
             </div>
-            <div className="row pl-5 pt-3">
+            <div className="row pl-5 pt-3 mb-4">
               <span>Choose a subscription plan</span>
             </div>
-            <div className="card my-4">
-              <div className="card-body prices">
-                <div className="row">
-                  <div className="col-md-12">
-                    <label>
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="yearly"
-                      />
-                      &nbsp;{this.state.pageInfo.yearlyPrice} ETH per year
-                    </label>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12">
-                    <label>
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="monthly"
-                      />
-                      &nbsp;{this.state.pageInfo.monthlyPrice} ETH per month
-                    </label>
-                  </div>
-                </div>
-                <div className="btn btn-primary subscription-btn">Subscribe</div>
-                <div className="subscription-terms">By registering you agree to our<br />Terms of Service and privacy</div>
-              </div>
-            </div>
+            <SubscriptionOptions radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
           </div>
         </div>}
-      </div>
       </div>
       </div> : null
     );
@@ -293,6 +265,7 @@ export default class Profile extends Component {
     }
     this.setState({ pageUsername: username });
     this.getPageInfo(username);
+    this.setSubscriptionFile();
   }
 
   getPageInfo(username){
@@ -334,5 +307,27 @@ export default class Profile extends Component {
 
   showPageEdit(){
     return !this.state.isLoading && (this.isLocalAndHasNotConfiguredPage() || this.state.isEditing);
+  }
+
+  setSubscriptionFile() {
+      if (this.state.pageUsername && loadUserData()) {
+          var loggedUserAppPrivateKey = loadUserData().appPrivateKey;
+          var loggedUserAppPublicKey = getPublicKeyFromPrivate(loggedUserAppPrivateKey);
+          const options = { username:  this.state.pageUsername, decrypt: false };
+          getFile('bp/' + loggedUserAppPublicKey.toLowerCase() + '.json', options)
+          .then(
+              (file)=>{
+              if (file) {
+                  this.setState(
+                      {
+                          subscriptionFile: JSON.parse(file)
+                      }
+                  );
+              } 
+          })
+          .catch((error) => {
+              console.log(error);
+          });
+      }
   }
 }

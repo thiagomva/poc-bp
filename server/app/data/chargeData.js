@@ -3,7 +3,7 @@ var DataAccess = require("./dataAccess.js");
 
 class ChargeData{
     constructor(){
-        this.Charge = sequelize.define('Charge', {
+        this.Charge = DataAccess.define('Charge', {
             chargeId: {
                 type: Sequelize.CHAR(36),
                 primaryKey: true
@@ -17,7 +17,11 @@ class ChargeData{
     insert(charge){
         return this.Charge.create(charge);
     }
+    update(charge){
+        return charge.update(charge, { where: { chargeId: charge.chargeId }, fields: charge.changed() });
+    }
     listPending(appPublicKey){
+        const ne = Sequelize.Op.ne;
         return this.Charge.findAll({where: {
             appPublicKey: appPublicKey,
             status: {[ne]:"paid"}

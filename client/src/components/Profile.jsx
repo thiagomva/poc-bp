@@ -265,7 +265,7 @@ export default class Profile extends Component {
     }
     this.setState({ pageUsername: username });
     this.getPageInfo(username);
-    this.setSubscriptionFile();
+    this.setSubscriptionFile(username);
   }
 
   getPageInfo(username){
@@ -309,11 +309,11 @@ export default class Profile extends Component {
     return !this.state.isLoading && (this.isLocalAndHasNotConfiguredPage() || this.state.isEditing);
   }
 
-  setSubscriptionFile() {
-      if (this.state.pageUsername && loadUserData()) {
+  setSubscriptionFile(username) {
+      if (username && loadUserData()) {
           var loggedUserAppPrivateKey = loadUserData().appPrivateKey;
           var loggedUserAppPublicKey = getPublicKeyFromPrivate(loggedUserAppPrivateKey);
-          const options = { username:  this.state.pageUsername, decrypt: false };
+          const options = { username:  username, decrypt: false };
           getFile('bp/' + loggedUserAppPublicKey.toLowerCase() + '.json', options)
           .then(
               (file)=>{

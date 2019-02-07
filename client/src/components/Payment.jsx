@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 import {Container, Col, Row} from 'react-bootstrap';
 import Axios from 'axios';
 import { server_url, open_node_url } from '../config';
+import SubscriptionOptions from './SubscriptionOptions.jsx';
 
 export default class Payment extends Component {
   constructor(props) {
@@ -47,6 +48,10 @@ export default class Payment extends Component {
     this.setState({ showModal: false });
   }
 
+  hideModal() {
+    this.setState({ showModal: false });
+  }
+
   createPaymentRequest(monthly){
     var url = server_url + '/api/v1/charges';
     var loggedUserAppPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey);
@@ -75,21 +80,7 @@ export default class Payment extends Component {
               <Modal.Title>Subscribe</Modal.Title>
             </Modal.Header>
             <Modal.Body className="payment-option-modal">
-              <Container>
-              Select your payment option to proceed!
-              <Row className="payment-buttons-row">
-                <Col md={6}>
-                  <code>
-                    <button type="button" className="btn btn-primary btn-lg" onClick={e => this.onMonthlyClick(e)}>{ "$"+this.props.monthlyPrice +"/month"}</button>  
-                  </code>
-                </Col>
-                <Col md={6}>
-                  <code>
-                    <button type="button" className="btn btn-primary btn-lg" onClick={e => this.onYearlyClick(e)}>{"$"+this.props.yearlyPrice+"/year"}</button>
-                  </code>
-                </Col>
-              </Row>
-              </Container>
+            <SubscriptionOptions radioGroupName="-modal" monthlyPrice={this.props.monthlyPrice} yearlyPrice={this.props.yearlyPrice} pageUsername={this.props.pageUsername} callback={this.hideModal} alignCenter={true}></SubscriptionOptions>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={this.handleClose}>

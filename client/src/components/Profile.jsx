@@ -183,10 +183,10 @@ export default class Profile extends Component {
             <div className="row header-section become-bitpatron" href="/">
               <img src="./images/Icon_Star.png"/>&nbsp;Become BitPatron
             </div>
-            <div className="row pl-5 pt-3">
+            <div className="row pl-5 pt-3 mb-4">
               <span>Choose a subscription plan</span>
             </div>
-            <SubscriptionOptions monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
+            <SubscriptionOptions radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
           </div>}
         </div>
       </div>

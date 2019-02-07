@@ -17,14 +17,14 @@ export default class SubscriptionOptions extends Component {
 
     render() {
         return (<div>
-            <div className="card my-4">
+            <div className="card">
               <div className="card-body prices">
-                <div className="row">
+                <div className={(this.props.alignCenter ? "payment-option-modal " : "") + "row"}>
                   <div className="col-md-12">
                     <label>
                       <input
                         type="radio"
-                        name="payment"
+                        name={"payment" + this.props.radioGroupName}
                         value="yearly"
                         checked={!this.state.monthlySubscription}
                         onChange={e => this.handleSubscriptionTypeChange(e)}
@@ -33,12 +33,12 @@ export default class SubscriptionOptions extends Component {
                     </label>
                   </div>
                 </div>
-                <div className="row">
+                <div className={(this.props.alignCenter ? "payment-option-modal " : "") + "row"}>
                   <div className="col-md-12">
                     <label>
                       <input
                         type="radio"
-                        name="payment"
+                        name={"payment" + this.props.radioGroupName}
                         value="monthly"
                         checked={this.state.monthlySubscription}
                         onChange={e => this.handleSubscriptionTypeChange(e)}
@@ -72,6 +72,10 @@ export default class SubscriptionOptions extends Component {
         }).catch((err) => {
           alert('Sorry, an error ocurred.');
         });
+
+        if(this.props.callback) {
+            this.props.callback();
+        }
       }
 
       handleSubscriptionTypeChange(event) {

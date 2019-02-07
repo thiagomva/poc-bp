@@ -3,6 +3,7 @@ var Error = require('../util/error.js');
 var Blockstack = require('blockstack');
 var JsonTokens = require('jsontokens');
 const axios = require('axios');
+var PageInfoData = require('../data/pageInfoData.js');
 
 class Subscribers {
     constructor(username, appPublicKey, monthly) {
@@ -31,7 +32,7 @@ class Subscribers {
                                 self.getFileFromUrl(address, hubUrlPrefix, 'pageInfo.json', function(errPi, respPi) {
                                     if (errPi) throw new Error(404, 'pageInfo.json not found.');
                                     else {
-                                        self.handleFilesRead(self, appPrivateKey, jsonFile[self.username], address, hubServerUrl, hubUrlPrefix, respFp, respSub, respPi, cb);
+                                        self.handleFilesRead(self, appPrivateKey, pageInfo.jwt, address, hubServerUrl, hubUrlPrefix, respFp, respSub, respPi, cb);
                                     }
                                 });
                             }

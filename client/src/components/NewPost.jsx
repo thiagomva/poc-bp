@@ -41,69 +41,82 @@ export default class NewPost extends Component {
   render() {
     return (
       <div className="new-page">
-        <div className="col-md-12">
-          <input className="input-page-name"
-            value={this.state.newFileTitle}
-            onChange={e => this.handleNewFileTitleChange(e)}
-            placeholder="What's your post title?"
-          />
+        <div className="row">
+            <div className="col-md-12">
+                {this.props.editingFile ? <div className="page-title">
+                    EDIT POST
+                </div> :
+                <div className="page-title">
+                    CREATE POST
+                </div>}
+            </div>
         </div>
-        <div className="col-md-12"><span>This post is:</span></div>
-        <div className="col-md-12">
-          <label>
-            <input
-              type="radio"
-              name="fileIsPublic"
-              value="public"
-              checked={this.state.newFileIsPublic}
-              onChange={e => this.handleFileIsPublicChange(e)}
+        <div className="row">
+          <div className="col-md-12 mb-4">
+            <input className="form-control input-page-name"
+              value={this.state.newFileTitle}
+              onChange={e => this.handleNewFileTitleChange(e)}
+              placeholder="What's your post title?"
             />
-            &nbsp;Public
-          </label>
-        </div>
-        <div className="col-md-12">
-          <label>
-            <input
-              type="radio"
-              name="fileIsPublic"
-              value="paid"
-              checked={!this.state.newFileIsPublic}
-              onChange={e => this.handleFileIsPublicChange(e)}
+          </div>
+          <div className="col-md-12 mb-2"><span>This post is:</span></div>
+          <div className="col-md-12">
+            <label>
+              <input
+                type="radio"
+                name="fileIsPublic"
+                value="public"
+                checked={this.state.newFileIsPublic}
+                onChange={e => this.handleFileIsPublicChange(e)}
+              />
+              &nbsp;Public
+            </label>
+          </div>
+          <div className="col-md-12">
+            <label>
+              <input
+                type="radio"
+                name="fileIsPublic"
+                value="paid"
+                checked={!this.state.newFileIsPublic}
+                onChange={e => this.handleFileIsPublicChange(e)}
+              />
+              &nbsp;Only for paying subscribers
+            </label>
+          </div>
+          {!this.state.newFileIsPublic && <div className="col-md-12 mt-3">
+            <input className="form-control input-page-hint"
+              value={this.state.newFileDescription}
+              onChange={e => this.handleNewFileDescriptionChange(e)}
+              placeholder="What's your post hint?"
             />
-            &nbsp;Only for paying subscribers
-          </label>
-        </div>
-        {!this.state.newFileIsPublic && <div className="col-md-12">
-          <input className="input-page-description"
-            value={this.state.newFileDescription}
-            onChange={e => this.handleNewFileDescriptionChange(e)}
-            placeholder="What's your post hint?"
+          </div>}
+          <div className="col-md-12 mt-4">
+          <FroalaEditor
+            tag='textarea'
+            config={{
+              placeholderText: "Content",
+              toolbarButtons: ['bold', 'italic', 'underline', 'color', 'align', 'fontSize', 'insertLink', 'insertImage', 'embedly'],
+              imageInsertButtons: ['imageByURL'],
+              imageUploadRemoteUrls: false,
+              heightMin: '200px'
+            }}
+            model={this.state.newFileContent}
+            onModelChange={this.handleModelChange}
           />
-        </div>}
-        <div className="col-md-12">
-        <FroalaEditor
-          tag='textarea'
-          config={{
-            placeholderText: "Content",
-            toolbarButtons: ['bold', 'italic', 'underline', 'color', 'align', 'fontSize', 'insertLink', 'insertImage', 'embedly'],
-            imageInsertButtons: ['imageByURL'],
-            imageUploadRemoteUrls: false
-          }}
-          model={this.state.newFileContent}
-          onModelChange={this.handleModelChange}
-        />
-        </div>
-        <div className="col-md-12 text-right my-4">
-          <button className="btn btn-secondary btn-lg margin-right-10"
-            onClick={e => this.props.handleCancel()}>
-            Cancel
-          </button>
-          <button 
-            className="btn btn-primary btn-lg"
-            onClick={e => this.handleNewPostSubmit(e)}
-          >
-            Save
-          </button>
+          </div>
+          <div className="col-md-12 text-right my-4">
+            <button className="btn btn-secondary btn-lg margin-right-10"
+              onClick={e => this.props.handleCancel()}>
+              Cancel
+            </button>
+            <button 
+              className="btn btn-primary btn-lg"
+              onClick={e => this.handleNewPostSubmit(e)}
+            >
+              Save
+            </button>
+          </div>
         </div>
       </div>
     );

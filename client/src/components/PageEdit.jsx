@@ -8,6 +8,7 @@ import {
 } from 'blockstack';
 import Axios from 'axios';
 import { server_url } from '../config';
+import ImageUploader from './ImageUploader.jsx';
 
 export default class PageEdit extends Component {
 
@@ -28,8 +29,7 @@ export default class PageEdit extends Component {
       newPageDescription: "",
       newMonthlyPrice:undefined,
       newYearlyPrice: undefined,
-      isLoading: false,
-      pageInfo: null
+      isLoading: false
     };
   }
 
@@ -37,47 +37,106 @@ export default class PageEdit extends Component {
 
     return (
       <div className="new-page">
-        <div className="col-md-12">
-          <input className="input-page-name"
-            value={this.state.newPageName}
-            onChange={e => this.handleNewPageNameChange(e)}
-            placeholder="What's your page name?"
-          />
+        <div className="row">
+            <div className="col-md-12">
+                {this.props.pageInfo ? <div className="page-title">
+                    EDIT PAGE
+                </div> :
+                <div className="page-title">
+                    CREATE PAGE
+                </div>}
+            </div>
         </div>
-        <div className="col-md-12">
-          <input className="input-page-description"
-            value={this.state.newPageDescription}
-            onChange={e => this.handleNewPageDescriptionChange(e)}
-            placeholder="What's your page description?"
-          />
-        </div>
-        <div className="col-md-6">
-          <input className="input-page-price" type="number"
-            value={this.state.newMonthlyPrice}
-            onChange={e => this.handleNewMonthlyPriceChange(e)}
-            placeholder="Monthly price (USD)"
-          />
-        </div>
-        <div className="col-md-6">
-          <input className="input-page-duration" type="number"
-            value={this.state.newYearlyPrice}
-            onChange={e => this.handleNewYearlyPriceChange(e)}
-            placeholder="Yearly price (USD)"
-          />
+        <div className="row">
+          <div className="col-md-auto">
+            <div className="row">
+              <div className="col-md-12 paid-subscription-title">&nbsp;</div>
+              <div className="col-md-12">
+                <ImageUploader></ImageUploader>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="row">
+              <div className="col-md-12 paid-subscription-title">&nbsp;</div>
+              <div className="col-md-12 mb-3">
+                <input className="form-control input-page-name" type="text"
+                  value={this.state.newPageName}
+                  onChange={e => this.handleNewPageNameChange(e)}
+                  placeholder="What's your page name?"
+                />
+              </div>
+              <div className="col-md-12">
+                <textarea className="form-control input-page-description"
+                  value={this.state.newPageDescription}
+                  onChange={e => this.handleNewPageDescriptionChange(e)}
+                  placeholder="What's your page description?"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="row">
+              <div className="col-md-12 paid-subscription-title">Set up paid subscriptions</div>
+              <div className="col-md-12 mb-3">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">$</span>
+                  </div>
+                  <input className="form-control input-page-price" type="number"
+                    value={this.state.newMonthlyPrice}
+                    onChange={e => this.handleNewMonthlyPriceChange(e)}
+                    placeholder="Monthly price (USD)"
+                  />
+                  <div className="input-group-append">
+                    <span className="input-group-text">per month</span>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-12 mb-3">
+              <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">$</span>
+                  </div>
+                  <input className="form-control input-page-yearly" type="number"
+                    value={this.state.newYearlyPrice}
+                    onChange={e => this.handleNewYearlyPriceChange(e)}
+                    placeholder="Yearly price (USD)"
+                    aria-describedby="yearlyPriceHelp"
+                  />
+                  <div className="input-group-append">
+                    <span className="input-group-text">per year</span>
+                  </div>
+                </div>
+                <small id="yearlyPriceHelp" className="form-text text-muted text-center">We recommend less than 10x monthly price</small>
+              </div>
+              <div className="col-md-12 text-center">
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" value="" id="termsCheck"/>
+                  <label className="form-check-label" htmlFor="termsCheck">
+                  I agree with all terms and conditions
+                  </label>
+                </div>
+              </div>
+              <div className="col-md-12 text-center">
+                {this.props.pageInfo && <button 
+                    className="btn btn-secondary btn-lg margin-right-10"
+                    onClick={e => this.props.handleCancelEdition()}
+                  >
+                    Cancel
+                  </button>
+                }
+                <button className="btn btn-primary btn-lg my-4 btn-large-width" 
+                  onClick={e => this.handleNewPageSubmit(e)}>
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>        
         </div>
         <div className="col-md-12 text-right">
-        <button 
-            className="btn btn-secondary btn-lg margin-right-10"
-            onClick={e => this.props.handleCancelEdition()}
-          >
-            Cancel
-          </button>
-          <button 
-            className="btn btn-primary btn-lg"
-            onClick={e => this.handleNewPageSubmit(e)}
-          >
-            Save
-          </button>
+        
+          
         </div>
       </div>
     );

@@ -50,9 +50,9 @@ export default class PublicList extends Component {
                                     <div className="posts-title pull-left">
                                         <i className="fa fa-bullhorn rotate-315"></i>POSTS
                                     </div>
-                                    {this.isLoggedUserPage() && <div className="new-post-btn pull-right">
+                                    {this.isLoggedUserPage() && <div className="icon-btn pull-right">
                                         <div className='btn btn-primary' onClick={e => {this.props.handleNewPost()}}>
-                                            <i className="fa fa-edit"></i><span>NEW POST</span>
+                                            <i className="fa fa-edit"></i><span>New Post</span>
                                         </div>
                                     </div>}
                                 </div>
@@ -78,7 +78,7 @@ export default class PublicList extends Component {
                                     <div className="post-title"> {this.state.files[fileName].title}</div>
                                     <div className="post-description"> {this.state.files[fileName].description}</div>
                                     {this.state.files[fileName].content && 
-                                    <div className="fr-view" dangerouslySetInnerHTML={{ __html: this.state.files[fileName].content + '&nbsp;<br>&nbsp;' }}></div>
+                                    <div className="fr-view mt-4" dangerouslySetInnerHTML={{ __html: this.state.files[fileName].content + '&nbsp;<br>&nbsp;' }}></div>
                                     }
                                 </div>
                                 <div className="card-footer">

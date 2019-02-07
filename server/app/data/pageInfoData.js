@@ -13,7 +13,8 @@ class PageInfoData{
             pageDescription: Sequelize.STRING(300),
             numberOfPosts: Sequelize.INTEGER,
             monthlyPrice: Sequelize.DOUBLE,
-            yearlyPrice: Sequelize.DOUBLE
+            yearlyPrice: Sequelize.DOUBLE,
+            email: Sequelize.STRING(100)
         });
     }
     insert(pageInfo){

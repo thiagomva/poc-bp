@@ -3,7 +3,7 @@ var Error = require('../util/error.js');
 var PageInfoData = require('../data/pageInfoData.js');
 
 class Pages {
-    constructor(jwt, userBlockstackId, pageName, pageDescription, numberOfPosts, monthlyPrice, yearlyPrice) {
+    constructor(jwt, userBlockstackId, pageName, pageDescription, numberOfPosts, monthlyPrice, yearlyPrice,email) {
         this.jwt = jwt;
         this.userBlockstackId = userBlockstackId;
         this.pageName = pageName ? pageName : '';
@@ -11,6 +11,7 @@ class Pages {
         this.numberOfPosts = numberOfPosts ? numberOfPosts : 0;
         this.monthlyPrice = monthlyPrice;
         this.yearlyPrice = yearlyPrice;
+        this.email = email;
     }
 
     listPages(cb) {
@@ -18,6 +19,7 @@ class Pages {
             result = result.map(function(item) { 
                 item = item.toJSON();
                 delete item.jwt; 
+                delete item.email;
                 return item; 
             });
             cb(null, result);
@@ -68,6 +70,10 @@ class Pages {
 
             if (_this.yearlyPrice != null) {
                 pageInfo.yearlyPrice = _this.yearlyPrice;
+            }
+
+            if (_this.email != null) {
+                pageInfo.email = _this.email;
             }
             if(shouldCreate){
                 pageInfoData.insert(pageInfo).then(result => cb(null, null)).catch(err => cb(err));

@@ -42,4 +42,4 @@ ReactDOM.render((
     </BrowserRouter>
   ), document.getElementById('root'));
 
-  ReactDOM.render(<FroalaEditor tag='textarea'/>, document.getElementById('editor'));
+  // ReactDOM.render(<FroalaEditor tag='textarea'/>, document.getElementById('editor'));

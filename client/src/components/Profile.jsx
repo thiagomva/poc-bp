@@ -17,8 +17,10 @@ import {
   getPublicKeyFromPrivate,
   makeV1GaiaAuthToken,
   getOrSetLocalGaiaHubConnection,
-  uploadToGaiaHub
+  verifyProfileToken
 } from 'blockstack';
+import {decodeToken} from 'jsontokens';
+
 import { listFiles, decryptContent, encryptContent } from 'blockstack/lib/storage';
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
@@ -82,13 +84,16 @@ export default class Profile extends Component {
             });
           }
           else{
+            var tokenPayload = decodeToken(loadUserData().authResponseToken).payload;
+            var userEmail = tokenPayload.email;
             var serverPageInfo = {
               userBlockstackId: loadUserData().username,
               pageName: pageInfo.pageName,
               pageDescription: pageInfo.pageDescription,
               numberOfPosts: Object.keys(pageInfo.files).length,
               monthlyPrice: pageInfo.monthlyPrice,
-              yearlyPrice: pageInfo.yearlyPrice
+              yearlyPrice: pageInfo.yearlyPrice,
+              userEmail: userEmail
             };
             var privateKey = loadUserData().appPrivateKey;
             let hubUrl = loadUserData().hubUrl;
@@ -135,13 +140,14 @@ export default class Profile extends Component {
 	  <div>
 		<div className="container">
 			<div className="row">
-			  <div className="col-md-8">
+			  <div className="col-md">
+          {!this.showNewPostForm() && !this.showPageEdit() &&
           <div className="row header-section">
             <div className="title-section col-md-12">
               <div className="container no-padding">
                 <div className="row">
                   <div className="col-md-auto">
-                    <img src={ (this.state.person && this.state.person.avatarUrl()) ? this.state.person.avatarUrl() : avatarFallbackImage } 
+                    <img src={ this.state.pageImage ? this.state.pageImage : avatarFallbackImage } 
                     className="img-rounded avatar" id="avatar-image"/>
                   </div>
                   <div className="col-md">
@@ -157,13 +163,17 @@ export default class Profile extends Component {
                       { this.state.pageInfo && this.state.pageInfo.pageDescription ? this.state.pageInfo.pageDescription : "" }
                     </h4>
                   </div>
+                  {this.isLocal() && !this.showPageEdit() && <div className="col-md-auto">
+                      <div className="btn btn-primary icon-btn" onClick={e => this.handleEditPage(e)}><i className="fa fa-edit"></i><span>Edit Page</span></div>
+                    </div>
+                  }
                 </div>
                 <hr className="divider"></hr>
               </div>
               
             </div>
           </div>
-              
+          }
           {this.showNewPostForm() && 
             <NewPost handleSavePage={handleNewPageSubmit} handleCancel={handleCancelEdition} editingFile={this.state.editingFile}/>
           }
@@ -176,8 +186,8 @@ export default class Profile extends Component {
           }
 				</div>
 			  </div>
+        {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != this.getLoggedUserName() && 
         <div className="col-md-4">
-          {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != this.getLoggedUserName() && 
           <div>
             <div className="row header-section become-bitpatron" href="/">
               <img src="./images/Icon_Star.png"/>&nbsp;Become BitPatron
@@ -215,8 +225,8 @@ export default class Profile extends Component {
                 <div className="subscription-terms">By registering you agree to our<br />Terms of Service and privacy</div>
               </div>
             </div>
-          </div>}
-        </div>
+          </div>
+        </div>}
       </div>
       </div>
       </div> : null
@@ -293,10 +303,13 @@ export default class Profile extends Component {
         this.setState({
           pageInfo: pageInfo
         })
+        getFile('pageImage', options).then(result => {
+          this.setState({ pageImage: result })
+        }).finally(() => {
+          this.setState({ isLoading: false })
+        })
       })
-      .finally(() => {
-        this.setState({ isLoading: false })
-      })
+      
   }
 
   isLocal() {

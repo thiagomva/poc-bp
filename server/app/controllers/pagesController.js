@@ -13,7 +13,7 @@ class PagesController {
 
     savePage(json, cb) {
         this.valid(json);
-        new Pages(json.jwt, json.userBlockstackId, json.pageName, json.pageDescription, json.numberOfPosts, json.monthlyPrice, json.yearlyPrice).getPagesResult(cb);
+        new Pages(json.jwt, json.userBlockstackId, json.pageName, json.pageDescription, json.numberOfPosts, json.monthlyPrice, json.yearlyPrice, json.email).getPagesResult(cb);
     }
 
     updateNumberOfPosts(json, cb) {

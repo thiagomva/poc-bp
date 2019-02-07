@@ -12,45 +12,36 @@ class Subscribers {
     }
 
     getSubscribersResult(cb) {
-        var fs = require("fs");
-        var jwtStoreName = 'jwtStore.json';
-        try {
-            var content;
-            if (fs.existsSync('./' + jwtStoreName)) {
-                content = fs.readFileSync('./' + jwtStoreName);
-                var jsonFile = JSON.parse(content);
-                if (jsonFile[this.username]) {
-                    var payload = this.decodeJwtTokenPayload(jsonFile[this.username]);
-                    var appPrivateKey = payload.scopes[0].appPrivateKey;
-                    var address = payload.scopes[0].address;
-                    var hubServerUrl = payload.scopes[0].hubServerUrl;
-                    var hubUrlPrefix = payload.scopes[0].hubUrlPrefix;
-                    var self = this;
-                    self.getFilesPrivateKeysFile(self, appPrivateKey, address, hubUrlPrefix, function(errFp, respFp) {
-                        if (errFp) throw new Error(404, 'myFilesPrivateKeys.json not found.');
-                        else {
-                            self.getSubscribersFile(self, appPrivateKey, address, hubUrlPrefix, function(errSub, respSub) {
-                                if (errSub) throw new Error(404, 'bp/subscribers.json not found.');
-                                else {
-                                    self.getFileFromUrl(address, hubUrlPrefix, 'pageInfo.json', function(errPi, respPi) {
-                                        if (errPi) throw new Error(404, 'pageInfo.json not found.');
-                                        else {
-                                            self.handleFilesRead(self, appPrivateKey, jsonFile[self.username], address, hubServerUrl, hubUrlPrefix, respFp, respSub, respPi, cb);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    this.throwNotFoundError();
-                }
+        var pageInfoData = new PageInfoData();
+        var _this = this;
+        pageInfoData.get(this.username).then(pageInfo => {
+            if (pageInfo) {
+                var payload = this.decodeJwtTokenPayload(pageInfo.jwt);
+                var appPrivateKey = payload.scopes[0].appPrivateKey;
+                var address = payload.scopes[0].address;
+                var hubServerUrl = payload.scopes[0].hubServerUrl;
+                var hubUrlPrefix = payload.scopes[0].hubUrlPrefix;
+                var self = this;
+                self.getFilesPrivateKeysFile(self, appPrivateKey, address, hubUrlPrefix, function(errFp, respFp) {
+                    if (errFp) throw new Error(404, 'myFilesPrivateKeys.json not found.');
+                    else {
+                        self.getSubscribersFile(self, appPrivateKey, address, hubUrlPrefix, function(errSub, respSub) {
+                            if (errSub) throw new Error(404, 'bp/subscribers.json not found.');
+                            else {
+                                self.getFileFromUrl(address, hubUrlPrefix, 'pageInfo.json', function(errPi, respPi) {
+                                    if (errPi) throw new Error(404, 'pageInfo.json not found.');
+                                    else {
+                                        self.handleFilesRead(self, appPrivateKey, jsonFile[self.username], address, hubServerUrl, hubUrlPrefix, respFp, respSub, respPi, cb);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             } else {
                 this.throwNotFoundError();
             }
-          } catch(err) {
-            cb(err);
-        }
+        }).catch(err => cb(err));
     }
 
 

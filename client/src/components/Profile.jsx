@@ -20,6 +20,7 @@ import {
   uploadToGaiaHub
 } from 'blockstack';
 import { listFiles, decryptContent, encryptContent } from 'blockstack/lib/storage';
+import SubscriptionOptions from './SubscriptionOptions.jsx';
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
@@ -185,36 +186,7 @@ export default class Profile extends Component {
             <div className="row pl-5 pt-3">
               <span>Choose a subscription plan</span>
             </div>
-            <div className="card my-4">
-              <div className="card-body prices">
-                <div className="row">
-                  <div className="col-md-12">
-                    <label>
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="yearly"
-                      />
-                      &nbsp;{this.state.pageInfo.yearlyPrice} USD per year
-                    </label>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12">
-                    <label>
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="monthly"
-                      />
-                      &nbsp;{this.state.pageInfo.monthlyPrice} USD per month
-                    </label>
-                  </div>
-                </div>
-                <div className="btn btn-primary subscription-btn">Subscribe</div>
-                <div className="subscription-terms">By registering you agree to our<br />Terms of Service and privacy</div>
-              </div>
-            </div>
+            <SubscriptionOptions monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
           </div>}
         </div>
       </div>

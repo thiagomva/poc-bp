@@ -139,68 +139,67 @@ export default class Profile extends Component {
 
     return (
       !isSignInPending() && person ?
-	  <div>
-		<div className="container">
-			<div className="row">
-			  <div className="col-md">
-          {!this.showNewPostForm() && !this.showPageEdit() &&
-          <div className="row header-section">
-            <div className="title-section col-md-12">
-              <div className="container no-padding">
-                <div className="row">
-                  <div className="col-md-auto">
-                    <img src={ this.state.pageImage ? this.state.pageImage : avatarFallbackImage } 
-                    className="img-rounded avatar" id="avatar-image"/>
-                  </div>
-                  <div className="col-md">
-                    <h1>
-                      <span>
-                      { 
-                        this.state.isLoading ? "Loading..." :
-                        this.state.pageInfo && this.state.pageInfo.pageName ? 
-                        this.state.pageInfo.pageName : person.name() ? person.name()
-                        : username && username.includes('.') ? username.split('.')[0]+"'s Page" : username }</span>&nbsp;&nbsp;
-                      </h1>
-                    <h4>
-                      { this.state.pageInfo && this.state.pageInfo.pageDescription ? this.state.pageInfo.pageDescription : "" }
-                    </h4>
-                  </div>
-                  {this.isLocal() && !this.showPageEdit() && <div className="col-md-auto">
-                      <div className="btn btn-primary icon-btn" onClick={e => this.handleEditPage(e)}><i className="fa fa-edit"></i><span>Edit Page</span></div>
+      <div className="container">
+        <div className="row">
+          <div className="col-md">
+            {!this.showNewPostForm() && !this.showPageEdit() &&
+            <div className="row header-section">
+              <div className="title-section col-md-12">
+                <div className="container no-padding">
+                  <div className="row">
+                    <div className="col-md-auto">
+                      <img src={ this.state.pageImage ? this.state.pageImage : avatarFallbackImage } 
+                      className="img-rounded avatar" id="avatar-image"/>
                     </div>
-                  }
+                    <div className="col-md">
+                      <h1>
+                        <span>
+                        { 
+                          this.state.isLoading ? "Loading..." :
+                          this.state.pageInfo && this.state.pageInfo.pageName ? 
+                          this.state.pageInfo.pageName : person.name() ? person.name()
+                          : username && username.includes('.') ? username.split('.')[0]+"'s Page" : username }</span>&nbsp;&nbsp;
+                        </h1>
+                      <h4>
+                        { this.state.pageInfo && this.state.pageInfo.pageDescription ? this.state.pageInfo.pageDescription : "" }
+                      </h4>
+                    </div>
+                    {this.isLocal() && !this.showPageEdit() && <div className="col-md-auto">
+                        <div className="btn btn-primary icon-btn" onClick={e => this.handleEditPage(e)}><i className="fa fa-edit"></i><span>Edit Page</span></div>
+                      </div>
+                    }
+                  </div>
+                  <hr className="divider"></hr>
                 </div>
-                <hr className="divider"></hr>
+                
               </div>
-              
             </div>
+            }
+            {this.showNewPostForm() && 
+              <NewPost handleSavePage={handleNewPageSubmit} handleCancel={handleCancelEdition} editingFile={this.state.editingFile}/>
+            }
+            {this.showPageEdit() &&
+              <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit} handleCancelEdition={handleCancelEdition}/>
+            }
+            <div className="col-md-12">
+            {!this.showNewPostForm() &&  !this.showPageEdit() &&
+              <PublicList handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person}/>
+            }
           </div>
-          }
-          {this.showNewPostForm() && 
-            <NewPost handleSavePage={handleNewPageSubmit} handleCancel={handleCancelEdition} editingFile={this.state.editingFile}/>
-          }
-          {this.showPageEdit() &&
-            <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit} handleCancelEdition={handleCancelEdition}/>
-          }
-          <div className="col-md-12">
-          {!this.showNewPostForm() &&  !this.showPageEdit() &&
-            <PublicList handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person}/>
-          }
-				</div>
-			  </div>
-        {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != this.getLoggedUserName() && !this.state.subscriptionFile &&
-        <div className="col-md-4">
-          <div>
-            <div className="row header-section become-bitpatron" href="/">
-              <img src="./images/Icon_Star.png"/>&nbsp;Become BitPatron
-            </div>
-            <div className="row pl-5 pt-3 mb-4">
-              <span>Choose a subscription plan</span>
-            </div>
-            <SubscriptionOptions radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
           </div>
-        </div>}
-      </div>
+          {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != this.getLoggedUserName() && !this.state.subscriptionFile &&
+          <div className="col-md-4">
+            <div>
+              <div className="row header-section become-bitpatron" href="/">
+                <img src="./images/Icon_Star.png"/>&nbsp;Become BitPatron
+              </div>
+              <div className="row pl-5 pt-3 mb-4">
+                <span>Choose a subscription plan</span>
+              </div>
+              <SubscriptionOptions radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
+            </div>
+          </div>}
+        </div>
       </div> : null
     );
   }

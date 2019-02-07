@@ -95,7 +95,7 @@ export default class Profile extends Component {
               numberOfPosts: Object.keys(pageInfo.files).length,
               monthlyPrice: pageInfo.monthlyPrice,
               yearlyPrice: pageInfo.yearlyPrice,
-              userEmail: userEmail
+              email: userEmail
             };
             var privateKey = loadUserData().appPrivateKey;
             let hubUrl = loadUserData().hubUrl;

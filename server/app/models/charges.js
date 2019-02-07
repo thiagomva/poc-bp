@@ -34,6 +34,9 @@ class Charges {
                 }
             });
         }
+        else{
+            cb(null, false);
+        }
     }
 
     getCreateResult(json, cb) {
@@ -90,10 +93,13 @@ class Charges {
                 apiCalls++;
                 axios.get(url + charge.chargeId, httpConfig).then(response => {
                     var data = response && response.data && response.data.data;
-                    _this.updateChargeStatusIfNecessary(charge, data.status, () => {});
-                    if(apiCalls <= 0){
-                        cb(null,null);
-                    }
+                    _this.updateChargeStatusIfNecessary(charge, data.status, () => {
+                        apiCalls--;
+                        if(apiCalls <= 0){
+                            cb(null,null);
+                        }
+                    });
+                    
                 })
                 .catch(error => {
                     cb(error);

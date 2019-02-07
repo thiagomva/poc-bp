@@ -5,6 +5,7 @@ import PublicList from './PublicList.jsx';
 import Topbar from './TopBar.jsx';
 import { server_url } from '../config';
 import Axios from 'axios';
+import Helmet from 'react-helmet';
 
 import {
   isSignInPending,
@@ -137,9 +138,23 @@ export default class Profile extends Component {
       this.setState({isLoading: false,isEditing:false,isCreatingPost:false});
     }
 
+    var pageName = this.state.pageInfo && this.state.pageInfo.pageName ? 
+      this.state.pageInfo.pageName : person.name() ? person.name()
+      : username && username.includes('.') ? username.split('.')[0]+"'s Page" : username;
+
     return (
       !isSignInPending() && person ?
       <div className="container">
+        <Helmet>
+          <title>{pageName + " | BitPatron"}</title>
+          <meta property="og:site_name" content={pageName+" | BitPatron"}/>
+          <meta property="og:title" content={pageName+" | BitPatron"}/>
+          <meta name="description" content={this.state.pageInfo && this.state.pageInfo.pageDescription ? this.state.pageInfo.pageDescription : ""}/>
+          <meta name="author" content={username ? (username.includes('.') ? username.split('.')[0] : username) : ""}/>
+          <meta property="og:type" content="website"/>
+          <meta property="og:description" content={"Become a BitPatron of "+pageName+" with Bitcoin."}/>
+          <meta property="og:image" content="https://bitpatron.co/img/TW_BitPatron_Post1.png"/>
+        </Helmet>
         <div className="row">
           <div className="col-md">
             {!this.showNewPostForm() && !this.showPageEdit() &&

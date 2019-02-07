@@ -8,7 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import {Container, Col, Row} from 'react-bootstrap';
 import Axios from 'axios';
-import { server_url } from '../config';
+import { server_url, open_node_url } from '../config';
 
 export default class Payment extends Component {
   constructor(props) {
@@ -56,7 +56,7 @@ export default class Payment extends Component {
       monthly: monthly
     }).then(response => {
       if(response.data && response.data.id){
-        window.location.href = "https://dev-checkout.opennode.co/" + response.data.id;
+        window.location.href = open_node_url + response.data.id;
       }
       else{
         alert('Sorry, an error ocurred.');

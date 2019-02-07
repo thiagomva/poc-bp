@@ -1,4 +1,5 @@
 {
   "server_url": "http://localhost:4000",
-  "ethereum_network": "4"
+  "ethereum_network": "4",
+  "open_node_url": "https://dev-checkout.opennode.co/"
 }

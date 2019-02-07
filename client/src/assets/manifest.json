@@ -1,7 +1,7 @@
 {
-  "name": "BitPatron POC",
+  "name": "BitPatron",
   "start_url": "localhost:8080",
-  "description": "A simple demo of BitPatron",
+  "description": "The Bitcoin censorship-free Patreon alternative",
   "icons": [{
     "src": "http://localhost:8080/icon-192x192.png",
     "sizes": "192x192",

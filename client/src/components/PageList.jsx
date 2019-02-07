@@ -29,8 +29,8 @@ export default class PageList extends Component {
                     </div>
                     <div className="row">
                     {this.state.pages.map((page) => (
-                        <div className="col-md-4">
-                            <a key={page.username} className="page-card card mb-4">
+                        <div key={page.username} className="col-md-4">
+                            <div className="page-card card mb-4">
                                 <div className="card-body">
                                     <div className="card-title">{page.pageName}</div>
                                     <hr></hr>
@@ -39,7 +39,7 @@ export default class PageList extends Component {
                                 <div className="card-footer">
                                     <a className="btn btn-outline-primary" href={"/"+page.username}>EXPLORE</a>  
                                 </div>
-                            </a>
+                            </div>
                         </div>
                     ))}
                     </div>

@@ -30,7 +30,7 @@ export default class TopBar extends Component {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarResponsive">
-            <ul className="navbar-nav mr-auto ml-5">
+            <ul className="navbar-nav mr-auto ml-lg-5">
               <NavLink to="/" title="HOME"></NavLink>
               <NavLink to="/explore" title="EXPLORE"></NavLink>
             </ul>
@@ -38,10 +38,10 @@ export default class TopBar extends Component {
               <li className="nav-item twitter-nav-item">
                 <a className="nav-link clickable" href="https://twitter.com/BitPatronCo" target="_blank"><i className="fa fa-twitter"></i></a>
               </li>
-              <div className="nav-separator mx-2"></div>
+              <div className="nav-separator mx-lg-2"></div>
               {username && 
                 <li className="nav-item">                  
-                  <a className="nav-link clickable" href="/"><i className="fa fa-user-circle mx-1"></i><span>{username}</span></a>
+                  <a className="nav-link clickable" href="/"><i className="fa fa-user-circle mr-1"></i><span>{username}</span></a>
                 </li>
               }
               {username && 

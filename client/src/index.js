@@ -27,6 +27,8 @@ import 'font-awesome/css/font-awesome.css';
 
 import FroalaEditor from 'react-froala-wysiwyg';
 
+import 'bootstrap/dist/js/bootstrap.js';
+
 // Require Sass file so webpack can build it
 import 'bootstrap/dist/css/bootstrap.css';
 import './styles/style.css';

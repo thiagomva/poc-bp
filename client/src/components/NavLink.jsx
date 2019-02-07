@@ -7,7 +7,7 @@ export default class NavLink extends Component {
 
   render() {
     var isActive = window.location.pathname == this.props.to;
-    var className = isActive ? 'nav-item mx-2 active' : 'nav-item mx-2';
+    var className = isActive ? 'nav-item mx-lg-2 active' : 'nav-item mx-lg-2';
 
     return (
       <li className={className}>

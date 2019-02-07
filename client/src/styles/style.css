@@ -300,14 +300,23 @@ input, textarea{color:#000;padding:10px;}
     color: white;
 }
 
-li.nav-item.active:after {
-    height: 8px;
-    content: ' ';
-    width: 100%;
-    background: #fc6449;
-    display: block;
-    bottom: -16px;
-    position: relative;
+@media(min-width:992px){
+    li.nav-item.active:after {
+        height: 8px;
+        content: ' ';
+        width: 100%;
+        background: #fc6449;
+        display: block;
+        bottom: -16px;
+        position: relative;
+    }
+
+    .nav-separator{
+        width: 1px;
+        height: 34px;
+        background: white;
+        display: block;
+    }
 }
 
 .twitter-nav-item i{
@@ -315,9 +324,3 @@ li.nav-item.active:after {
     margin-top: -6px;
 }
 
-.nav-separator{
-    width: 1px;
-    height: 34px;
-    background: white;
-    display: block;
-}

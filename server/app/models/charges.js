@@ -36,8 +36,8 @@ class Charges {
 
     getCreateResult(json, cb) {
         var pageInfoData = new PageInfoData();
-        var chargeData = new PageInfoData();
-        pageInfoData.get(this.userBlockstackId).then(pageInfo => {
+        var chargeData = new ChargeData();
+        pageInfoData.get(json.username).then(pageInfo => {
             var price = 20;
             if(json.monthly){
                 price = pageInfo.monthlyPrice;

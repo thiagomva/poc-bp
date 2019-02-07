@@ -7,6 +7,7 @@ const ConfigAssetPlugin = new CopyWebpackPlugin([ { from: 'src/assets/config.jso
 const IconAssetPlugin = new CopyWebpackPlugin([ { from: 'src/images/icon-192x192.png', to: 'icon-192x192.png' } ]);
 const ImagesAssetPlugin = new CopyWebpackPlugin([ { from: 'src/images/', to: 'images/'} ]);
 const WebConfigPlugin = new CopyWebpackPlugin([ { from: 'src/web.config', to: 'web.config' } ]);
+const FontsPlugin = new CopyWebpackPlugin([ { from: 'src/fonts', to: 'fonts' } ]);
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './src/index.html',
@@ -69,6 +70,7 @@ module.exports = {
      IconAssetPlugin, 
      ImagesAssetPlugin,
      WebConfigPlugin,
+     FontsPlugin,
      new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery"

@@ -1,22 +1,22 @@
 /*Custom Fonts*/
 @font-face {
     font-family: Montserrat-Black;
-    src: url('/src/fonts/Font_Montserrat/Montserrat-Black.otf') format("opentype");
+    src: url('/fonts/Font_Montserrat/Montserrat-Black.otf') format("opentype");
 }
 
 @font-face {
     font-family: Montserrat-Bold;
-    src: url('/src/fonts/Font_Montserrat/Montserrat-Bold.otf') format("opentype");
+    src: url('/fonts/Font_Montserrat/Montserrat-Bold.otf') format("opentype");
 }
 
 @font-face {
     font-family: Montserrat-Light;
-    src: url('/src/fonts/Font_Montserrat/Montserrat-Light.otf') format("opentype");
+    src: url('/fonts/Font_Montserrat/Montserrat-Light.otf') format("opentype");
 }
 
 @font-face {
     font-family: Montserrat-SemiBold;
-    src: url('/src/fonts/Font_Montserrat/Montserrat-SemiBold.otf') format("opentype");
+    src: url('/fonts/Font_Montserrat/Montserrat-SemiBold.otf') format("opentype");
 }
 
 /* Globals */

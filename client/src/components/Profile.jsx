@@ -195,7 +195,7 @@ export default class Profile extends Component {
                         name="payment"
                         value="yearly"
                       />
-                      &nbsp;{this.state.pageInfo.yearlyPrice} ETH per year
+                      &nbsp;{this.state.pageInfo.yearlyPrice} USD per year
                     </label>
                   </div>
                 </div>
@@ -207,7 +207,7 @@ export default class Profile extends Component {
                         name="payment"
                         value="monthly"
                       />
-                      &nbsp;{this.state.pageInfo.monthlyPrice} ETH per month
+                      &nbsp;{this.state.pageInfo.monthlyPrice} USD per month
                     </label>
                   </div>
                 </div>

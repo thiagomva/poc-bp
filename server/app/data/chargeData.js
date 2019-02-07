@@ -3,7 +3,7 @@ var DataAccess = require("./dataAccess.js");
 
 class ChargeData{
     constructor(){
-        this.Charge = sequelize.define('Charge', {
+        this.Charge = DataAccess.define('Charge', {
             chargeId: {
                 type: Sequelize.CHAR(36),
                 primaryKey: true

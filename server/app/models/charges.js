@@ -1,7 +1,6 @@
 const axios = require('axios');
 var config = require('nconf');
 var Subscribers = require('./subscribers.js');
-var chargesStoreName = 'chargesStore.json';
 var PageInfoData = require('../data/pageInfoData.js');
 var ChargeData = require('../data/chargeData.js');
 

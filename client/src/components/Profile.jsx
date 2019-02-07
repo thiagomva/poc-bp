@@ -47,7 +47,8 @@ export default class Profile extends Component {
       isCreatingPost: false,
       docPrivateKey: "",
       docPublicKey: "",
-      pageInfo: null
+      pageInfo: null,
+      subscriptionFile: null
     };
   }
 
@@ -178,7 +179,9 @@ export default class Profile extends Component {
 				</div>
 			  </div>
         <div className="col-md-4">
-          {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != this.getLoggedUserName() && 
+          {this.state.pageInfo && this.state.pageUsername 
+          && this.state.pageUsername != this.getLoggedUserName() 
+          && !this.state.subscriptionFile &&
           <div>
             <div className="row header-section become-bitpatron" href="/">
               <img src="./images/Icon_Star.png"/>&nbsp;Become BitPatron
@@ -255,6 +258,7 @@ export default class Profile extends Component {
     }
     this.setState({ pageUsername: username });
     this.getPageInfo(username);
+    this.setSubscriptionFile();
   }
 
   getPageInfo(username){
@@ -293,5 +297,27 @@ export default class Profile extends Component {
 
   showPageEdit(){
     return !this.state.isLoading && (this.isLocalAndHasNotConfiguredPage() || this.state.isEditing);
+  }
+
+  setSubscriptionFile() {
+      if (this.state.pageUsername && loadUserData()) {
+          var loggedUserAppPrivateKey = loadUserData().appPrivateKey;
+          var loggedUserAppPublicKey = getPublicKeyFromPrivate(loggedUserAppPrivateKey);
+          const options = { username:  this.state.pageUsername, decrypt: false };
+          getFile('bp/' + loggedUserAppPublicKey.toLowerCase() + '.json', options)
+          .then(
+              (file)=>{
+              if (file) {
+                  this.setState(
+                      {
+                          subscriptionFile: JSON.parse(file)
+                      }
+                  );
+              } 
+          })
+          .catch((error) => {
+              console.log(error);
+          });
+      }
   }
 }

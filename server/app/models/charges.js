@@ -11,9 +11,10 @@ class Charges {
             if(callback.status != "processing" && callback.status != "paid"){
                 cb(null, null);
             }
-            var chargeData = new PageInfoData();
+            var chargeData = new ChargeData();
+            var _this = this;
             chargeData.get(callback.id).then(charge => {
-                updateChargeStatusIfNecessary(charge, callback.status, cb);
+                _this.updateChargeStatusIfNecessary(charge, callback.status, cb);
             });
         } catch(err) {
             cb(err)
@@ -23,6 +24,7 @@ class Charges {
     updateChargeStatusIfNecessary(charge, newStatus, cb){
         if(charge.status != "paid" &&  charge.status != newStatus){
             charge.status = newStatus;
+            var chargeData = new ChargeData();
             chargeData.update(charge).then(result => {
                 if(charge.status == "processing" || charge.status == "paid"){
                     new Subscribers(charge.username, charge.appPublicKey, charge.periodType == 0).getSubscribersResult(cb);
@@ -74,7 +76,8 @@ class Charges {
     }
 
     getCheckResult(check, cb){
-        var chargeData = new PageInfoData();
+        var chargeData = new ChargeData();
+        var _this = this;
         chargeData.listPending(check.appPublicKey).then(charges => {
             let httpConfig = {
                 headers: {
@@ -87,7 +90,7 @@ class Charges {
                 apiCalls++;
                 axios.get(url + charge.chargeId, httpConfig).then(response => {
                     var data = response && response.data && response.data.data;
-                    updateChargeStatusIfNecessary(charge, data.status, () => {});
+                    _this.updateChargeStatusIfNecessary(charge, data.status, () => {});
                     if(apiCalls <= 0){
                         cb(null,null);
                     }

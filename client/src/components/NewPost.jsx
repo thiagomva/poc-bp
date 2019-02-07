@@ -87,7 +87,8 @@ export default class NewPost extends Component {
             placeholderText: "Content",
             toolbarButtons: ['bold', 'italic', 'underline', 'color', 'align', 'fontSize', 'insertLink', 'insertImage', 'embedly'],
             imageInsertButtons: ['imageByURL'],
-            imageUploadRemoteUrls: false
+            imageUploadRemoteUrls: false,
+            key: 'LB5A1C1C2sB4E4H4A15B3A7B6F2D4F3fyuinD-13tsmmH3fi=='
           }}
           model={this.state.newFileContent}
           onModelChange={this.handleModelChange}

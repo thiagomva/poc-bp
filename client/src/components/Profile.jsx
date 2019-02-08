@@ -53,6 +53,10 @@ export default class Profile extends Component {
       pageInfo: null,
       subscriptionFile: null
     };
+
+    if (!this.props.match.params.username && loadUserData() && loadUserData().username) {
+      this.props.history.push('/'+loadUserData().username)
+    }
   }
 
   render() {

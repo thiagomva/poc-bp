@@ -42,9 +42,6 @@ export default class ImageUploader extends Component {
     );
   }
 
-  componentWillMount() {
-  }
-
   componentDidMount() {
     let docOptions = { decrypt: false };
     getFile('pageImage', docOptions).then(result => 

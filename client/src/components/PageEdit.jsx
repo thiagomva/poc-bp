@@ -195,20 +195,20 @@ export default class PageEdit extends Component {
       files: this.props.pageInfo ? this.props.pageInfo.files : {}
     };
     
-    if(checkEmptyField(pageInfo.pageName)){
+    if(this.checkEmptyField(pageInfo.pageName)){
       alert("Page name is required");
       return;
     }
-    if(checkEmptyField(pageInfo.pageDescription)){
+    if(this.checkEmptyField(pageInfo.pageDescription)){
       alert("Page description is required");
       return;
     }
-    if(checkEmptyField(pageInfo.monthlyPrice)){
-      alert("Monthly price is required");
+    if(this.checkEmptyField(pageInfo.monthlyPrice)){
+      alert("Monthly price is required and needs to be greater than 0");
       return;
     }
-    if(checkEmptyField(pageInfo.yearlyPrice)){
-      alert("Yearly price is required");
+    if(this.checkEmptyField(pageInfo.yearlyPrice)){
+      alert("Yearly price is required and needs to be greater than 0");
       return;
     }
 
@@ -216,6 +216,6 @@ export default class PageEdit extends Component {
   }
 
   checkEmptyField(value){
-    return value == null || (typeof value == "string" && value.trim() == "" ) || (typeof value == "number" && value == 0)
+    return value == null || (typeof value == "string" && value.trim() == "" ) || (typeof value == "number" && value <= 0)
   }
 }

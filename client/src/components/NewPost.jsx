@@ -220,15 +220,15 @@ export default class NewPost extends Component {
       publicKey: publicKey
     }
 
-    if(checkEmptyField(fileInfo.fileTitle)){
+    if(this.checkEmptyField(fileInfo.fileTitle)){
       alert("Title is required");
       return;
     }
-    if(!fileInfo.isPublic && checkEmptyField(fileInfo.fileDescription)){
+    if(!fileInfo.isPublic && this.checkEmptyField(fileInfo.fileDescription)){
       alert("Hint is required for non public posts");
       return;
     }
-    if(checkEmptyField(fileInfo.fileContent)){
+    if(this.checkEmptyField(fileInfo.fileContent)){
       alert("Content is required");
       return;
     }

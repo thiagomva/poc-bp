@@ -51,7 +51,7 @@ export default class TopBar extends Component {
               }
               {!username && 
               <li className="nav-item ">
-                <a className="nav-link clickable" onClick={handleSignIn.bind(this)}>Login</a>
+                <a className="nav-link clickable" onClick={handleSignIn.bind(this)}>Login/Register</a>
               </li>
               }
             </ul>

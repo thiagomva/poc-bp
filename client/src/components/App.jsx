@@ -21,7 +21,9 @@ export default class App extends Component {
   }
 
   handleSignIn(e) {
-    e.preventDefault();
+    if(e && e.preventDefault){
+      e.preventDefault();
+    }
     const origin = window.location.origin
     redirectToSignIn(origin, origin + '/manifest.json', ['store_write', 'publish_data', 'email'])
   }
@@ -46,7 +48,7 @@ export default class App extends Component {
               <Route
                 path='/:username'
                 render={
-                  routeProps => <Profile handleSignOut={ this.handleSignOut } {...routeProps} />
+                  routeProps => <Profile handleSignIn={ this.handleSignIn } {...routeProps} />
                 }
               />
               {!isUserSignedIn() ?

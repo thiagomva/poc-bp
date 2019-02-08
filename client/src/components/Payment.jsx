@@ -26,8 +26,9 @@ export default class Payment extends Component {
   onClick(e) {
     e.preventDefault();
     if(!loadUserData()){
-      const origin = window.location.origin
-      redirectToSignIn(origin, origin + '/manifest.json', ['store_write', 'publish_data', 'email'])
+      this.props.handleSignIn();
+      // const origin = window.location.origin
+      // redirectToSignIn(origin, origin + '/manifest.json', ['store_write', 'publish_data', 'email'])
     }
     else{
       this.setState({paying:true,showModal:true});

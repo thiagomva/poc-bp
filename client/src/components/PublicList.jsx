@@ -37,6 +37,7 @@ export default class PublicList extends Component {
     }
 
     render() {
+        const { handleSignIn } = this.props;
         return (
             <div>
                 <div className="row">
@@ -89,7 +90,7 @@ export default class PublicList extends Component {
                                         Posted by {this.state.pageOwner && this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}
                                     </div>
                                     <div className="pull-right">
-                                        {!this.state.files[fileName].isPublic && this.checkUserNotAllowed() && <Payment pageUsername={this.state.pageUsername}  monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
+                                        {!this.state.files[fileName].isPublic && this.checkUserNotAllowed() && <Payment handleSignIn={handleSignIn} pageUsername={this.state.pageUsername}  monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
                                         {(this.state.files[fileName].isPublic || !this.checkUserNotAllowed()) && !this.state.files[fileName].content &&<div className='btn btn-primary' onClick={e => {if(!this.state.files[fileName].isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName, this.state.files[fileName].isPublic)}}  ><span>Read More</span></div>}
                                     </div>
                                 </div>

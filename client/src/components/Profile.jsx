@@ -60,7 +60,7 @@ export default class Profile extends Component {
   }
 
   render() {
-    const { handleSignOut } = this.props;
+    const { handleSignIn } = this.props;
     const { person } = this.state;
     const { username } = this.state;
     var handleNewPost = () =>{
@@ -202,7 +202,7 @@ export default class Profile extends Component {
             }
             <div className="col-md-12">
             {!this.showNewPostForm() &&  !this.showPageEdit() &&
-              <PublicList handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person}/>
+              <PublicList handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person}/>
             }
           </div>
           </div>
@@ -215,7 +215,7 @@ export default class Profile extends Component {
               <div className="row pl-5 pt-3 mb-4">
                 <span>Choose a subscription plan</span>
               </div>
-              <SubscriptionOptions expirationDate={this.getExpirationDate()} radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
+              <SubscriptionOptions handleSignIn={handleSignIn} expirationDate={this.getExpirationDate()} radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
             </div>
           </div>}
         </div>
@@ -225,13 +225,15 @@ export default class Profile extends Component {
 
   getExpirationDate(){
     var duration = null;
-    var appPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey).toLowerCase();
-    if (this.state.subscriptionFile && this.state.subscriptionFile[appPublicKey]) {
-        duration = this.state.subscriptionFile[appPublicKey].expirationDate;
+    if(loadUserData()){
+      var appPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey).toLowerCase();
+      if (this.state.subscriptionFile && this.state.subscriptionFile[appPublicKey]) {
+          duration = this.state.subscriptionFile[appPublicKey].expirationDate;
+      }
     }
     return duration;
   }
-  
+
   componentWillMount() {
     var userData = loadUserData();
     if(userData){

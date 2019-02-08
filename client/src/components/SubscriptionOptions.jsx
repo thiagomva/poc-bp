@@ -78,6 +78,10 @@ export default class SubscriptionOptions extends Component {
     }
 
     createPaymentRequest(){
+      if(!loadUserData()){
+        this.props.handleSignIn();
+      }
+      else{
         var monthly = this.state.monthlySubscription;
         var url = server_url + '/api/v1/charges';
         var loggedUserAppPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey);
@@ -100,6 +104,7 @@ export default class SubscriptionOptions extends Component {
             this.props.callback();
         }
       }
+    }
 
       handleSubscriptionTypeChange(event) {
         this.setState({ monthlySubscription: event.target.value === 'monthly' && event.target.checked })

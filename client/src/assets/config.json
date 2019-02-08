@@ -1,5 +1,5 @@
 {
   "server_url": "https://pocbpnode.azurewebsites.net",
   "ethereum_network": "4",
-  "open_node_url": "https://dev-checkout.opennode.co/"
+  "open_node_url": "https://checkout.opennode.co/"
 }

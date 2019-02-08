@@ -1,9 +1,9 @@
 {
   "name": "BitPatron",
-  "start_url": "https://tt.bitpatron.co/manifest.json'",
+  "start_url": "https://bitpatron.co/manifest.json'",
   "description": "The Bitcoin censorship-free Patreon alternative",
   "icons": [{
-    "src": "https://tt.bitpatron.co/icon-192x192.png",
+    "src": "https://bitpatron.co/icon-192x192.png",
     "sizes": "192x192",
     "type": "image/png"
   }]

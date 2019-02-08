@@ -67,7 +67,7 @@ export default class PageEdit extends Component {
                 />
               </div>
               <div className="col-md-12">
-                <textarea className="form-control input-page-description" maxlength="300"
+                <textarea className="form-control input-page-description" maxlength="500"
                   value={this.state.newPageDescription}
                   onChange={e => this.handleNewPageDescriptionChange(e)}
                   placeholder="What's your page description?"
@@ -196,8 +196,8 @@ export default class PageEdit extends Component {
       alert("Page description is required");
       return;
     }
-    if(this.checkMaxLengthExceeded(pageInfo.pageDescription,300)){
-      alert("Page description must not exceed 300 characters");
+    if(this.checkMaxLengthExceeded(pageInfo.pageDescription,500)){
+      alert("Page description must not exceed 500 characters");
       return;
     }
     if(this.checkEmptyField(pageInfo.monthlyPrice)){

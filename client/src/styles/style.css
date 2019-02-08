@@ -508,3 +508,17 @@ body {
     font-size: 15px;
     line-height: 2;
   }
+
+  .wallet-status-label {
+    font-family: Montserrat-SemiBold;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .saved {
+    color: darkgreen;
+  }
+
+  .saving {
+      font-style: italic;
+  }

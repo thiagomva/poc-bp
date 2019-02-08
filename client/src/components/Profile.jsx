@@ -44,6 +44,7 @@ export default class Profile extends Component {
       pageUsername:"",
       newStatus: "",
       bitcoinWallet: "",
+      storedBitcoinWallet: "",
       statuses: [],
       statusIndex: 0,
       isLoading: false,
@@ -54,7 +55,8 @@ export default class Profile extends Component {
       pageInfo: null,
       subscriptionFile: null,
       totalSubscribers: 0,
-      totalEarnings: 0
+      totalEarnings: 0,
+      isSubmittingWallet: false
     };
 
     if (!this.props.match.params.username && loadUserData() && loadUserData().username) {
@@ -228,6 +230,9 @@ export default class Profile extends Component {
                   value={this.state.bitcoinWallet}
                   onChange={e => this.handleBitcoinWalletChange(e)}></input>
                 <div className="small-round-btn" onClick={e => this.updatePayoutWallet(e)}><i className="fa fa-arrow-right"></i></div>
+                {this.state.storedBitcoinWallet && this.state.storedBitcoinWallet == this.state.bitcoinWallet && 
+                <div className="wallet-status-label saved">Saved</div>}
+                {this.state.isSubmittingWallet && <div className="wallet-status-label saving">Saving...</div>}
               </div>}
             </div>
           </div>}
@@ -332,7 +337,7 @@ export default class Profile extends Component {
 
   getBitcointWallet(){
     getFile('bitcoinWallet').then(wallet => {
-      this.setState({ bitcoinWallet: wallet });
+      this.setState({ storedBitcoinWallet: wallet, bitcoinWallet: wallet });
     })
   }
 
@@ -426,6 +431,10 @@ export default class Profile extends Component {
   }
 
   updatePayoutWallet() {
-    putFile('bitcoinWallet', this.state.bitcoinWallet);
+    this.setState({ isSubmittingWallet: true })
+    putFile('bitcoinWallet', this.state.bitcoinWallet).then(result => {
+        this.setState({ storedBitcoinWallet: this.state.bitcoinWallet,isSubmittingWallet: false })
+      }
+    );
   }
 }

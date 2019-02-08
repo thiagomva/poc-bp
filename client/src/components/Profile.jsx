@@ -206,7 +206,7 @@ export default class Profile extends Component {
             }
           </div>
           </div>
-          {this.state.pageInfo && this.state.pageUsername &&
+          {!this.showNewPostForm() && !this.showPageEdit() && this.state.pageInfo && this.state.pageUsername &&
           <div className="col-md-4">
             <div>
               <div className="row header-section become-bitpatron" href="/">

@@ -216,6 +216,11 @@ export default class Profile extends Component {
                 <span>Choose a subscription plan</span>
               </div>
               <SubscriptionOptions handleSignIn={handleSignIn} expirationDate={this.getExpirationDate()} radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
+              {this.checkUserIsPageOwner() && <div className="payout-box p-3 mt-3">
+                <div className="box-label">Edit your payout</div>
+                <input className="wallet-input" placeholder="Enter your wallet number"></input>
+                <div className="small-round-btn"><i className="fa fa-arrow-right"></i></div>
+              </div>}
             </div>
           </div>}
         </div>
@@ -261,7 +266,7 @@ export default class Profile extends Component {
       this.fetchData();
     }
 
-    if (!this.props.match.params.username || (loadUserData() && loadUserData().username == this.props.match.params.username)) {
+    if (this.checkUserIsPageOwner()) {
       const script = document.createElement("script");
 
       script.src = "//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5c5dbb7e21461dc9";
@@ -368,5 +373,9 @@ export default class Profile extends Component {
               console.log(error);
           });
       }
+  }
+
+  checkUserIsPageOwner() {
+    return !this.props.match.params.username || (loadUserData() && loadUserData().username == this.props.match.params.username);
   }
 }

@@ -460,3 +460,46 @@ body {
 .buttons-row .btn{
     width: 120px;
 }
+
+.payout-box {
+    border: 1px solid #959595;
+  }
+
+  .box-label {
+    font-family: Montserrat-SemiBold;
+    font-size: 18px;
+    line-height: 2.11;
+    letter-spacing: 0.5px;
+    color: #404040;
+    margin-bottom: 14px;
+  }
+
+  .wallet-input {
+    background-color: #e6e6e6;
+    border: none;
+    padding: 15px;
+    width: 80%;
+  }
+
+  .wallet-input::placeholder {
+    font-family: Montserrat-Light;
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: 0.3px;
+    color: #a6a6a6;
+  }
+
+  .small-round-btn {
+    background-color: #ff4828;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 15px;
+    cursor: pointer;
+    color: #ffffff;
+    text-align: center;
+    padding-top: 6px;
+    padding-left: 2px;
+  }

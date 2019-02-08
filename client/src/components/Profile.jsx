@@ -43,6 +43,7 @@ export default class Profile extends Component {
       username: "",
       pageUsername:"",
       newStatus: "",
+      bitcoinWallet: "",
       statuses: [],
       statusIndex: 0,
       isLoading: false,
@@ -218,8 +219,11 @@ export default class Profile extends Component {
               <SubscriptionOptions handleSignIn={handleSignIn} expirationDate={this.getExpirationDate()} radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
               {this.checkUserIsPageOwner() && <div className="payout-box p-3 mt-3">
                 <div className="box-label">Edit your payout</div>
-                <input className="wallet-input" placeholder="Enter your wallet number"></input>
-                <div className="small-round-btn"><i className="fa fa-arrow-right"></i></div>
+                <input className="wallet-input" 
+                  placeholder="Enter your wallet number"
+                  value={this.state.bitcoinWallet}
+                  onChange={e => this.handleBitcoinWalletChange(e)}></input>
+                <div className="small-round-btn" onClick={e => this.updatePayoutWallet(e)}><i className="fa fa-arrow-right"></i></div>
               </div>}
             </div>
           </div>}
@@ -291,6 +295,10 @@ export default class Profile extends Component {
     this.setState({isEditing: true})
   }
 
+  handleBitcoinWalletChange(event) {
+    this.setState({bitcoinWallet: event.target.value})
+  }
+
   fetchData() {
     this.setState({ isLoading: true });
     var username = this.state.username;
@@ -307,9 +315,19 @@ export default class Profile extends Component {
          console.log('could not resolve profile')
        })
     }
+    else{
+      this.getBitcointWallet();
+    }
     this.setState({ pageUsername: username });
     this.getPageInfo(username);
     this.setSubscriptionFile(username);
+    
+  }
+
+  getBitcointWallet(){
+    getFile('bitcoinWallet').then(wallet => {
+      this.setState({ bitcoinWallet: wallet });
+    })
   }
 
   getPageInfo(username){
@@ -377,5 +395,9 @@ export default class Profile extends Component {
 
   checkUserIsPageOwner() {
     return !this.props.match.params.username || (loadUserData() && loadUserData().username == this.props.match.params.username);
+  }
+
+  updatePayoutWallet() {
+    putFile('bitcoinWallet', this.state.bitcoinWallet);
   }
 }

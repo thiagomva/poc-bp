@@ -17,12 +17,4 @@ module.exports = function (router) {
       .post(function (req, res, next) {
         new PagesController().updateNumberOfPosts(req.body, baseResponse(res, next));
       })
-
-    router.route('/bitcoinWallet/:username')
-      .post(function (req, res, next) {
-        new PagesController().updateBitcoinWallet(req.params.username, req.body, baseResponse(res, next));
-      })
-      .get(function (req, res, next) {
-        new PagesController().getBitcoinWallet(req.params.username, baseResponse(res, next));
-      })
   };

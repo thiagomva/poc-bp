@@ -150,7 +150,7 @@ export default class Site extends Component {
                       <h2>BitPatron</h2>
                       <ul>
                           <li>4%</li>
-                          <li>Instantly</li>
+                          <li>Weekly</li>
                           <li>No</li>
                           <li>Yes</li>
                       </ul>

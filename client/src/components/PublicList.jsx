@@ -130,7 +130,7 @@ export default class PublicList extends Component {
     fetchData(nextProps) {
         var newState = this.getStateFromProps(nextProps);        
         this.setState(newState, () => {
-            if(nextProps.pageUsername != null)
+            if(nextProps.pageUsername != null && nextProps.pageUsername != "")
             {
                 this.setSubscriptionData();
             }

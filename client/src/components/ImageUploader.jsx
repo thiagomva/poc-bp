@@ -44,9 +44,11 @@ export default class ImageUploader extends Component {
 
   componentDidMount() {
     let docOptions = { decrypt: false };
-    getFile('pageImage', docOptions).then(result => 
-      this.setState({imageSrc: result, loaded: true, wasChanged: false, imageText: ''})
-    );
+    getFile('pageImage', docOptions).then(result => {
+      if(result){
+        this.setState({imageSrc: result, loaded: true, wasChanged: false, imageText: ''});
+      }
+    });
   }
   
   handleDragOver(){

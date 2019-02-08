@@ -27,8 +27,8 @@ export default class PageEdit extends Component {
       username: "",
       newPageName: "",
       newPageDescription: "",
-      newMonthlyPrice:undefined,
-      newYearlyPrice: undefined,
+      newMonthlyPrice:"",
+      newYearlyPrice: "",
       isLoading: false
     };
   }
@@ -134,7 +134,7 @@ export default class PageEdit extends Component {
     );
   }
 
-  componentWillMount() {
+    componentDidMount() {
     this.setState({
       person: new Person(loadUserData().profile),
       username: loadUserData().username
@@ -156,9 +156,6 @@ export default class PageEdit extends Component {
     .catch((error) => {
         console.log('could not resolve profile')
     });
-  }
-
-  componentDidMount() {
   }
   
   handleNewPageNameChange(event) {

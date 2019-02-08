@@ -123,15 +123,12 @@ export default class NewPost extends Component {
     );
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.setState({
       person: new Person(loadUserData().profile),
       username: loadUserData().username
     });
     this.fetchData(this.props);
-  }
-
-  componentDidMount() {
   }
 
   componentWillReceiveProps(nextProps) {

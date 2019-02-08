@@ -26,7 +26,7 @@ class Charges {
             var chargeData = new ChargeData();
             chargeData.update(charge).then(result => {
                 if(charge.status == "processing" || charge.status == "paid"){
-                    new Subscribers(charge.username, charge.appPublicKey, charge.periodType == 0).getSubscribersResult(cb);
+                    new Subscribers(charge.username, charge.appPublicKey, charge.periodType == 0, charge.subscriberUsername).getSubscribersResult(cb);
                 }
                 else{
                     cb(null, JSON.parse(stringfiedJson));
@@ -66,7 +66,7 @@ class Charges {
                 axios.post(url, body, httpConfig).then(response => {
                     var data = response && response.data && response.data.data;
                     var jsonFile = {};
-                    var charge = {chargeId: data.id, username: json.username, appPublicKey: json.appPublicKey, status: data.status, periodType: json.monthly ? 0 : 1}
+                    var charge = {chargeId: data.id, username: json.username, appPublicKey: json.appPublicKey, status: data.status, periodType: (json.monthly ? 0 : 1), subscriberUsername: json.subscriberUsername}
                     chargeData.insert(charge)
                     .then(result => cb(null, data))
                     .catch(error => { cb(error); });

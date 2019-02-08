@@ -6,10 +6,11 @@ const axios = require('axios');
 var PageInfoData = require('../data/pageInfoData.js');
 
 class Subscribers {
-    constructor(username, appPublicKey, monthly) {
+    constructor(username, appPublicKey, monthly, subscriberUsername) {
         this.username = username;
         this.appPublicKey = appPublicKey;
         this.monthly = monthly;
+        this.subscriberUsername = subscriberUsername;
     }
 
     getSubscribersResult(cb) {

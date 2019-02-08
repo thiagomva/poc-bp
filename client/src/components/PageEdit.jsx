@@ -60,14 +60,14 @@ export default class PageEdit extends Component {
             <div className="row">
               <div className="col-md-12 paid-subscription-title">&nbsp;</div>
               <div className="col-md-12 mb-3">
-                <input className="form-control input-page-name" type="text"
+                <input className="form-control input-page-name" type="text" maxlength="50"
                   value={this.state.newPageName}
                   onChange={e => this.handleNewPageNameChange(e)}
                   placeholder="What's your page name?"
                 />
               </div>
               <div className="col-md-12">
-                <textarea className="form-control input-page-description"
+                <textarea className="form-control input-page-description" maxlength="500"
                   value={this.state.newPageDescription}
                   onChange={e => this.handleNewPageDescriptionChange(e)}
                   placeholder="What's your page description?"
@@ -188,8 +188,16 @@ export default class PageEdit extends Component {
       alert("Page name is required");
       return;
     }
+    if(this.checkMaxLengthExceeded(pageInfo.pageName,50)){
+      alert("Page name must not exceed 50 characters");
+      return;
+    }
     if(this.checkEmptyField(pageInfo.pageDescription)){
       alert("Page description is required");
+      return;
+    }
+    if(this.checkMaxLengthExceeded(pageInfo.pageDescription,500)){
+      alert("Page description must not exceed 500 characters");
       return;
     }
     if(this.checkEmptyField(pageInfo.monthlyPrice)){
@@ -206,5 +214,9 @@ export default class PageEdit extends Component {
 
   checkEmptyField(value){
     return value == null || (typeof value == "string" && value.trim() == "" ) || (typeof value == "number" && (value <= 0 || Number.isNaN(value)))
+  }
+
+  checkMaxLengthExceeded(value, length){
+    return value.length > length;
   }
 }

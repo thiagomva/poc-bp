@@ -12,7 +12,8 @@ class ChargeData{
             appPublicKey: Sequelize.CHAR(66),
             status: Sequelize.STRING(15),
             periodType: Sequelize.INTEGER,
-            subscriberUsername: Sequelize.STRING(50)
+            subscriberUsername: Sequelize.STRING(50),
+            amount: Sequelize.FLOAT,
         });
     }
     insert(charge){

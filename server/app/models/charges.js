@@ -65,8 +65,7 @@ class Charges {
                 var url = config.get('OPEN_NODE_API_URL') + "v1/charges";
                 axios.post(url, body, httpConfig).then(response => {
                     var data = response && response.data && response.data.data;
-                    var jsonFile = {};
-                    var charge = {chargeId: data.id, username: json.username, appPublicKey: json.appPublicKey, status: data.status, periodType: (json.monthly ? 0 : 1), subscriberUsername: json.subscriberUsername}
+                    var charge = {chargeId: data.id, username: json.username, appPublicKey: json.appPublicKey, status: data.status, periodType: (json.monthly ? 0 : 1), subscriberUsername: json.subscriberUsername, amount: (data.amount/100000000.0)}
                     chargeData.insert(charge)
                     .then(result => cb(null, data))
                     .catch(error => { cb(error); });

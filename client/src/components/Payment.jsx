@@ -59,7 +59,8 @@ export default class Payment extends Component {
     Axios.post(url, {
       appPublicKey: loggedUserAppPublicKey,
       username: this.props.pageUsername,
-      monthly: monthly
+      monthly: monthly,
+      subscriberUsername: loadUserData().username
     }).then(response => {
       if(response.data && response.data.id){
         window.location.href = open_node_url + response.data.id;

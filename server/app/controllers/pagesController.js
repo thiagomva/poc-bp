@@ -26,6 +26,18 @@ class PagesController {
     listPages(cb) {
         new Pages().listPages(cb);
     }
+
+    updateBitcoinWallet(username, json, cb) {
+        if (!json) throw new Error(400, 'no body in request');
+        if (!json.newWallet) throw new Error(400, 'new wallet is mandatory');
+        if (!username) throw new Error(400, 'username is mandatory');
+        new Pages(null, username).updateBitcoinWallet(json.newWallet, cb);
+    }
+
+    getBitcoinWallet(username, cb) {
+        if (!username) throw new Error(400, 'username is mandatory');
+        new Pages(null, username).getBitcoinWallet(cb);
+    }
 }
 
 module.exports = PagesController;

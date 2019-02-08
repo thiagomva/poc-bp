@@ -109,10 +109,25 @@ class Charges {
         });
     }
 
+    getTotalAmount(username, cb){
+        var chargeData = new ChargeData();
+        chargeData.listPaidFromUser(username).then(charges => {
+            var totalAmount = 0;
+            if(charges){
+                charges.forEach((charge) => {
+                    totalAmount += charge.amount;
+                });
+            }
+            cb(null, totalAmount);
+        })
+        .catch(error => {
+            cb(error);
+        });
+    }
 
     updateAllChargesInfo(cb){
-        var chargeData = new PageInfoData();
-        chargeData.listPending().then(charges => {
+        var chargeData = new ChargeData();
+        chargeData.listAllPending().then(charges => {
             let httpConfig = {
                 headers: {
                     Authorization: config.get('OPEN_NODE_API_KEY')

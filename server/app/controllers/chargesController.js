@@ -48,6 +48,11 @@ class ChargesController {
     updateAll(cb) {
         new Charges().updateAllChargesInfo(cb);
     }
+
+    getTotalAmount(username, cb) {
+        if (!username) throw new Error(400, 'username is mandatory');
+        new Charges().getTotalAmount(username, cb);
+    }
 }
 
 module.exports = ChargesController;

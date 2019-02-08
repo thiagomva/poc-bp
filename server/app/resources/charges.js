@@ -23,4 +23,9 @@ module.exports = function (router) {
     .post(function (req, res, next) {
       new ChargesController().updateAll(baseResponse(res, next));
     });
+
+  router.route('/totalAmount/:username')
+    .get(function (req, res, next) {
+      new ChargesController().getTotalAmount(req.params.username, baseResponse(res, next));
+    });
 };

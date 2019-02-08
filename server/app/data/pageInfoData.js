@@ -14,7 +14,8 @@ class PageInfoData{
             numberOfPosts: Sequelize.INTEGER,
             monthlyPrice: Sequelize.DOUBLE,
             yearlyPrice: Sequelize.DOUBLE,
-            email: Sequelize.STRING(100)
+            email: Sequelize.STRING(100),
+            bitcoinWallet: Sequelize.STRING(40)
         });
     }
     insert(pageInfo){

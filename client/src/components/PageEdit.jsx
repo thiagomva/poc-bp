@@ -194,6 +194,28 @@ export default class PageEdit extends Component {
       yearlyPrice: parseFloat(this.state.newYearlyPrice),
       files: this.props.pageInfo ? this.props.pageInfo.files : {}
     };
+    
+    if(checkEmptyField(pageInfo.pageName)){
+      alert("Page name is required");
+      return;
+    }
+    if(checkEmptyField(pageInfo.pageDescription)){
+      alert("Page description is required");
+      return;
+    }
+    if(checkEmptyField(pageInfo.monthlyPrice)){
+      alert("Monthly price is required");
+      return;
+    }
+    if(checkEmptyField(pageInfo.yearlyPrice)){
+      alert("Yearly price is required");
+      return;
+    }
+
     this.props.handleSavePage(pageInfo);
+  }
+
+  checkEmptyField(value){
+    return value == null || (typeof value == "string" && value.trim() == "" ) || (typeof value == "number" && value == 0)
   }
 }

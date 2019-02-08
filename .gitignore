@@ -9,3 +9,4 @@ server/pageList.json
 server/chargesStore.json
 /server/config/environments/production.js
 /server/config/environments/dev.js
+/server/config/environments/_production.js

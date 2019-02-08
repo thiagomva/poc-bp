@@ -219,8 +219,25 @@ export default class NewPost extends Component {
       privateKey:privateKey,
       publicKey: publicKey
     }
+
+    if(checkEmptyField(fileInfo.fileTitle)){
+      alert("Title is required");
+      return;
+    }
+    if(!fileInfo.isPublic && checkEmptyField(fileInfo.fileDescription)){
+      alert("Hint is required for non public posts");
+      return;
+    }
+    if(checkEmptyField(fileInfo.fileContent)){
+      alert("Content is required");
+      return;
+    }
     
     this.addNewFile(fileInfo);
+  }
+
+  checkEmptyField(value){
+    return value == null || (typeof value == "string" && value.trim() == "" );
   }
 
   addNewFile(fileInfo){

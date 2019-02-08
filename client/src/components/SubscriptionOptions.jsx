@@ -62,7 +62,7 @@ export default class SubscriptionOptions extends Component {
 
     getFormattedDateFromDuration() {
       if(this.props.expirationDate){
-        duration = this.props.expirationDate;
+        var duration = this.props.expirationDate;
         var date = new Date(duration);
         return date.toLocaleDateString({},{ year: 'numeric', month: 'short', day: 'numeric'});
       }

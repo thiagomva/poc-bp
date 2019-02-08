@@ -20,7 +20,6 @@ class Pages {
                 item = item.toJSON();
                 delete item.jwt; 
                 delete item.email;
-                delete item.bitcoinWallet;
                 return item; 
             });
             cb(null, result);
@@ -81,31 +80,6 @@ class Pages {
             }
             else{
                 pageInfoData.update(pageInfo).then(result => cb(null, null)).catch(err => cb(err));
-            }
-        }).catch(err => cb(err));
-    }
-
-    getBitcoinWallet(cb) {
-        var pageInfoData = new PageInfoData();
-        pageInfoData.get(this.userBlockstackId).then(pageInfo => {
-            if(pageInfo){
-                cb(null, pageInfo.bitcoinWallet);
-            }
-            else{
-                cb("Page info not found");
-            }
-        }).catch(err => cb(err));
-    }
-
-    updateBitcoinWallet(newAddress, cb) {
-        var pageInfoData = new PageInfoData();
-        pageInfoData.get(this.userBlockstackId).then(pageInfo => {
-            if(pageInfo){
-                pageInfo.bitcoinWallet = newAddress;
-                pageInfoData.update(pageInfo).then(result => cb(null, null)).catch(err => cb(err));
-            }
-            else{
-                cb("Page info not found");
             }
         }).catch(err => cb(err));
     }

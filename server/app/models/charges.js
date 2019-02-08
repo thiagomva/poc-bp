@@ -115,7 +115,9 @@ class Charges {
             var totalAmount = 0;
             if(charges){
                 charges.forEach((charge) => {
-                    totalAmount += charge.amount;
+                    if(charge.amount){
+                        totalAmount += charge.amount;
+                    }
                 });
             }
             cb(null, totalAmount);

@@ -471,14 +471,14 @@ body {
     line-height: 2.11;
     letter-spacing: 0.5px;
     color: #404040;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
   }
 
   .wallet-input {
     background-color: #e6e6e6;
     border: none;
     padding: 15px;
-    width: 80%;
+    width: calc(100% - 45px);
   }
 
   .wallet-input::placeholder {
@@ -502,4 +502,9 @@ body {
     text-align: center;
     padding-top: 6px;
     padding-left: 2px;
+  }
+
+  .payout-info {
+    font-size: 15px;
+    line-height: 2;
   }

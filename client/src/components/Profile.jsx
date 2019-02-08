@@ -52,7 +52,9 @@ export default class Profile extends Component {
       docPrivateKey: "",
       docPublicKey: "",
       pageInfo: null,
-      subscriptionFile: null
+      subscriptionFile: null,
+      totalSubscribers: 0,
+      totalEarnings: 0
     };
 
     if (!this.props.match.params.username && loadUserData() && loadUserData().username) {
@@ -219,6 +221,8 @@ export default class Profile extends Component {
               <SubscriptionOptions handleSignIn={handleSignIn} expirationDate={this.getExpirationDate()} radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
               {this.checkUserIsPageOwner() && <div className="payout-box p-3 mt-3">
                 <div className="box-label">Edit your payout</div>
+                <div className="payout-info">Total Subscribers: {this.state.totalSubscribers}</div>
+                <div className="payout-info">Total Earnings: {this.state.totalEarnings} BTC</div>
                 <input className="wallet-input" 
                   placeholder="Enter your wallet number"
                   value={this.state.bitcoinWallet}
@@ -317,6 +321,8 @@ export default class Profile extends Component {
     }
     else{
       this.getBitcointWallet();
+      this.getTotalSubscribers();
+      this.getTotalEarnings();
     }
     this.setState({ pageUsername: username });
     this.getPageInfo(username);
@@ -327,6 +333,28 @@ export default class Profile extends Component {
   getBitcointWallet(){
     getFile('bitcoinWallet').then(wallet => {
       this.setState({ bitcoinWallet: wallet });
+    })
+  }
+
+  getTotalSubscribers(){
+    var totalSubscribers = 0;
+    getFile("bp/subscribers.json").then((file)=>{
+      var subscribers = JSON.parse(file || "{}");
+      for (var key in subscribers){
+        if(subscribers[key].expirationDate > (new Date()).getTime()){
+          totalSubscribers++;
+        }
+      }
+      this.setState({totalSubscribers: totalSubscribers});
+    });
+  }
+
+  getTotalEarnings(){
+    var url = server_url + '/api/v1/charges/totalAmount/' + this.state.username;
+    Axios.get(url).then(response => {
+      if(response && response.data){
+        this.setState({totalEarnings: response.data.toFixed(8)});
+      }
     })
   }
 

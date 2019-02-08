@@ -26,8 +26,9 @@ export default class SubscriptionOptions extends Component {
                         type="radio"
                         name={"payment" + this.props.radioGroupName}
                         value="yearly"
-                        checked={!this.state.monthlySubscription}
+                        checked={this.canSubscribe() && !this.state.monthlySubscription}
                         onChange={e => this.handleSubscriptionTypeChange(e)}
+                        disabled={!this.canSubscribe()}
                       />
                       &nbsp;{this.props.yearlyPrice} USD per year
                     </label>
@@ -40,17 +41,40 @@ export default class SubscriptionOptions extends Component {
                         type="radio"
                         name={"payment" + this.props.radioGroupName}
                         value="monthly"
-                        checked={this.state.monthlySubscription}
+                        checked={this.canSubscribe() && this.state.monthlySubscription}
                         onChange={e => this.handleSubscriptionTypeChange(e)}
+                        disabled={!this.canSubscribe()}
                       />
                       &nbsp;{this.props.monthlyPrice} USD per month
                     </label>
                   </div>
                 </div>
-                <div className="btn btn-primary subscription-btn" onClick={e => this.createPaymentRequest(e)}>Subscribe</div>
+                {this.canSubscribe() && <div className="btn btn-primary subscription-btn" onClick={e => this.createPaymentRequest(e)}>Subscribe</div>}
+                {!this.isOwner() && this.getFormattedDateFromDuration() && <div className="btn btn-success subscription-btn">Subscribed until {this.getFormattedDateFromDuration()}</div>}
               </div>
             </div>
         </div>);
+    }
+
+    canSubscribe(){
+      return !this.isOwner() && !this.getFormattedDateFromDuration();
+    }
+
+    getFormattedDateFromDuration() {
+      if(this.props.expirationDate){
+        duration = this.props.expirationDate;
+        var date = new Date(duration);
+        return date.toLocaleDateString({},{ year: 'numeric', month: 'short', day: 'numeric'});
+      }
+      return null;
+    }
+    
+    isOwner(){
+      var userData = loadUserData();
+      if(userData){
+        return this.props.pageUsername == userData.username;
+      }
+      return false;
     }
 
     createPaymentRequest(){

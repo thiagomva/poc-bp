@@ -157,18 +157,6 @@ export default class PublicList extends Component {
         return newState;
     }
 
-    getFormattedDateFromDuration() {
-        var duration;
-        var appPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey).toLowerCase();
-        if (this.state.subscriptionFile && this.state.subscriptionFile[appPublicKey]) {
-            duration = this.state.subscriptionFile[appPublicKey].expirationDate;
-        } else {
-            duration = (new Date()).getTime() + (this.state.yearlyPrice * 86400000);
-        }
-        var date = new Date(duration);
-        return date.toLocaleDateString();
-    }
-
     setSubscriptionData() {
         lookupProfile(this.state.pageUsername)
         .then((profile) => {

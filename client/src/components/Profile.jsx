@@ -206,7 +206,7 @@ export default class Profile extends Component {
             }
           </div>
           </div>
-          {this.state.pageInfo && this.state.pageUsername && this.state.pageUsername != this.getLoggedUserName() && !this.state.subscriptionFile &&
+          {this.state.pageInfo && this.state.pageUsername &&
           <div className="col-md-4">
             <div>
               <div className="row header-section become-bitpatron" href="/">
@@ -215,7 +215,7 @@ export default class Profile extends Component {
               <div className="row pl-5 pt-3 mb-4">
                 <span>Choose a subscription plan</span>
               </div>
-              <SubscriptionOptions radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
+              <SubscriptionOptions expirationDate={this.getExpirationDate()} radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
             </div>
           </div>}
         </div>
@@ -223,6 +223,15 @@ export default class Profile extends Component {
     );
   }
 
+  getExpirationDate(){
+    var duration = null;
+    var appPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey).toLowerCase();
+    if (this.state.subscriptionFile && this.state.subscriptionFile[appPublicKey]) {
+        duration = this.state.subscriptionFile[appPublicKey].expirationDate;
+    }
+    return duration;
+  }
+  
   componentWillMount() {
     var userData = loadUserData();
     if(userData){

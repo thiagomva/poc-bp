@@ -208,6 +208,6 @@ export default class PageEdit extends Component {
   }
 
   checkEmptyField(value){
-    return value == null || (typeof value == "string" && value.trim() == "" ) || (typeof value == "number" && (value <= 0 || Number.isNaN(value))
+    return value == null || (typeof value == "string" && value.trim() == "" ) || (typeof value == "number" && (value <= 0 || Number.isNaN(value)))
   }
 }

@@ -64,7 +64,7 @@ export default class Profile extends Component {
     const { person } = this.state;
     const { username } = this.state;
     var handleNewPost = () =>{
-      this.setState({isCreatingPost: true});
+      this.setState({isCreatingPost: true, editingFile: null});
     }
 
     var handleEditPost = (file) =>{

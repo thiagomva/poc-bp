@@ -10,7 +10,7 @@ class PageInfoData{
             },
             jwt: Sequelize.STRING(1000),
             pageName: Sequelize.STRING(50),
-            pageDescription: Sequelize.STRING(300),
+            pageDescription: Sequelize.STRING(500),
             numberOfPosts: Sequelize.INTEGER,
             monthlyPrice: Sequelize.DOUBLE,
             yearlyPrice: Sequelize.DOUBLE,

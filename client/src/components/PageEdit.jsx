@@ -110,14 +110,6 @@ export default class PageEdit extends Component {
                 </div>
                 <small id="yearlyPriceHelp" className="form-text text-muted text-center">We recommend less than 10x monthly price</small>
               </div>
-              <div className="col-md-12 text-center">
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" value="" id="termsCheck"/>
-                  <label className="form-check-label" htmlFor="termsCheck">
-                  I agree with all terms and conditions
-                  </label>
-                </div>
-              </div>
               <div className="col-md-12 text-center buttons-row">
                 {this.props.pageInfo && <button 
                     className="btn btn-secondary btn-lg margin-right-10"
@@ -216,6 +208,6 @@ export default class PageEdit extends Component {
   }
 
   checkEmptyField(value){
-    return value == null || (typeof value == "string" && value.trim() == "" ) || (typeof value == "number" && value <= 0)
+    return value == null || (typeof value == "string" && value.trim() == "" ) || (typeof value == "number" && (value <= 0 || Number.isNaN(value))
   }
 }

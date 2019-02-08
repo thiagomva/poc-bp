@@ -48,7 +48,6 @@ export default class SubscriptionOptions extends Component {
                   </div>
                 </div>
                 <div className="btn btn-primary subscription-btn" onClick={e => this.createPaymentRequest(e)}>Subscribe</div>
-                <div className="subscription-terms">By registering you agree to our<br />Terms of Service and privacy</div>
               </div>
             </div>
         </div>);

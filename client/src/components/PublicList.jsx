@@ -97,23 +97,6 @@ export default class PublicList extends Component {
                             ))}
                         </div>
                     </div>
-                <div className="col-md-4">
-                {this.state.yearlyPrice &&
-                    this.state.pageUsername != this.getLoggedUsername() && 
-                    !this.state.subscriptionFile &&                            
-                    <div className="card my-4">
-                        <h5 className="card-header">{"Become BitPatron"}</h5>
-                        <div className="card-body">
-                            <div className="row">
-                            <div className="col-lg-12">
-                                {this.state.pageUsername != this.getLoggedUsername() && !this.state.subscriptionFile && <Payment pageUsername={this.state.pageUsername} monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={false}></Payment>}
-                                {(this.state.pageUsername == this.getLoggedUsername() || this.state.subscriptionFile) && <span><br/><b><u>Subscribed</u></b></span>}
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-                </div>
             </div>
         </div>
         

@@ -82,11 +82,6 @@ export default class Payment extends Component {
             <Modal.Body className="payment-option-modal">
             <SubscriptionOptions radioGroupName="-modal" monthlyPrice={this.props.monthlyPrice} yearlyPrice={this.props.yearlyPrice} pageUsername={this.props.pageUsername} callback={this.hideModal} alignCenter={true}></SubscriptionOptions>
             </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={this.handleClose}>
-                Cancel
-              </Button>
-            </Modal.Footer>
           </Modal>
       </div>
     );

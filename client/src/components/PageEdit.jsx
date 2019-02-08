@@ -60,14 +60,14 @@ export default class PageEdit extends Component {
             <div className="row">
               <div className="col-md-12 paid-subscription-title">&nbsp;</div>
               <div className="col-md-12 mb-3">
-                <input className="form-control input-page-name" type="text" maxlength="50"
+                <input className="form-control input-page-name" type="text" maxLength="50"
                   value={this.state.newPageName}
                   onChange={e => this.handleNewPageNameChange(e)}
                   placeholder="What's your page name?"
                 />
               </div>
               <div className="col-md-12">
-                <textarea className="form-control input-page-description" maxlength="500"
+                <textarea className="form-control input-page-description" maxLength="500"
                   value={this.state.newPageDescription}
                   onChange={e => this.handleNewPageDescriptionChange(e)}
                   placeholder="What's your page description?"

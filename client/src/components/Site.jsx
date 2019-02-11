@@ -28,12 +28,10 @@ export default class Site extends Component {
           <div>
               <img src="./images/logo.svg" className="center-logo" />
           </div>
-          <div className="center-text">
-              <h4>THE FIRST DECENTRALIZED PATREON ALTERNATIVE<br/>Powered by Blockstack & Bitcoin</h4>
-              <span>Express your voice, without being </span>
-              <br />
-              <span>controlled by big corporates.</span>
-          </div>        
+          <div class="center-text">
+            <h4>Express your voice, without being controlled by big  corporates.</h4>
+            <span>A decentralized membership platform that gives creators the ability<br/>to monetize their passion/work with Bitcoin.</span>
+          </div>      
           <div className="signup-button" id="myBtn" onClick={ handleSignIn.bind(this) }>
               <span>CREATE YOUR PAGE <img src="./images/icons/arrow.png" className="arrow" /></span>
           </div>

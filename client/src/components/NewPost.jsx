@@ -270,12 +270,19 @@ export default class NewPost extends Component {
       this.addFileToPrivateList(fileInfo);
     });
 
-    var url = server_url + '/api/v1/pages';
+    //this.savePostOnServer(fileInfo);
+  }
 
-    Axios.post(url, {
-      userBlockstackId: this.state.username,
-      numberOfPosts: Object.keys(myFiles).length
-    }).then(response => {
+  savePostOnServer(fileInfo){
+    var url = server_url + '/api/v1/posts';
+    postInfo = {
+      name: fileInfo.fileName,
+      username: this.state.username,
+      title: fileInfo.fileTitle,
+      description: fileInfo.fileDescription,
+      isPublic: fileInfo.isPublic
+    }
+    Axios.post(url, postInfo).then(response => {
       
     });
   }

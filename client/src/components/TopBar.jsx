@@ -33,7 +33,7 @@ export default class TopBar extends Component {
             <ul className="navbar-nav mr-auto ml-lg-5">
               <NavLink to="/" title="HOME"></NavLink>
               <NavLink to="/explore" title="EXPLORE"></NavLink>
-              <NavLink to="/posts" title="POSTS"></NavLink>
+              
             </ul>
             <ul className="navbar-nav ml-auto">
               <li className="nav-item twitter-nav-item">

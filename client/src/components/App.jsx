@@ -45,6 +45,11 @@ export default class App extends Component {
                   routeProps => <PageList handleSignOut={ this.handleSignOut } {...routeProps} />
                 }
               />
+              <Route path='/posts'
+                render={
+                  routeProps => <Posts handleSignOut={ this.handleSignOut } {...routeProps} />
+                }
+              />
               <Route
                 path='/:username/:postId?/:postTitle?'
                 render={

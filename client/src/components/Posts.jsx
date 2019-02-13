@@ -17,7 +17,7 @@ export default class Posts extends Component {
     constructor(props) {
         super(props);
 
-        var defaultState = {
+        this.state = {
             isLoading: true,            
             files: {},
             profiles: {}
@@ -107,16 +107,13 @@ export default class Posts extends Component {
 
     fetchData() {
         var url = server_url + '/api/v1/posts';
-        var response = {
-            data:{"1":{"ownerUsername":"dduartef.id.blockstack","title":"Test new editor","name":1,"description":"testing","isPublic":false,"postTime":1549478585700},"2":{"ownerUsername":"thiagomva.id.blockstack", "title":"testing video","name":2,"description":"","isPublic":true,"postTime":1549478786067}}
-            }
         
-        //Axios.get(url).then(response => {
+        Axios.get(url).then(response => {
             this.setState({files:response.data},
                 ()=>{
                     this.getProfileFromPosts();
                 });
-          //});
+            });
     }
 
     getProfileFromPosts() {

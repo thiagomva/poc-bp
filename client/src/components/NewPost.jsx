@@ -269,20 +269,12 @@ export default class NewPost extends Component {
     .then(() => {
       this.addFileToPrivateList(fileInfo);
     });
-
-    //this.savePostOnServer(fileInfo);
   }
 
   savePostOnServer(fileInfo){
     var url = server_url + '/api/v1/posts';
-    postInfo = {
-      name: fileInfo.fileName,
-      username: this.state.username,
-      title: fileInfo.fileTitle,
-      description: fileInfo.fileDescription,
-      isPublic: fileInfo.isPublic
-    }
-    Axios.post(url, postInfo).then(response => {
+    fileInfo["username"] = this.state.username;
+    Axios.post(url, fileInfo).then(response => {
       
     });
   }
@@ -342,6 +334,7 @@ export default class NewPost extends Component {
         isPublic: fileInfo.isPublic,
         postTime: isNew ? new Date().getTime() : pageInfo.files[fileInfo.fileName].postTime
       }
+      this.savePostOnServer(pageInfo.files[fileInfo.fileName]);
       this.props.handleSavePage(pageInfo);
     });
   }

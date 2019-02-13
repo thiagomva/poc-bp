@@ -63,7 +63,7 @@ export default class Posts extends Component {
                                     <img src={ (this.getProfileFromPostFileName(fileName) && this.getProfileFromPostFileName(fileName).avatarUrl()) ? this.getProfileFromPostFileName(fileName).avatarUrl() : avatarFallbackImage }
                                         className="img-rounded avatar mini-avatar"
                                         id="avatar-image"/>
-                                        Posted by {this.getProfileFromPostFileName(fileName) && this.getProfileFromPostFileName(fileName).name() ? this.getProfileFromPostFileName(fileName).name() : this.state.files[fileName].ownerUsername.split('.')[0]}
+                                        Posted by {this.getProfileFromPostFileName(fileName) && this.getProfileFromPostFileName(fileName).name() ? this.getProfileFromPostFileName(fileName).name() : this.state.files[fileName].username.split('.')[0]}
                                     </div>
                                     <div className="pull-right">
                                         {!this.state.files[fileName].isPublic && <a href={this.getPostUrl(fileName)} className='btn btn-primary'><span><i className="fa fa-lock"></i> View Post</span></a>}
@@ -81,12 +81,12 @@ export default class Posts extends Component {
 
     getProfileFromPostFileName(fileName){
         return (this.state.files && this.state.files[fileName] &&
-            this.state.files[fileName].ownerUsername && this.state.profiles) ? 
-            this.state.profiles[this.state.files[fileName].ownerUsername] : null;
+            this.state.files[fileName].username && this.state.profiles) ? 
+            this.state.profiles[this.state.files[fileName].username] : null;
     }
     
     getPostUrl(fileName){
-        return "/"+this.state.files[fileName].ownerUsername+"/"+fileName+"/"+this.formatPostTitle(this.state.files[fileName].title);
+        return "/"+this.state.files[fileName].username+"/"+fileName+"/"+this.formatPostTitle(this.state.files[fileName].title);
     }
     
     formatPostTitle(title){
@@ -109,7 +109,7 @@ export default class Posts extends Component {
         var url = server_url + '/api/v1/posts';
         
         Axios.get(url).then(response => {
-            this.setState({files:response.data},
+            this.setState({files:response.data, isLoading:false},
                 ()=>{
                     this.getProfileFromPosts();
                 });
@@ -117,7 +117,7 @@ export default class Posts extends Component {
     }
 
     getProfileFromPosts() {
-        var usernames = new Set(Object.keys(this.state.files).map(filename => {return this.state.files[filename].ownerUsername}));
+        var usernames = new Set(Object.keys(this.state.files).map(filename => {return this.state.files[filename].username}));
         var profiles = {};
         usernames.forEach(
             username => 

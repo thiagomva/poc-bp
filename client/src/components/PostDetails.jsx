@@ -8,30 +8,28 @@ import {
     Person,
     decryptContent
   } from 'blockstack';
+import { isNull } from 'util';
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
-export default class PublicList extends Component {
+export default class PostDetails extends Component {
     constructor(props) {
         super(props);
 
         var defaultState = {
-            currentFileContent:"",
             subscriptionFile: null,
             pageOwner: null,
-            isLoading: false,            
+            isLoading: true,            
             pageName: "",
             pageDescription: "",
             monthlyPrice: undefined,
             yearlyPrice: undefined,
-            files: {},
+            file: null,
             pageUsername: ""
         }
         var newState = this.getStateFromProps(props);
         
         this.state = Object.assign({}, defaultState, newState);
-
-        newState
 
         this.subscriptionConfirmed = this.subscriptionConfirmed.bind(this);
     }
@@ -42,44 +40,31 @@ export default class PublicList extends Component {
             <div>
                 <div className="row">
                     <div className="col-md-12">
-                            {this.state.isLoading &&
-                                <h1>Loading...</h1>
-                            }
+                            {this.state.isLoading ?
+                                <h1>Loading...</h1> :
                             <div className="file-container">
-                            <div className="row">
-                                <div className="col-md-12 mb-2">
-                                    <div className="posts-title pull-left">
-                                        <i className="fa fa-bullhorn rotate-315"></i>POSTS
-                                    </div>
-                                    {this.isLoggedUserPage() && <div className="icon-btn pull-right">
-                                        <div className='btn btn-primary' onClick={e => {this.props.handleNewPost()}}>
-                                            <i className="fa fa-edit"></i><span>New Post</span>
-                                        </div>
-                                    </div>}
-                                </div>
-                            </div>
                             
-                            {this.getFilesNamesDescOrderdByDate().map((fileName) => (<div key={fileName} className="card  mb-4">
+                            {this.state.file && <div className="card  mb-4">
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-md">
-                                            <a href={this.getPostUrl(fileName)} className="post-date pull-left">
-                                            {this.state.files[fileName].postTime && new Date(this.state.files[fileName].postTime).toLocaleDateString({}, { year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute:'numeric' })}
-                                            </a>
+                                            <div className="post-date pull-left">
+                                            {this.state.file.postTime && new Date(this.state.file.postTime).toLocaleDateString({}, { year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute:'numeric' })}
+                                            </div>
                                             <div className="post-visibility float-right">
-                                                {!this.state.files[fileName].isPublic && (this.isLoggedUserPage() || this.checkUserNotAllowed()) && <div><i className="fa fa-lock"></i> Locked</div>}
-                                                {!this.state.files[fileName].isPublic && !this.checkUserNotAllowed() && !this.isLoggedUserPage() && <div><i className="fa fa-unlock"></i> Unlocked</div>}
-                                                {this.state.files[fileName].isPublic && <div><i className="fa fa-globe"></i> Public</div>}
+                                                {!this.state.file.isPublic && (this.isLoggedUserPage() || this.checkUserNotAllowed()) && <div><i className="fa fa-lock"></i> Locked</div>}
+                                                {!this.state.file.isPublic && !this.checkUserNotAllowed() && !this.isLoggedUserPage() && <div><i className="fa fa-unlock"></i> Unlocked</div>}
+                                                {this.state.file.isPublic && <div><i className="fa fa-globe"></i> Public</div>}
                                             </div>
                                             <div className="post-visibility edit-post float-right">
-                                                {this.isLoggedUserPage() && <div onClick={e => {this.handleEditPost(fileName)}} ><i className="fa fa-edit"></i> Edit Post</div>}
+                                                {this.isLoggedUserPage() && <div onClick={e => {this.handleEditPost()}} ><i className="fa fa-edit"></i> Edit Post</div>}
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="post-title"> {this.state.files[fileName].title}</div>
-                                    <div className="post-description"> {this.state.files[fileName].description}</div>
-                                    {this.state.files[fileName].content && 
-                                    <div className="fr-view mt-4" dangerouslySetInnerHTML={{ __html: this.state.files[fileName].content + '&nbsp;<br>&nbsp;' }}></div>
+                                    <div className="post-title"> {this.state.file.title}</div>
+                                    <div className="post-description"> {this.state.file.description}</div>
+                                    {this.state.file.content && 
+                                    <div className="fr-view mt-4" dangerouslySetInnerHTML={{ __html: this.state.file.content + '&nbsp;<br>&nbsp;' }}></div>
                                     }
                                 </div>
                                 <div className="card-footer">
@@ -90,39 +75,22 @@ export default class PublicList extends Component {
                                         Posted by {this.state.pageOwner && this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}
                                     </div>
                                     <div className="pull-right">
-                                        {!this.state.files[fileName].isPublic && this.checkUserNotAllowed() && <Payment handleSignIn={handleSignIn} pageUsername={this.state.pageUsername}  monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
-                                        {(this.state.files[fileName].isPublic || !this.checkUserNotAllowed()) && !this.state.files[fileName].content &&<div className='btn btn-primary' onClick={e => {if(!this.state.files[fileName].isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName, this.state.files[fileName].isPublic)}}  ><span>Read More</span></div>}
+                                        {!this.state.file.isPublic && this.checkUserNotAllowed() && <Payment handleSignIn={handleSignIn} pageUsername={this.state.pageUsername}  monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
+                                        {(this.state.file.isPublic || !this.checkUserNotAllowed()) && !this.state.file.content &&<div className='btn btn-primary' onClick={e => {if(!this.state.file.isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName, this.state.file.isPublic)}}  ><span>Read More</span></div>}
                                     </div>
                                 </div>
                             </div>
-                            ))}
+                            }
                         </div>
+                        }
                     </div>
             </div>
         </div>
-        
-
         );
     }
-    
-    getPostUrl(fileName){
-        return "/"+this.state.pageUsername+"/"+fileName+"/"+this.formatPostTitle(this.state.files[fileName].title);
-    }
-    
-    formatPostTitle(title){
-        return typeof title == "string" ? title.split(' ').join('-') : '';
-    }
 
-    getFilesNamesDescOrderdByDate(){
-        var _this = this;
-        return Object.keys(this.state.files).sort(function (a, b) { 
-            var dif = (_this.state.files[b].postTime || 0) - (_this.state.files[a].postTime || 0);
-            return dif;
-        });
-    }
-
-    handleEditPost(fileName){
-        this.props.handleEditPost(this.state.files[fileName]);
+    handleEditPost(){
+        this.props.handleEditPost(this.state.file);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -137,6 +105,7 @@ export default class PublicList extends Component {
     }
 
     fetchData(nextProps) {
+        this.setState({isLoading:true});
         var newState = this.getStateFromProps(nextProps);        
         this.setState(newState, () => {
             if(nextProps.pageUsername != null && nextProps.pageUsername != "")
@@ -153,8 +122,7 @@ export default class PublicList extends Component {
                 pageName: props.pageInfo.pageName,
                 pageDescription: props.pageInfo.pageDescription,
                 monthlyPrice: props.pageInfo.monthlyPrice,
-                yearlyPrice: props.pageInfo.yearlyPrice,
-                files: props.pageInfo.files ? props.pageInfo.files : {}
+                yearlyPrice: props.pageInfo.yearlyPrice
             }
         }
         if(props.pageUsername != null){
@@ -162,6 +130,10 @@ export default class PublicList extends Component {
         }
         if(props.pageOwner != null){
             newState["pageOwner"] = props.pageOwner;
+        }
+        if(props.postId != null){
+            newState["postId"] = props.postId;
+            newState["file"] = props.pageInfo.files ? props.pageInfo.files[props.postId] : {};
         }
         return newState;
     }
@@ -191,13 +163,18 @@ export default class PublicList extends Component {
             getFile('bp/' + loggedUserAppPublicKey.toLowerCase() + '.json', options)
             .then(
                 (file)=>{
+                var parsedFile = {};
                 if (file) {
-                    this.setState(
-                        {
-                            subscriptionFile: JSON.parse(file)
-                        }
-                    );
-                } 
+                    parsedFile = JSON.parse(file)
+                }
+                this.setState(
+                    {
+                        subscriptionFile: parsedFile
+                    },
+                    () => {
+                        this.handleReadFile()
+                    }
+                );
             })
             .catch((error) => {
                 console.log(error);
@@ -221,9 +198,12 @@ export default class PublicList extends Component {
         return !this.isLoggedUserPage() && !this.state.subscriptionFile;
     }
 
-    handleReadFile(fileName, isPublic){
+    handleReadFile(){
+        var fileName = this.state.postId;
+        var isPublic = this.state.file.isPublic;
+
         if (!isPublic && this.checkUserNotAllowed()) {
-            alert("You need to subscribe to access this content");
+            this.setState({isLoading:false});
             return;
         }
         if (isPublic) {
@@ -231,16 +211,17 @@ export default class PublicList extends Component {
         } else if (!this.state.subscriptionFile) {
             getFile("myFilesPrivateKeys.json").then((file)=>{
                 var keys = JSON.parse(file || "{}");
-                this.handleSelectedFile(fileName, keys[fileName]);
+                this.handleSelectedFile(fileName, keys[fileName] ? keys[fileName].decryptionPrivateKey : null);
               });
         } else {
-            this.handleSelectedFile(fileName, this.state.subscriptionFile[fileName]);
+            this.handleSelectedFile(fileName, this.state.subscriptionFile[fileName] ? this.state.subscriptionFile[fileName].decryptionPrivateKey : isNull);
         }
     }
 
-    handleSelectedFile(fileName, file, isPublic) {
-        if (!isPublic && file == null) {
+    handleSelectedFile(fileName, decryptionPrivateKey, isPublic) {
+        if (!isPublic && decryptionPrivateKey == null) {
             alert("You don't have access to this content");
+            this.setState({isLoading:false});
             return;
         }
         
@@ -255,9 +236,9 @@ export default class PublicList extends Component {
                     var decryptedFilePrivateKey = null;
 
                     if (!this.state.subscriptionFile) {
-                        decryptedFilePrivateKey = file.decryptionPrivateKey;
+                        decryptedFilePrivateKey = decryptionPrivateKey;
                     } else {
-                        decryptedFilePrivateKey = decryptContent(file.decryptionPrivateKey,{privateKey:loadUserData().appPrivateKey});
+                        decryptedFilePrivateKey = decryptContent(decryptionPrivateKey,{privateKey:loadUserData().appPrivateKey});
                     }
 
                     fileContent = decryptContent(parsedFileWithEncryptedContent[fileName].content, {privateKey:decryptedFilePrivateKey});
@@ -265,12 +246,12 @@ export default class PublicList extends Component {
                 
                 var currentFileContent = JSON.parse(fileContent);
                 
-                var files = this.state.files;
-                files[fileName].content = currentFileContent;
+                var file = this.state.file;
+                file.content = currentFileContent;
                 this.setState(
                     {
-                        files: files,
-                        currentFileContent: currentFileContent
+                        file: file,
+                        isLoading:false
                     }
                 );
             });

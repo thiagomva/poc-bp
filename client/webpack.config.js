@@ -21,6 +21,7 @@ module.exports = {
   output: {
     path: path.resolve('public/build'),
     filename: 'index_bundle.js',
+    publicPath: '/'
   },
   devServer: {
     historyApiFallback: {

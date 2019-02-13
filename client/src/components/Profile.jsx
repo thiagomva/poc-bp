@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PageEdit from './PageEdit.jsx';
 import NewPost from './NewPost.jsx';
+import PostDetails from './PostDetails.jsx';
 import PublicList from './PublicList.jsx';
 import Topbar from './TopBar.jsx';
 import { server_url } from '../config';
 import Axios from 'axios';
-import Helmet from 'react-helmet';
 
 import {
   isSignInPending,
@@ -154,16 +154,6 @@ export default class Profile extends Component {
     return (
       !isSignInPending() && person ?
       <div className="container">
-        <Helmet>
-          <title>{pageName + " | BitPatron"}</title>
-          <meta property="og:site_name" content={pageName+" | BitPatron"}/>
-          <meta property="og:title" content={pageName+" | BitPatron"}/>
-          <meta name="description" content={this.state.pageInfo && this.state.pageInfo.pageDescription ? this.state.pageInfo.pageDescription : ""}/>
-          <meta name="author" content={username ? (username.includes('.') ? username.split('.')[0] : username) : ""}/>
-          <meta property="og:type" content="website"/>
-          <meta property="og:description" content={"Become a BitPatron of "+pageName+" with Bitcoin."}/>
-          <meta property="og:image" content="https://bitpatron.co/img/TW_BitPatron_Post1.png"/>
-        </Helmet>
         <div className="row">
           <div className="col-md">
             {!this.showNewPostForm() && !this.showPageEdit() &&
@@ -206,16 +196,20 @@ export default class Profile extends Component {
               <PageEdit pageInfo={this.state.pageInfo} handleSavePage={handleNewPageSubmit} handleCancelEdition={handleCancelEdition}/>
             }
             <div className="col-md-12">
-            {!this.showNewPostForm() &&  !this.showPageEdit() &&
+            {!this.showNewPostForm() &&  !this.showPageEdit() && this.showPostDetails() &&            
+              <PostDetails handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} postId={this.props.match.params.postId}/>
+            }
+            {!this.showNewPostForm() &&  !this.showPageEdit() && !this.showPostDetails() &&
               <PublicList handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person}/>
             }
+            
           </div>
           </div>
           {!this.showNewPostForm() && !this.showPageEdit() && this.state.pageInfo && this.state.pageUsername &&
           <div className="col-md-4">
             <div>
               <div className="row header-section become-bitpatron" href="/">
-                <img src="./images/Icon_Star.png"/>&nbsp;Become BitPatron
+                <img src="/images/Icon_Star.png"/>&nbsp;Become BitPatron
               </div>
               <div className="row pl-5 pt-3 mb-4">
                 <span>Choose a subscription plan</span>
@@ -239,6 +233,21 @@ export default class Profile extends Component {
         </div>
       </div> : null
     );
+  }
+
+  showPostDetails(){
+    var show = this.props.match.params.postId != null && this.state.pageInfo && this.state.pageInfo.files && this.state.pageInfo.files[this.props.match.params.postId];
+    if(show){
+      if (!this.props.match.params.postTitle) {
+        var postTitle = this.state.pageInfo.files[this.props.match.params.postId].title
+        this.props.history.push(this.props.match.url + '/' + this.formatPostTitle(postTitle));
+      }
+    }
+    return show;
+  }
+
+  formatPostTitle(title){
+    return typeof title == "string" ? title.split(' ').join('-') : '';
   }
 
   getExpirationDate(){
@@ -377,7 +386,6 @@ export default class Profile extends Component {
           this.setState({ isLoading: false })
         })
       })
-      
   }
 
   isLocal() {

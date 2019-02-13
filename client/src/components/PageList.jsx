@@ -5,7 +5,6 @@ import {
   } from 'blockstack';
 import Axios from 'axios';
 import { server_url } from '../config';
-import Helmet from 'react-helmet';
 
 export default class PageList extends Component {
     constructor(props) {
@@ -20,16 +19,6 @@ export default class PageList extends Component {
         const { handleSignOut } = this.props;
         return (
             <div>
-                <Helmet>
-                    <title>BitPatron</title>
-                    <meta property="og:site_name" content="BitPatron - The Bitcoin censorship-free Patreon alternative"/>
-                    <meta property="og:title" content="BitPatron - The Bitcoin censorship-free Patreon alternative"/>
-                    <meta name="description" content="Express your voice, without being controlled by big corporates. Help us shape the future of Free Speech and Bitcoin adoption to get a lifetime fee discount."/>
-                    <meta name="author" content="BitPatron"/>
-                    <meta property="og:type" content="website"/>
-                    <meta property="og:description" content="Express your voice, without being controlled by big corporates. Help us shape the future of Free Speech and Bitcoin adoption to get a lifetime fee discount."/>
-                    <meta property="og:image" content="https://bitpatron.co/img/FB_BitPatron_1200x600.png"/>
-                </Helmet>
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12">

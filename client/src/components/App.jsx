@@ -11,8 +11,8 @@ import {
   handlePendingSignIn,
   signUserOut,
 } from 'blockstack';
-import PublicList from './PublicList.jsx';
 import PageList from './PageList.jsx';
+import Posts from './Posts.jsx';
 
 export default class App extends Component {
 
@@ -46,7 +46,7 @@ export default class App extends Component {
                 }
               />
               <Route
-                path='/:username'
+                path='/:username/:postId?/:postTitle?'
                 render={
                   routeProps => <Profile handleSignIn={ this.handleSignIn } {...routeProps} />
                 }

@@ -37,7 +37,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-preset-es2017": "^6.24.1",
-    "blockstack": "^18.2.1",
+    "blockstack": "^18.3.0",
     "bootstrap": "^4.1.1",
     "font-awesome": "^4.7.0",
     "react": "^16.7.0",

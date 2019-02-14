@@ -114,7 +114,7 @@ body {
 }
 
 .subscription-btn {
-    height: 32px;
+    min-height: 32px;
     width: 82%;
     font-family: Montserrat-SemiBold;
     font-size: 12px;

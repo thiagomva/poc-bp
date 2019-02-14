@@ -34,7 +34,7 @@ export default class Posts extends Component {
                     <div className="card-body">
                         <div className="row">
                             <div className="col-md">
-                                <a href={this.getPostUrl(file.name)} className="post-date pull-left">
+                                <a href={this.getPostUrl(file)} className="post-date pull-left">
                                 {file.postTime && new Date(file.postTime).toLocaleDateString({}, { year: 'numeric', month: 'short', day: 'numeric', hour:'numeric', minute:'numeric' })}
                                 </a>
                                 <div className="post-visibility float-right">

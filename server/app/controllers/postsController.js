@@ -16,8 +16,12 @@ class PostsController {
         new Posts().savePost(json, cb);
     }
 
-    listPosts(cb) {
-        new Posts().listPosts(cb);
+    listPosts(pageSize, lastPostTime, cb) {
+        new Posts().listPosts(pageSize, lastPostTime, cb);
+    }
+
+    loadAll(cb) {
+        new Posts().loadAll(cb);
     }
 }
 

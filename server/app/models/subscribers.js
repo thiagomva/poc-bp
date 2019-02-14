@@ -132,6 +132,29 @@ class Subscribers {
         let payload =  (0, JsonTokens.decodeToken)(token).payload;
         return payload;
     }
+
+    savePosts(username, jwt, postObj){
+        const fs = require('fs');
+        var payload = this.decodeJwtTokenPayload(jwt);
+        var address = payload.scopes[0].address;
+        var hubUrlPrefix = payload.scopes[0].hubUrlPrefix;
+        var self = this;
+        self.getFileFromUrl(address, hubUrlPrefix, 'pageInfo.json', function(errPi, respPi) {
+            if (errPi) throw new Error(404, 'pageInfo.json not found.');
+            else {
+                Object.keys(respPi.files).map(fileName => {
+                    if(!isNaN(parseInt(fileName))){
+                        var post = respPi.files[fileName];
+                        post.username = username;
+                        postObj.savePost(post);
+                    }
+                    else{
+                        console.log("fileName is NaN: "+fileName);
+                    }
+                });
+            }
+        });
+    }
 }
 
 module.exports = Subscribers;

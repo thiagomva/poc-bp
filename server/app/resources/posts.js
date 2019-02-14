@@ -10,6 +10,10 @@ module.exports = function (router) {
         new PostsController().savePost(req.body, baseResponse(res, next));
       })
       .get(function (req, res, next) {
-        new PostsController().listPosts(baseResponse(res, next));
+        new PostsController().listPosts(req.query["pageSize"],req.query["lastPostTime"], baseResponse(res, next));
       });
+
+    router.route('/loadAll').get(function (req, res, next) {
+      new PostsController().loadAll(baseResponse(res, next));
+    });
   };

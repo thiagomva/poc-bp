@@ -27,8 +27,15 @@ class PostData{
     update(post){
         return post.update(post, { where: { name: post.name, username: post.username }, fields: post.changed() });
     }
-    list(){
-        return this.Post.findAll();
+    list(pageSize, lastPostTime){
+        var where = {};
+        if(lastPostTime){
+            where.postTime = {[Sequelize.Op.lt]: lastPostTime}
+        }
+
+        return this.Post.findAll({where: where,
+            limit: pageSize,
+            order:[['postTime', 'DESC']]});
     }
 }
 

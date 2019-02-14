@@ -65,7 +65,7 @@ export default class Posts extends Component {
                         <div onClick={e => this.fetchData()} className='btn btn-primary'><span>Load More</span></div>
                     }
                     {this.state.isLoading &&
-                        <h8>Loading...</h8>
+                        <span>Loading...</span>
                     }
                 </div>
             </div>

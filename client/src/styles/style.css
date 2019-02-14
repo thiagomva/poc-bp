@@ -192,6 +192,12 @@ body {
     border-color: #e84528;
 }
 
+.nav-pills .nav-link.active, 
+.nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #ff4828;
+}
+
 .post-user{
     line-height: 36px;
     font-size: 12px;

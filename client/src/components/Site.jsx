@@ -16,7 +16,7 @@ export default class Site extends Component {
           <div>
               <img src="./images/logo.svg" className="center-logo" />
           </div>
-          <div class="center-text">
+          <div className="center-text">
             <h4>Express your voice, without being controlled by big  corporates.</h4>
             <span>A decentralized membership platform that gives creators the ability<br/>to monetize their passion/work with Bitcoin.</span>
           </div>      

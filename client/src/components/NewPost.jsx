@@ -57,6 +57,7 @@ export default class NewPost extends Component {
               value={this.state.newFileTitle}
               onChange={e => this.handleNewFileTitleChange(e)}
               placeholder="What's your post title?"
+              maxLength="200"
             />
           </div>
           <div className="col-md-12 mb-2"><span>This post is:</span></div>
@@ -89,6 +90,7 @@ export default class NewPost extends Component {
               value={this.state.newFileDescription}
               onChange={e => this.handleNewFileDescriptionChange(e)}
               placeholder="What's your post hint?"
+              maxLength="1000"
             />
           </div>}
           <div className="col-md-12 mt-4">
@@ -225,12 +227,24 @@ export default class NewPost extends Component {
       alert("Hint is required for non public posts");
       return;
     }
+    if(this.checkMaxLengthExceeded(fileInfo.fileTitle,200)){
+      alert("Title must not exceed 200 characters");
+      return;
+    }
+    if(this.checkMaxLengthExceeded(fileInfo.fileDescription,1000)){
+      alert("Hint must not exceed 1000 characters");
+      return;
+    }
     if(this.checkEmptyField(fileInfo.fileContent)){
       alert("Content is required");
       return;
     }
     
     this.addNewFile(fileInfo);
+  }
+
+  checkMaxLengthExceeded(value, length){
+    return value.length > length;
   }
 
   checkEmptyField(value){

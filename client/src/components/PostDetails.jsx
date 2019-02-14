@@ -163,7 +163,7 @@ export default class PostDetails extends Component {
             getFile('bp/' + loggedUserAppPublicKey.toLowerCase() + '.json', options)
             .then(
                 (file)=>{
-                var parsedFile = {};
+                var parsedFile = null;
                 if (file) {
                     parsedFile = JSON.parse(file)
                 }
@@ -179,6 +179,9 @@ export default class PostDetails extends Component {
             .catch((error) => {
                 console.log(error);
             });
+        }
+        else{
+            this.setState({isLoading: false});
         }
     }
 

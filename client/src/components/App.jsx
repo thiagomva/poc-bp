@@ -12,7 +12,6 @@ import {
   signUserOut,
 } from 'blockstack';
 import PageList from './PageList.jsx';
-import Posts from './Posts.jsx';
 
 export default class App extends Component {
 
@@ -43,11 +42,6 @@ export default class App extends Component {
               <Route path='/explore'
                 render={
                   routeProps => <PageList handleSignOut={ this.handleSignOut } {...routeProps} />
-                }
-              />
-              <Route path='/posts'
-                render={
-                  routeProps => <Posts handleSignOut={ this.handleSignOut } {...routeProps} />
                 }
               />
               <Route

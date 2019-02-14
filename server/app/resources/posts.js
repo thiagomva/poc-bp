@@ -12,8 +12,4 @@ module.exports = function (router) {
       .get(function (req, res, next) {
         new PostsController().listPosts(req.query["pageSize"],req.query["lastPostTime"], baseResponse(res, next));
       });
-
-    router.route('/loadAll').get(function (req, res, next) {
-      new PostsController().loadAll(baseResponse(res, next));
-    });
   };

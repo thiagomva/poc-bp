@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Topbar from './TopBar.jsx';
+import Posts from './Posts.jsx';
 import {
     loadUserData
   } from 'blockstack';
@@ -11,7 +11,9 @@ export default class PageList extends Component {
         super(props);
 
         this.state = {
-            pages: []
+            pages: [],
+            posts: [],
+            showPosts: true,
         }
     }
 
@@ -21,14 +23,25 @@ export default class PageList extends Component {
             <div>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-12">                      
                             <div className="page-title">
                                 EXPLORE
                             </div>
+                            <ul className="nav nav-pills mb-4">
+                                <li className="nav-item">
+                                    <a href="#" className={"nav-link "+ (this.state.showPosts ? "active":"")} onClick={e => this.showPosts()}>Posts</a>
+                                </li>
+                                <li className="nav-item">
+                                    <a href="#" className={"nav-link "+ (!this.state.showPosts ? "active":"")} onClick={e => this.showCreators()}>Creators</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div className="row">
-                    {this.state.pages.map((page) => (
+                    {this.state.showPosts && 
+                        <Posts></Posts>
+                    }
+                    {!this.state.showPosts && this.state.pages.map((page) => (
                         <div key={page.username} className="col-md-4">
                             <div className="page-card card mb-4">
                                 <div className="card-body">
@@ -46,6 +59,16 @@ export default class PageList extends Component {
                 </div>
             </div>
         );
+    }
+
+    showPosts(){
+        var shouldLoad = this.state.posts.length ==0;
+        this.setState({showPosts:true, isLoading:shouldLoad});
+    }
+
+    showCreators(){
+        var shouldLoad = this.state.pages.length == 0;
+        this.setState({showPosts:false, isLoading:shouldLoad});
     }
 
     componentDidMount() {

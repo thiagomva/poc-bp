@@ -17,8 +17,8 @@ export default class Site extends Component {
               <img src="./images/logo.svg" className="center-logo" />
           </div>
           <div className="center-text">
-            <h4>Express your voice, without being controlled by big  corporates.</h4>
-            <span>A decentralized membership platform that gives creators the ability<br/>to monetize their passion/work with Bitcoin.</span>
+            <h4>The Decentralized Patreon Alternative</h4>
+            <span>Monetize your content, without being controlled by big corporates.</span>
           </div>      
           <div className="signup-button" id="myBtn" onClick={ handleSignIn.bind(this) }>
               <span>CREATE YOUR PAGE <img src="./images/icons/arrow.png" className="arrow" /></span>
@@ -51,6 +51,17 @@ export default class Site extends Component {
               </div>
               <div className="box">
                   <div>
+                      <img src="./images/icons/no-charge.png" />
+                  </div>
+                  <div className="title">
+                      <span>No Deplatforming</span>
+                  </div>
+                  <div className="description">
+                      <span>No one can take away your audience, content or revenue stream</span>
+                  </div>
+              </div>
+              <div className="box">
+                  <div>
                       <img src="./images/icons/cheap-fast.png" />
                   </div>
                   <div className="title">
@@ -58,17 +69,6 @@ export default class Site extends Component {
                   </div>
                   <div className="description">
                       <span>60% Cheaper than Patreon, experience Bitcoin Lightning instant settlements and low fees</span>
-                  </div>
-              </div>
-              <div className="box">
-                  <div>
-                      <img src="./images/icons/no-charge.png" />
-                  </div>
-                  <div className="title">
-                      <span>No Chargebacks</span>
-                  </div>
-                  <div className="description">
-                      <span>Bitcoin protects you against chargebacks or holds</span>
                   </div>
               </div>
           </div>

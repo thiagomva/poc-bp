@@ -59,8 +59,13 @@ export default class Profile extends Component {
       isSubmittingWallet: false
     };
 
-    if (!this.props.match.params.username && loadUserData() && loadUserData().username) {
-      this.props.history.push('/'+loadUserData().username)
+    if (!this.props.match.params.username && loadUserData()){
+      if(loadUserData().username) {
+        this.props.history.push('/'+loadUserData().username)
+      }
+      else{
+        alert("Your blockstack account is invalid - no username loaded. Please reset your blockstack account and try again.");
+      }
     }
   }
 

@@ -50,7 +50,7 @@ class Subscribers {
     handleFilesRead(self, appPrivateKey, jwt, address, hubServerUrl, hubUrlPrefix, filesPrivateKeys, subscribers, pageInfo, cb) {
         var date = new Date();
         var expiration = date.getTime() + (86400000 * (this.monthly ? 30 : 365));
-        subscribers[self.appPublicKey.toLowerCase()] = {expirationDate:expiration};
+        subscribers[self.appPublicKey.toLowerCase()] = {expirationDate:expiration, subscriberUsername: self.subscriberUsername};
         var subscribersToSave = Blockstack.encryptContent(JSON.stringify(subscribers), {publicKey: Blockstack.getPublicKeyFromPrivate(appPrivateKey)});
         var subscriptionFile = {};
         subscriptionFile[self.appPublicKey.toLowerCase()] = {expirationDate:expiration};

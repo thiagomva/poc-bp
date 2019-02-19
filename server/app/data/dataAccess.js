@@ -8,7 +8,6 @@ const sequelize = new Sequelize(config.get("DB_NAME"), config.get("DB_USER"), co
     },
     operatorsAliases: false,
     define:{
-        timestamps:false,
         freezeTableName: true
     } 
 });

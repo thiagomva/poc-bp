@@ -3,6 +3,7 @@ var config = require('nconf');
 var Subscribers = require('./subscribers.js');
 var PageInfoData = require('../data/pageInfoData.js');
 var ChargeData = require('../data/chargeData.js');
+var PeriodType = require('./periodType.js');
 
 class Charges {
     getCallbackResult(callback, cb) {
@@ -154,6 +155,23 @@ class Charges {
                 cb(null,null);
             }
         });
+    }
+
+    static GetExpirationDateFromCharge(charge){
+        var expirationDate = charge.paymentDate;
+        if(periodType == PeriodType.MONTHLY){
+            expirationDate.setMonth(expirationDate.getMonth()+1);
+        }
+        else if(periodType == PeriodType.YEARLY){
+            expirationDate.setYear(expirationDate.getFullYear()+1);
+        }
+        else if(periodType == PeriodType.HALF_YEARLY){
+            expirationDate.setMonth(expirationDate.getMonth()+6);
+        }
+        else if(periodType == PeriodType.QUARTERLY){
+            expirationDate.setMonth(expirationDate.getMonth()+3);
+        }
+        return expirationDate;
     }
 }
 

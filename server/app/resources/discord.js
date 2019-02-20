@@ -9,4 +9,9 @@ module.exports = function (router) {
     .post(function(req, res, next) {
         new DiscordController().getAccessToken(req.body, baseResponse(res, next));
     });
+
+    router.route('/join')
+    .post(function(req, res, next) {
+        new DiscordController().joinServer(req.body, req.headers["blockstack-auth-token"], baseResponse(res, next));
+    });
 }

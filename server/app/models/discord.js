@@ -3,6 +3,7 @@ var JsonTokens = require('jsontokens');
 var DiscordSubscriberInfoData = require('../data/discordSubscriberInfoData.js');
 var DiscordPageInfoData = require('../data/discordPageInfoData.js');
 var nconf = require('nconf');
+var Charges = require('./charges.js');
 
 class Discord {
     constructor() {

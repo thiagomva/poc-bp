@@ -35,6 +35,14 @@ class ChargeData{
             status: "paid"
         }});
     }
+    listPaidAndProcessingFromUserAndSubscriber(username, subscriberUsername){
+        const ne = Sequelize.Op.ne;
+        return this.Charge.findAll({where: {
+            username: username,
+            subscriberUsername: subscriberUsername,
+            status: {[ne]:"unpaid"}
+        }});
+    }
     listAllPending(){
         const ne = Sequelize.Op.ne;
         return this.Charge.findAll({where: {

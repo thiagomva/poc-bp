@@ -157,6 +157,21 @@ class Charges {
         });
     }
 
+    getUserPayment(loggedUsername, pageUsername){
+        return new Promise(function(resolve, reject){
+            var chargeData = new ChargeData();
+            chargeData.listPaidAndProcessingFromUserAndSubscriber(pageUsername, subscriberUsername).then(result =>{
+                result.forEach(charge => {
+                    if(GetExpirationDateFromCharge(charge) > new Date()){
+                        resolve(charge);
+                        return;
+                    }
+                });
+                resolve(null);
+            })
+        });
+    }
+
     static GetExpirationDateFromCharge(charge){
         var expirationDate = charge.paymentDate;
         if(periodType == PeriodType.MONTHLY){

@@ -7,7 +7,7 @@ class Discord {
 
     getAccessToken(code, authorizationHeader, cb) {
         var body = {
-            client_id: nconf.get("DISCORD_CLIENT_ID")
+            client_id: nconf.get("DISCORD_CLIENT_ID"),
             client_secret: nconf.get("DISCORD_CLIENT_SECRET"),
             grant_type: 'authorization_code',
             code: code,

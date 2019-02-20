@@ -5,17 +5,17 @@ class DiscordApiData {
         this.baseDiscordUrl = 'https://discordapp.com/api/v6/';
     }
 
-    postDiscord(path, reqBody, authorizationHeader) {
+    postDiscord(path, reqBody, cb) {
         var url = this.baseDiscordUrl + path;
 
         let httpConfig = {
             headers: {
-                Authorization: authorizationHeader,
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         };
 
         axios.post(url, reqBody, httpConfig).then(response => {
+            return response;
         })
         .catch(error => { cb(error); });
     }

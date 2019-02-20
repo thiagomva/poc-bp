@@ -1,22 +1,20 @@
 var DiscordApiData = require('../data/discordApiData.js');
+var nconf = require('nconf');
 
 class Discord {
-    constructor(code, serverId, authorizationHeader) {
-        this.code = code;
-        this.serverId = serverId;
-        this.authorizationHeader = authorizationHeader;
+    constructor() {
     }
 
-    getAccessToken(cb) {
+    getAccessToken(code, authorizationHeader, cb) {
         var body = {
-            client_id: this.serverId,
-            client_secret: 'xulambis',
+            client_id: nconf.get("DISCORD_CLIENT_ID")
+            client_secret: nconf.get("DISCORD_CLIENT_SECRET"),
             grant_type: 'authorization_code',
-            code: this.code,
+            code: code,
             redirect_uri: 'https://bitpatron.co'
         };
 
-        new DiscordApiData().postDiscord('oauth2/token', body, this.authorizationHeader);
+        new DiscordApiData().postDiscord('oauth2/token', body, authorizationHeader);
 
     }
 }

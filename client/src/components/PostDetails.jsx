@@ -76,7 +76,7 @@ export default class PostDetails extends Component {
                                     </div>
                                     <div className="pull-right">
                                         {!this.state.file.isPublic && this.checkUserNotAllowed() && <Payment handleSignIn={handleSignIn} pageUsername={this.state.pageUsername}  monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
-                                        {(this.state.file.isPublic || !this.checkUserNotAllowed()) && !this.state.file.content &&<div className='btn btn-primary' onClick={e => {if(!this.state.file.isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName, this.state.file.isPublic)}}  ><span>Read More</span></div>}
+                                        {(this.state.file.isPublic || !this.checkUserNotAllowed()) && !this.state.file.content &&<div className='btn btn-primary' onClick={e => {if(!this.state.file.isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile()}}  ><span>Read More</span></div>}
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +181,12 @@ export default class PostDetails extends Component {
             });
         }
         else{
-            this.setState({isLoading: false});
+            if(this.state.file.isPublic){
+                this.handleReadFile()
+            }
+            else{
+                this.setState({isLoading: false});
+            }
         }
     }
 
@@ -198,7 +203,7 @@ export default class PostDetails extends Component {
     }
 
     checkUserNotAllowed() {
-        return !this.isLoggedUserPage() && !this.state.subscriptionFile;
+        return (!this.isLoggedUserPage() && !this.state.subscriptionFile) || this.state.file.isPublic;
     }
 
     handleReadFile(){

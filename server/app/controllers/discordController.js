@@ -22,12 +22,23 @@ class DiscordController {
     }
 
     joinServer(json, authToken, cb){
-        validJoinServer(json);
+        this.validJoinServer(json);
         new Discord().joinServer(json, authToken, cb);
     }
 
     listRoles(authToken, cb){
         new Discord().listRoles(authToken, cb);
+    }
+
+    validRole(json){
+        if (!json) throw new Error(400, 'no body in request');
+        if(!json.roleId) throw new Error(400, 'role id is mandatory');
+        if(!json.roleName) throw new Error(400, 'role name is mandatory');
+    }
+
+    updateRole(json, authToken, cb) {
+        this.validRole(json);
+        new Discord().updateRole(json.roleId, json.roleName, authToken, cb);
     }
 }
 

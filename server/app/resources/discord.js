@@ -18,5 +18,8 @@ module.exports = function (router) {
     router.route('/roles')
     .get(function(req, res, next) {
         new DiscordController().listRoles(req.headers["blockstack-auth-token"], baseResponse(res, next));
+    })
+    .patch(function(req, res, next) {
+        new DiscordController().updateRole(req.body, req.headers["blockstack-auth-token"], baseResponse(res, next));
     });
 }

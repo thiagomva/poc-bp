@@ -18,7 +18,10 @@ class Discord {
             redirect_uri: 'https://bitpatron.co'
         };
 
-        new DiscordApiData().post('oauth2/token', body).then(result => cb(null, result));
+        new DiscordApiData().post('oauth2/token', body).then(
+            result => {
+                cb(null, result)
+        }).catch(e => cb(e));
     }
 
     joinServer(json, authToken, cb) {

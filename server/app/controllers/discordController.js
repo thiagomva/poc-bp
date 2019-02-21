@@ -7,11 +7,12 @@ class DiscordController {
     valid(json){
         if (!json) throw new Error(400, 'no body in request');
         if (!json.code) throw new Error(400, 'code is mandatory');
+        if (!json.guildId) throw new Error(400, 'guildId is mandatory');
     }
 
-    getAccessToken(json, cb) {
+    getAccessToken(json, authToken, cb) {
         this.valid(json);
-        new Discord().getAccessToken(json.code, cb);        
+        new Discord().getAccessToken(json.code, json.guildId, authToken, cb);        
     }
 
     validJoinServer(json){

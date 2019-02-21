@@ -6,8 +6,10 @@ class DiscordApiData {
     }
 
     callDiscordApi(method, path, body, authorizationType, authorizationToken){
+        var self = this;
+
         return new Promise(function(resolve, reject){
-            var url = this.baseDiscordUrl + path;
+            var url = self.baseDiscordUrl + path;
             var contentType = 'application/json';
             if(method == 'POST'){
                 contentType = 'application/x-www-form-urlencoded'
@@ -23,7 +25,8 @@ class DiscordApiData {
 
             var apiPromise = null;
             if(method == 'POST'){
-                apiPromise = axios.post(url, body, httpConfig);
+                const qs = require('querystring');
+                apiPromise = axios.post(url, qs.stringify(body), httpConfig);
             }else if(method == 'PUT'){
                 apiPromise = axios.put(url, body, httpConfig);
             }else if(method == 'GET'){
@@ -35,30 +38,32 @@ class DiscordApiData {
             }
             
             apiPromise.then(response => {
-                resolve(response);
+                resolve(response.data);
             })
-            .catch(reject);
+            .catch(e => 
+                reject(e)
+                );
         });
     }
 
     post(path, reqBody) {
-        return callDiscordApi('POST', path, reqBody);
+        return this.callDiscordApi('POST', path, reqBody);
     }
 
     get(path, authorizationToken, authorizationType){
-        return callDiscordApi('GET', path, null, authorizationToken, authorizationType);
+        return this.callDiscordApi('GET', path, null, authorizationToken, authorizationType);
     }
 
     delete(path, authorizationToken, authorizationType){
-        return callDiscordApi('DELETE', path, null, authorizationToken, authorizationType);
+        return this.callDiscordApi('DELETE', path, null, authorizationToken, authorizationType);
     }
 
     put(path, body, authorizationToken, authorizationType){
-        return callDiscordApi('PUT', path, body, authorizationToken, authorizationType);
+        return this.callDiscordApi('PUT', path, body, authorizationToken, authorizationType);
     }
 
     patch(path, body, authorizationToken, authorizationType){
-        return callDiscordApi('PATCH', path, body, authorizationToken, authorizationType);
+        return this.callDiscordApi('PATCH', path, body, authorizationToken, authorizationType);
     }
 }
 

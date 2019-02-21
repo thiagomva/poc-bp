@@ -9,7 +9,7 @@ class Discord {
     constructor() {
     }
 
-    getAccessToken(code, cb) {
+    getAccessToken(code, guild_id, authToken, cb) {
         var body = {
             client_id: nconf.get("DISCORD_CLIENT_ID"),
             client_secret: nconf.get("DISCORD_CLIENT_SECRET"),
@@ -18,7 +18,26 @@ class Discord {
             redirect_uri: 'https://bitpatron.co'
         };
 
-        new DiscordApiData().post('oauth2/token', body).then(result => cb(null, result));
+        new DiscordApiData().post('oauth2/token', body).then(
+            result => {
+                var decodedTokenPayload = (0, JsonTokens.decodeToken)(authToken).payload;
+                var loggedUsername = decodedTokenPayload.username;
+                var discordPageInfoData = new DiscordPageInfoData();
+                var currentTime = new Date();
+                var expiration = new Date(currentTime.setSeconds(currentTime.getSeconds() + result.expires_in));
+
+                var discordPageInfo = {
+                    username: loggedUsername, 
+                    guildId: guild_id, 
+                    accessToken: result.access_token,
+                    refreshToken: result.refresh_token, 
+                    expirationDate: expiration
+                };
+
+                discordPageInfoData.insert(discordPageInfo);
+
+                cb(null, result)
+        }).catch(e => cb(e));
     }
 
     joinServer(json, authToken, cb) {

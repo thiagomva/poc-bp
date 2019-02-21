@@ -1,9 +1,10 @@
 var config = require('nconf');
 var Error = require('../util/error.js');
 var PageInfoData = require('../data/pageInfoData.js');
+var PeriodType = require('./periodType.js');
 
 class Pages {
-    constructor(jwt, userBlockstackId, pageName, pageDescription, numberOfPosts, monthlyPrice, yearlyPrice,email) {
+    constructor(jwt, userBlockstackId, pageName, pageDescription, numberOfPosts, monthlyPrice, yearlyPrice,email, quarterlyPrice, halfYearlyPrice) {
         this.jwt = jwt;
         this.userBlockstackId = userBlockstackId;
         this.pageName = pageName ? pageName : '';
@@ -11,6 +12,8 @@ class Pages {
         this.numberOfPosts = numberOfPosts ? numberOfPosts : 0;
         this.monthlyPrice = monthlyPrice;
         this.yearlyPrice = yearlyPrice;
+        this.quarterlyPrice = quarterlyPrice;
+        this.halfYearlyPrice = halfYearlyPrice;
         this.email = email;
     }
 
@@ -72,6 +75,14 @@ class Pages {
                 pageInfo.yearlyPrice = _this.yearlyPrice;
             }
 
+            if (_this.quarterlyPrice != null) {
+                pageInfo.quarterlyPrice = _this.quarterlyPrice;
+            }
+
+            if (_this.halfYearlyPrice != null) {
+                pageInfo.halfYearlyPrice = _this.halfYearlyPrice;
+            }
+
             if (_this.email != null) {
                 pageInfo.email = _this.email;
             }
@@ -82,6 +93,22 @@ class Pages {
                 pageInfoData.update(pageInfo).then(result => cb(null, null)).catch(err => cb(err));
             }
         }).catch(err => cb(err));
+    }
+
+    static GetPriceFromPeriodType(periodType, pageInfo){
+        if(periodType == PeriodType.MONTHLY){
+            return pageInfo.monthlyPrice;
+        }
+        else if(periodType == PeriodType.QUARTERLY){
+            return pageInfo.quarterlyPrice;
+        }
+        else if(periodType == PeriodType.HALF_YEARLY){
+            return pageInfo.halfYearlyPrice;
+        }
+        else if(periodType == PeriodType.YEARLY){
+            return pageInfo.yearlyPrice;
+        }
+        return null;
     }
 }
 

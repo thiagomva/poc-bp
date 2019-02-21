@@ -4,6 +4,7 @@ var Subscribers = require('./subscribers.js');
 var PageInfoData = require('../data/pageInfoData.js');
 var ChargeData = require('../data/chargeData.js');
 var PeriodType = require('./periodType.js');
+var Pages = require('./pages.js');
 
 class Charges {
     getCallbackResult(callback, cb) {
@@ -14,20 +15,30 @@ class Charges {
             var chargeData = new ChargeData();
             var _this = this;
             chargeData.get(callback.id).then(charge => {
-                _this.updateChargeStatusIfNecessary(charge, callback.status, cb);
+                _this.updateChargeStatusIfNecessary(charge, callback, cb);
             });
         } catch(err) {
             cb(err)
         }
     }
 
-    updateChargeStatusIfNecessary(charge, newStatus, cb){
+    updateChargeStatusIfNecessary(charge, nodeChargeData, settledAt, cb){
+        var newStatus = nodeChargeData.status
         if(charge.status != "paid" &&  charge.status != newStatus){
             charge.status = newStatus;
+            if((newStatus == "paid" ||newStatus == "processing") && !charge.paymentDate){
+                if(callback.chain_invoice && callback.chain_invoice.settled_at){
+                    charge.paymentDate = new Date(parseInt(callback.chain_invoice.settled_at + "000"));
+                }
+                else{
+                    charge.paymentDate = new Date();
+                }
+            }
+            
             var chargeData = new ChargeData();
             chargeData.update(charge).then(result => {
                 if(charge.status == "processing" || charge.status == "paid"){
-                    new Subscribers(charge.username, charge.appPublicKey, charge.periodType == 0, charge.subscriberUsername).getSubscribersResult(cb);
+                    new Subscribers(charge.username, charge.appPublicKey, charge.periodType, charge.subscriberUsername, charge.paymentDate).getSubscribersResult(cb);
                 }
                 else{
                     cb(null, JSON.parse(stringfiedJson));
@@ -39,17 +50,13 @@ class Charges {
         }
     }
 
+    
+
     getCreateResult(json, cb) {
         var pageInfoData = new PageInfoData();
         var chargeData = new ChargeData();
         pageInfoData.get(json.username).then(pageInfo => {
-            var price = 20;
-            if(json.monthly){
-                price = pageInfo.monthlyPrice;
-            }
-            else{
-                price = pageInfo.yearlyPrice;
-            }
+            var price = Pages.GetPriceFromPeriodType(json.periodType, pageInfo);
 
             var body = {
                 amount: price,
@@ -66,7 +73,7 @@ class Charges {
                 var url = config.get('OPEN_NODE_API_URL') + "v1/charges";
                 axios.post(url, body, httpConfig).then(response => {
                     var data = response && response.data && response.data.data;
-                    var charge = {chargeId: data.id, username: json.username, appPublicKey: json.appPublicKey, status: data.status, periodType: (json.monthly ? 0 : 1), subscriberUsername: json.subscriberUsername, amount: (data.amount/100000000.0)}
+                    var charge = {chargeId: data.id, username: json.username, appPublicKey: json.appPublicKey, status: data.status, periodType: json.periodType, subscriberUsername: json.subscriberUsername, amount: (data.amount/100000000.0)}
                     chargeData.insert(charge)
                     .then(result => cb(null, data))
                     .catch(error => { cb(error); });
@@ -92,7 +99,7 @@ class Charges {
                 apiCalls++;
                 axios.get(url + charge.chargeId, httpConfig).then(response => {
                     var data = response && response.data && response.data.data;
-                    _this.updateChargeStatusIfNecessary(charge, data.status, () => {
+                    _this.updateChargeStatusIfNecessary(charge, data, () => {
                         apiCalls--;
                         if(apiCalls <= 0){
                             cb(null,null);
@@ -142,7 +149,7 @@ class Charges {
                 apiCalls++;
                 axios.get(url + charge.chargeId, httpConfig).then(response => {
                     var data = response && response.data && response.data.data;
-                    updateChargeStatusIfNecessary(charge, data.status, () => {});
+                    updateChargeStatusIfNecessary(charge, data, () => {});
                     if(apiCalls <= 0){
                         cb(null,null);
                     }
@@ -173,7 +180,11 @@ class Charges {
     }
 
     static GetExpirationDateFromCharge(charge){
-        var expirationDate = charge.paymentDate;
+        return GetExpirationDateFromPaymentDate(charge.paymentDate);
+    }
+    
+    static GetExpirationDateFromPaymentDate(paymentDate){
+        var expirationDate = paymentDate;
         if(periodType == PeriodType.MONTHLY){
             expirationDate.setMonth(expirationDate.getMonth()+1);
         }

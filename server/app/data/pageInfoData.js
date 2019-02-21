@@ -14,6 +14,8 @@ class PageInfoData{
             numberOfPosts: Sequelize.INTEGER,
             monthlyPrice: Sequelize.DOUBLE,
             yearlyPrice: Sequelize.DOUBLE,
+            quarterlyPrice: Sequelize.DOUBLE,
+            halfYearlyPrice: Sequelize.DOUBLE,
             email: Sequelize.STRING(100)
         });
     }

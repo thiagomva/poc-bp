@@ -75,7 +75,7 @@ export default class PostDetails extends Component {
                                         Posted by {this.state.pageOwner && this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}
                                     </div>
                                     <div className="pull-right">
-                                        {!this.state.file.isPublic && this.checkUserNotAllowed() && <Payment handleSignIn={handleSignIn} pageUsername={this.state.pageUsername}  monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
+                                        {!this.state.file.isPublic && this.checkUserNotAllowed() && <Payment handleSignIn={handleSignIn} pageUsername={this.state.pageUsername}  monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed}></Payment>}
                                         {(this.state.file.isPublic || !this.checkUserNotAllowed()) && !this.state.file.content &&<div className='btn btn-primary' onClick={e => {if(!this.state.file.isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile(fileName, this.state.file.isPublic)}}  ><span>Read More</span></div>}
                                     </div>
                                 </div>

@@ -349,7 +349,7 @@ body {
 }
 
 .input-group-append .input-group-text {
-    min-width: 115px;
+    min-width: 125px;
 }
 
 .uploader input {
@@ -528,3 +528,20 @@ body {
   .saving {
       font-style: italic;
   }
+
+.custom-switch .custom-control-label::before{
+    top: calc(50% - 7px);
+}
+
+.custom-switch .custom-control-label::after{
+    top: calc(50% - 5px);
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem #ff482840;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #ff4828;
+    background-color: #ff4828;
+}

@@ -29,6 +29,12 @@ export default class PageEdit extends Component {
       newPageDescription: "",
       newMonthlyPrice:"",
       newYearlyPrice: "",
+      newHalfYearlyPrice: "",
+      newQuarterlyPrice: "",
+      quarterSwitchValue: false,
+      monthSwitchValue: false,
+      yearSwitchValue: false,
+      halfYearSwitchValue: false,
       isLoading: false
     };
   }
@@ -79,36 +85,84 @@ export default class PageEdit extends Component {
             <div className="row">
               <div className="col-md-12 paid-subscription-title">Set up paid subscriptions</div>
               <div className="col-md-12 mb-3">
-                <div className="input-group">
-                  <div className="input-group-prepend">
-                    <span className="input-group-text">$</span>
-                  </div>
-                  <input className="form-control input-page-price" type="number"
-                    value={this.state.newMonthlyPrice}
-                    onChange={e => this.handleNewMonthlyPriceChange(e)}
-                    placeholder="Monthly price (USD)"
-                  />
-                  <div className="input-group-append">
-                    <span className="input-group-text">per month</span>
-                  </div>
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="monthSwitch" onChange={e => this.handleMonthSwitch(e)} checked={this.state.monthSwitchValue} />
+                  <label class="custom-control-label" for="monthSwitch">
+                    <div className="input-group">
+                      <div className="input-group-prepend">
+                        <span className="input-group-text">$</span>
+                      </div>
+                      <input className="form-control input-page-price" type="number"
+                        value={this.state.newMonthlyPrice}
+                        onChange={e => this.handleNewMonthlyPriceChange(e)}
+                        disabled={!this.state.monthSwitchValue}
+                      />
+                      <div className="input-group-append">
+                        <span className="input-group-text">per month</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>  
+              </div>
+              <div className="col-md-12 mb-3">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="quarterSwitch" onChange={e => this.handleQuarterSwitch(e)} checked={this.state.quarterSwitchValue} />
+                  <label class="custom-control-label" for="quarterSwitch">
+                    <div className="input-group">
+                      <div className="input-group-prepend">
+                        <span className="input-group-text">$</span>
+                      </div>
+                      <input className="form-control input-page-quarterly" type="number"
+                        value={this.state.newQuarterlyPrice}
+                        onChange={e => this.handleNewQuarterlyPriceChange(e)}
+                        disabled={!this.state.quarterSwitchValue}
+                      />
+                      <div className="input-group-append">
+                        <span className="input-group-text">per quarter</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>                
+              </div>
+              <div className="col-md-12 mb-3">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="halfYearSwitch" onChange={e => this.handleHalfYearSwitch(e)} checked={this.state.halfYearSwitchValue} />
+                  <label class="custom-control-label" for="halfYearSwitch">
+                    <div className="input-group">
+                      <div className="input-group-prepend">
+                        <span className="input-group-text">$</span>
+                      </div>
+                      <input className="form-control input-page-half-yearly" type="number"
+                        value={this.state.newHalfYearlyPrice}
+                        onChange={e => this.handleNewHalfYearlyPriceChange(e)}
+                        disabled={!this.state.halfYearSwitchValue}
+                      />
+                      <div className="input-group-append">
+                        <span className="input-group-text">per half year</span>
+                      </div>
+                    </div>
+                  </label>
                 </div>
               </div>
               <div className="col-md-12 mb-3">
-              <div className="input-group">
-                  <div className="input-group-prepend">
-                    <span className="input-group-text">$</span>
-                  </div>
-                  <input className="form-control input-page-yearly" type="number"
-                    value={this.state.newYearlyPrice}
-                    onChange={e => this.handleNewYearlyPriceChange(e)}
-                    placeholder="Yearly price (USD)"
-                    aria-describedby="yearlyPriceHelp"
-                  />
-                  <div className="input-group-append">
-                    <span className="input-group-text">per year</span>
-                  </div>
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="yearSwitch" onChange={e => this.handleYearSwitch(e)} checked={this.state.yearSwitchValue} />
+                  <label class="custom-control-label" for="yearSwitch">
+                    <div className="input-group">
+                      <div className="input-group-prepend">
+                        <span className="input-group-text">$</span>
+                      </div>
+                      <input className="form-control input-page-yearly" type="number"
+                        value={this.state.newYearlyPrice}
+                        onChange={e => this.handleNewYearlyPriceChange(e)}
+                        disabled={!this.state.yearSwitchValue}
+                      />
+                      <div className="input-group-append">
+                        <span className="input-group-text">per year</span>
+                      </div>
+                    </div>
+                  </label>
                 </div>
-                <small id="yearlyPriceHelp" className="form-text text-muted text-center">We recommend less than 10x monthly price</small>
               </div>
               <div className="col-md-12 text-center buttons-row">
                 {this.props.pageInfo && <button 
@@ -145,7 +199,13 @@ export default class PageEdit extends Component {
         newPageName : this.props.pageInfo.pageName,
         newPageDescription : this.props.pageInfo.pageDescription,
         newMonthlyPrice : this.props.pageInfo.monthlyPrice,
+        monthSwitchValue: this.props.pageInfo.monthlyPrice > 0,
         newYearlyPrice : this.props.pageInfo.yearlyPrice,
+        yearSwitchValue: this.props.pageInfo.yearlyPrice > 0,
+        newQuarterlyPrice : this.props.pageInfo.quarterlyPrice,
+        quarterSwitchValue: this.props.pageInfo.quarterlyPrice > 0,
+        newHalfYearlyPrice : this.props.pageInfo.halfYearlyPrice,
+        halfYearSwitchValue: this.props.pageInfo.halfYearlyPrice > 0
       })
     }
 
@@ -174,6 +234,46 @@ export default class PageEdit extends Component {
     this.setState({newYearlyPrice: event.target.value})
   }
 
+  handleNewQuarterlyPriceChange(event) {
+    this.setState({newQuarterlyPrice: event.target.value})
+  }
+
+  handleNewHalfYearlyPriceChange(event) {
+    this.setState({newHalfYearlyPrice: event.target.value})
+  }
+
+  handleQuarterSwitch(event) {
+    var newQuarterlyPrice = this.state.newQuarterlyPrice;
+    if(!event.target.checked){
+      newQuarterlyPrice = "";
+    }
+    this.setState({quarterSwitchValue: event.target.checked, newQuarterlyPrice: newQuarterlyPrice})
+  }
+
+  handleMonthSwitch(event) {
+    var newMonthlyPrice = this.state.newMonthlyPrice;
+    if(!event.target.checked){
+      newMonthlyPrice = "";
+    }
+    this.setState({monthSwitchValue: event.target.checked, newMonthlyPrice: newMonthlyPrice})
+  }
+
+  handleHalfYearSwitch(event) {
+    var newHalfYearlyPrice = this.state.newHalfYearlyPrice;
+    if(!event.target.checked){
+      newHalfYearlyPrice = "";
+    }
+    this.setState({halfYearSwitchValue: event.target.checked, newHalfYearlyPrice: newHalfYearlyPrice})
+  }
+
+  handleYearSwitch(event) {
+    var newYearlyPrice = this.state.newYearlyPrice;
+    if(!event.target.checked){
+      newYearlyPrice = "";
+    }
+    this.setState({yearSwitchValue: event.target.checked, newYearlyPrice: newYearlyPrice})
+  }
+
   handleNewPageSubmit(event) {
     event.preventDefault();
     let pageInfo = {
@@ -181,6 +281,8 @@ export default class PageEdit extends Component {
       pageDescription: this.state.newPageDescription,
       monthlyPrice: parseFloat(this.state.newMonthlyPrice),
       yearlyPrice: parseFloat(this.state.newYearlyPrice),
+      quarterlyPrice: parseFloat(this.state.newQuarterlyPrice),
+      halfYearlyPrice: parseFloat(this.state.newHalfYearlyPrice),
       files: this.props.pageInfo ? this.props.pageInfo.files : {}
     };
     
@@ -200,12 +302,12 @@ export default class PageEdit extends Component {
       alert("Page description must not exceed 500 characters");
       return;
     }
-    if(this.checkEmptyField(pageInfo.monthlyPrice)){
-      alert("Monthly price is required and needs to be greater than 0");
-      return;
-    }
-    if(this.checkEmptyField(pageInfo.yearlyPrice)){
-      alert("Yearly price is required and needs to be greater than 0");
+    if(this.checkEmptyField(pageInfo.monthlyPrice) &&
+      this.checkEmptyField(pageInfo.yearlyPrice) &&
+      this.checkEmptyField(pageInfo.quarterlyPrice) &&
+      this.checkEmptyField(pageInfo.halfYearlyPrice)
+    ){
+      alert("At least one price is required and needs to be greater than 0");
       return;
     }
 

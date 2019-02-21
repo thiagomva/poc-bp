@@ -118,6 +118,22 @@ class Discord {
             })
         });
     }
+
+    listRoles(authToken, cb) {
+        var decodedTokenPayload = (0, JsonTokens.decodeToken)(authToken).payload;
+        var loggedUsername = decodedTokenPayload.username;
+
+        var discordPageInfoData = new DiscordPageInfoData();
+
+        discordPageInfoData.get(loggedUsername).then(discordPageInfo => {
+            var path = 'guilds/' + discordPageInfo.guildId + '/roles';
+
+            new DiscordApiData().get(path, nconf.get('DISCORD_BOT_AUTH_TOKEN'), 'Bot').then(
+                result => {
+                    cb(null, result);
+                }).catch(e => cb(e));
+        });
+    }
 }
 
 module.exports = Discord;

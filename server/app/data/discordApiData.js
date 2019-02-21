@@ -5,7 +5,7 @@ class DiscordApiData {
         this.baseDiscordUrl = 'https://discordapp.com/api/v6/';
     }
 
-    callDiscordApi(method, path, body, authorizationType, authorizationToken){
+    callDiscordApi(method, path, body, authorizationToken, authorizationType){
         var self = this;
 
         return new Promise(function(resolve, reject){

@@ -25,6 +25,10 @@ class DiscordController {
         validJoinServer(json);
         new Discord().joinServer(json, authToken, cb);
     }
+
+    listRoles(authToken, cb){
+        new Discord().listRoles(authToken, cb);
+    }
 }
 
 module.exports = DiscordController;

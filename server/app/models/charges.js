@@ -160,7 +160,7 @@ class Charges {
     getUserPayment(loggedUsername, pageUsername){
         return new Promise(function(resolve, reject){
             var chargeData = new ChargeData();
-            chargeData.listPaidAndProcessingFromUserAndSubscriber(pageUsername, subscriberUsername).then(result =>{
+            chargeData.listPaidAndProcessingFromUserAndSubscriber(pageUsername, loggedUsername).then(result =>{
                 result.forEach(charge => {
                     if(GetExpirationDateFromCharge(charge) > new Date()){
                         resolve(charge);
@@ -168,7 +168,7 @@ class Charges {
                     }
                 });
                 resolve(null);
-            })
+            }).catch(reject);
         });
     }
 

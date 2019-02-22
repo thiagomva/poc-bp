@@ -19,7 +19,7 @@ class Charges {
             var _this = this;
             chargeData.get(callback.id).then(charge => {
                 _this.updateChargeStatusIfNecessary(charge, callback, cb);
-            });
+            }).catch(e => cb(e));
         } catch(err) {
             cb(err)
         }
@@ -46,7 +46,7 @@ class Charges {
                 else{
                     cb(null, JSON.parse(stringfiedJson));
                 }
-            });
+            }).catch(e => cb(e));
         }
         else{
             cb(null, false);
@@ -77,11 +77,10 @@ class Charges {
                 axios.post(url, body, httpConfig).then(response => {
                     var data = response && response.data && response.data.data;
                     var charge = {chargeId: data.id, username: json.username, appPublicKey: json.appPublicKey, status: data.status, periodType: json.periodType, subscriberUsername: json.subscriberUsername, amount: (data.amount/100000000.0)}
-                    chargeData.insert(charge)
-                    .then(result => cb(null, data))
-                    .catch(error => { cb(error); });
-                })
-                .catch(error => { cb(error); });
+                    chargeData.insert(charge).then(result => 
+                        cb(null, data)
+                    ).catch(error => { cb(error); });
+                }).catch(error => { cb(error); });
             } catch(err) { cb(err) }
         })
         .catch(err => { cb(err) });
@@ -117,7 +116,7 @@ class Charges {
             if(charges.length <= 0){
                 cb(null,null);
             }
-        });
+        }).catch(e => cb(e));;
     }
 
     getTotalAmount(username, cb){
@@ -167,7 +166,7 @@ class Charges {
             if(charges.length <= 0){
                 cb(null,null);
             }
-        });
+        }).catch(e => cb(e));;
     }
 
     updateAllPaymentDates(cb){
@@ -199,8 +198,8 @@ class Charges {
                         if(apiCalls <= 0){
                             cb(null,null);
                         }
-                    });
-                });
+                    }).catch(e => cb(e));
+                }).catch(e => cb(e));
                 if(apiCalls <= 0){
                     cb(null,null);
                 }

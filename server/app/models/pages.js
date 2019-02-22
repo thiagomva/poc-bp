@@ -60,7 +60,7 @@ class Pages {
                     else{
                         cb(null, pageDiscordInfo);
                     }
-                })
+                }).catch(e => cb(e));
             }
             else{
                 cb(null, pageDiscordInfo);

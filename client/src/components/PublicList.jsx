@@ -9,6 +9,7 @@ import {
     decryptContent
   } from 'blockstack';
 import { discord_auth_url } from '../config';
+import DiscordPanel from './DiscordPanel.jsx';
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
@@ -70,7 +71,7 @@ export default class PublicList extends Component {
                                 </div>
                             </div>
                             
-                            {this.getFilesNamesDescOrderdByDate().map((fileName) => (<div key={fileName} className="card  mb-4">
+                            {!this.state.isSettingUpDiscord && this.getFilesNamesDescOrderdByDate().map((fileName) => (<div key={fileName} className="card  mb-4">
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-md">
@@ -107,6 +108,9 @@ export default class PublicList extends Component {
                                 </div>
                             </div>
                             ))}
+                            {this.state.isSettingUpDiscord &&
+                            <DiscordPanel></DiscordPanel>
+                            }
                         </div>
                     </div>
             </div>

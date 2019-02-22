@@ -26,7 +26,8 @@ export default class PublicList extends Component {
             monthlyPrice: undefined,
             yearlyPrice: undefined,
             files: {},
-            pageUsername: ""
+            pageUsername: "",
+            isSettingUpDiscord: false
         }
         var newState = this.getStateFromProps(props);
         
@@ -47,11 +48,11 @@ export default class PublicList extends Component {
                             <div className="file-container">
                             <div className="row">
                                 <div className="col-md-12 mb-2">
-                                    <div className="posts-title pull-left">
+                                    <div onClick={e => {this.showOrHideDiscordSettings()}} className={"posts-title pull-left" + (this.state.isSettingUpDiscord ? '' : ' selected-tab')}>
                                         <i className="fa fa-bullhorn rotate-315"></i>POSTS
                                     </div>
                                     {this.isLoggedUserPage() && 
-                                    <div className="posts-title">
+                                    <div onClick={e => {this.showOrHideDiscordSettings()}} className={"posts-title pull-left" + (this.state.isSettingUpDiscord ? ' selected-tab' : '')}>
                                         <i className="fa fa-bullhorn rotate-315"></i>DISCORD
                                     </div>
                                     }
@@ -113,6 +114,12 @@ export default class PublicList extends Component {
         
 
         );
+    }
+
+    showOrHideDiscordSettings() {
+        this.setState({
+                isSettingUpDiscord: !this.state.isSettingUpDiscord
+            });
     }
 
     hasDiscord(){

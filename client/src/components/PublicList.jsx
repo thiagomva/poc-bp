@@ -50,7 +50,7 @@ export default class PublicList extends Component {
                                     <div className="posts-title pull-left">
                                         <i className="fa fa-bullhorn rotate-315"></i>POSTS
                                     </div>
-                                    {this.isLoggedUserPage() && this.hasDiscord() &&
+                                    {this.isLoggedUserPage() && 
                                     <div className="posts-title">
                                         <i className="fa fa-bullhorn rotate-315"></i>DISCORD
                                     </div>

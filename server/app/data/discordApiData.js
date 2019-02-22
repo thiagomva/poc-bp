@@ -40,9 +40,13 @@ class DiscordApiData {
             apiPromise.then(response => {
                 resolve(response.data);
             })
-            .catch(e => 
-                reject(e)
-                );
+            .catch(e => {
+                var result = e;
+                if(e.response){
+                    result = e.response;
+                }
+                reject(result);
+            });
         });
     }
 

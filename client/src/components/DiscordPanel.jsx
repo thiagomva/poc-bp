@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { server_url } from '../config';
 import Axios from 'axios';
 import { loadUserData} from 'blockstack';
+import { discord_auth_url } from '../config';
+
 
 export default class DiscordPanel extends Component {
     constructor(props) {
@@ -19,11 +21,18 @@ export default class DiscordPanel extends Component {
                     <div className="card-body discord-panel">
                         <div>Enable access to your server to add Discord role to your benefits.</div>
                         <div>Gives BitPatrons access to selected role on Discord.</div>
-                        <div className="icon-btn discord-btn text-center my-5">
+                        <div className="icon-btn discord-btn text-center mt-5">
                             <div className={(this.userAlreadyConfiguredDiscord()) ? "btn btn-primary disabled" : "btn btn-primary"} onClick={e => {this.handleConnectToDiscord()}}>
-                                <span>{this.userAlreadyConfiguredDiscord() ? "CONNECTED TO " : "CONNECT TO "}</span><img src="./images/icons/Icon_Discord_02.png"/>
+                                <span>{this.userAlreadyConfiguredDiscord() ? "CONNECTED TO " : (this.props.discordInfo ? "CONNECT TO " : "LOADING...")}</span>{this.props.discordInfo && <img src="./images/icons/Icon_Discord_02.png"/>}
                             </div>
                         </div>
+                        {this.userAlreadyConfiguredDiscord() && 
+                        <div className="icon-btn discord-btn text-center mb-5">
+                            <div className="btn btn-link new-server my-1" onClick={e => {this.handleConnectToNewDiscordServer()}}>
+                                <span>Connect to new discord server</span>
+                            </div>
+                        </div>
+                        }
                     </div>
                 </div>
                 <div className="subscribers-title">
@@ -56,11 +65,26 @@ export default class DiscordPanel extends Component {
     }
 
     userAlreadyConfiguredDiscord(){
-        return false;
+        return this.props.discordInfo && this.props.discordInfo.hasDiscord;
     }
 
     handleConnectToDiscord(){
+        if(!this.userAlreadyConfiguredDiscord()){
+            this.handleConnectToNewDiscordServer();
+        }
+    }
 
+    handleConnectToNewDiscordServer(){
+        if(this.props.discordInfo){
+            var redirectUri = window.location.origin + "/discordAuth/owner";
+            var url = discord_auth_url.
+                    replace("{RESPONSE_TYPE}", "code").
+                    replace("{CLIENT_ID}", this.props.discordInfo.clientId).
+                    replace("{REDIRECT_URI}", redirectUri).
+                    replace("{STATE}", loadUserData().username).
+                    replace("{SCOPE}", "bot");
+            window.location = url + "&permissions=268435457";
+        }
     }
 
     formatToDate(date){

@@ -4,7 +4,6 @@ import Profile from './Profile.jsx';
 import TopBar from './TopBar.jsx';
 import Site from './Site.jsx';
 import DiscordAuth from './DiscordAuth.jsx';
-import DiscordPanel from './DiscordPanel.jsx';
 
 import {
   isSignInPending,
@@ -47,15 +46,9 @@ export default class App extends Component {
                 }
               />
               <Route
-                path='/discordAuth'
+                path='/discordAuth/:owner?'
                 render={
                   routeProps => <DiscordAuth handleSignIn={ this.handleSignIn } {...routeProps} />
-                }
-              />
-              <Route
-                path='/discordPanel'
-                render={
-                  routeProps => <DiscordPanel handleSignIn={ this.handleSignIn } {...routeProps} />
                 }
               />
               <Route

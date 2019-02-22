@@ -10,13 +10,13 @@ class Discord {
     constructor() {
     }
 
-    getAccessToken(code, guild_id, authToken, cb) {
+    getAccessToken(code, guild_id, authToken, redirectUri, cb) {
         var body = {
             client_id: nconf.get("DISCORD_CLIENT_ID"),
             client_secret: nconf.get("DISCORD_CLIENT_SECRET"),
             grant_type: 'authorization_code',
             code: code,
-            redirect_uri: 'https://bitpatron.co'
+            redirect_uri: redirectUri
         };
 
         new DiscordApiData().post('oauth2/token', body).then(result => {

@@ -12,7 +12,7 @@ class DiscordController {
 
     getAccessToken(json, authToken, cb) {
         this.valid(json);
-        new Discord().getAccessToken(json.code, json.guildId, authToken, cb);        
+        new Discord().getAccessToken(json.code, json.guildId, authToken, json.redirectUri, cb);        
     }
 
     validJoinServer(json){

@@ -41,11 +41,15 @@ class Pages {
         var pageDiscordInfo = {
             hasDiscord: false,
             userAlreadyJoined: false,
-            clientId: nconf.get("DISCORD_CLIENT_ID")
+            clientId: nconf.get("DISCORD_CLIENT_ID"),
+            discordRole: null
         }
         new DiscordPageInfoData().get(username).then(result => {
-            pageDiscordInfo.hasDiscord = result && result.roleId;
-            if(pageDiscordInfo.hasDiscord && loggedUsername){
+            pageDiscordInfo.hasDiscord = result != null;
+            if(result.roleId){
+                pageDiscordInfo.discordRole = {id: result.roleId, name: result.roleName}
+            }
+            if(pageDiscordInfo.hasDiscord && pageDiscordInfo.discordRole != null && loggedUsername){
                 new SubscriberData().getValid(username,loggedUsername).then(result => {
                     if(result && result.length > 0){
                         var subscriber = result[0];

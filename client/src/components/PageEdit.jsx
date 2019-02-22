@@ -87,7 +87,7 @@ export default class PageEdit extends Component {
               <div className="col-md-12 mb-3">
                 <div className="custom-control custom-switch">
                   <input type="checkbox" className="custom-control-input" id="monthSwitch" onChange={e => this.handleMonthSwitch(e)} checked={this.state.monthSwitchValue} />
-                  <label className="custom-control-label" for="monthSwitch">
+                  <label className="custom-control-label" htmlFor="monthSwitch">
                     <div className="input-group">
                       <div className="input-group-prepend">
                         <span className="input-group-text">$</span>
@@ -107,7 +107,7 @@ export default class PageEdit extends Component {
               <div className="col-md-12 mb-3">
                 <div className="custom-control custom-switch">
                   <input type="checkbox" className="custom-control-input" id="quarterSwitch" onChange={e => this.handleQuarterSwitch(e)} checked={this.state.quarterSwitchValue} />
-                  <label className="custom-control-label" for="quarterSwitch">
+                  <label className="custom-control-label" htmlFor="quarterSwitch">
                     <div className="input-group">
                       <div className="input-group-prepend">
                         <span className="input-group-text">$</span>
@@ -127,7 +127,7 @@ export default class PageEdit extends Component {
               <div className="col-md-12 mb-3">
                 <div className="custom-control custom-switch">
                   <input type="checkbox" className="custom-control-input" id="halfYearSwitch" onChange={e => this.handleHalfYearSwitch(e)} checked={this.state.halfYearSwitchValue} />
-                  <label className="custom-control-label" for="halfYearSwitch">
+                  <label className="custom-control-label" htmlFor="halfYearSwitch">
                     <div className="input-group">
                       <div className="input-group-prepend">
                         <span className="input-group-text">$</span>
@@ -147,7 +147,7 @@ export default class PageEdit extends Component {
               <div className="col-md-12 mb-3">
                 <div className="custom-control custom-switch">
                   <input type="checkbox" className="custom-control-input" id="yearSwitch" onChange={e => this.handleYearSwitch(e)} checked={this.state.yearSwitchValue} />
-                  <label className="custom-control-label" for="yearSwitch">
+                  <label className="custom-control-label" htmlFor="yearSwitch">
                     <div className="input-group">
                       <div className="input-group-prepend">
                         <span className="input-group-text">$</span>

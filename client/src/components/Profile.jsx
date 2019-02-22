@@ -207,7 +207,7 @@ export default class Profile extends Component {
               <PostDetails handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} postId={this.props.match.params.postId}/>
             }
             {!this.showNewPostForm() &&  !this.showPageEdit() && !this.showPostDetails() &&
-              <PublicList handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} discordInfo={this.state.discordInfo}/>
+              <PublicList handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} discordInfo={this.state.discordInfo} location={this.props.location}/>
             }
             
           </div>
@@ -353,6 +353,9 @@ export default class Profile extends Component {
 
   getBitcointWallet(){
     getFile('bitcoinWallet').then(wallet => {
+      if(!wallet){
+        wallet = "";
+      }
       this.setState({ storedBitcoinWallet: wallet, bitcoinWallet: wallet });
     })
   }
@@ -394,10 +397,10 @@ export default class Profile extends Component {
         })
       })
 
-    this.getPageHasDiscord(username);
+    this.getPageDiscordInfo(username);
   }
 
-  getPageHasDiscord(username){
+  getPageDiscordInfo(username){
     var config={headers:{}};
     if(loadUserData()){
       config.headers["blockstack-auth-token"] = loadUserData().authResponseToken;

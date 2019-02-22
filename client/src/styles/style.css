@@ -224,13 +224,19 @@ body {
     font-weight: bold;
     letter-spacing: 0.6px;
     text-align: left;
-    color: #ff4828;
     line-height: 38px;
     font-family: Montserrat-Bold;
+    cursor: pointer;
+    margin-right: 30px;
+}
+
+.selected-tab {
+    color: #ff4828;
     border-bottom: 5px solid #ff4828;
 }
 
-.posts-title i{
+.posts-title i,
+.posts-title img{
     color: #4d4d4d;
     margin-right: 8px;
 }

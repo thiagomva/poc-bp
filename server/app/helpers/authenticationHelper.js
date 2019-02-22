@@ -15,7 +15,7 @@ module.exports = function (app) {
       if(!token){
         throw new Error(401, 'request unauthorized');
       }
-      Blockstack.verifyAuthResponse(token,"https://core.blockstack.org/v1/name/").then(
+      Blockstack.verifyAuthResponse(token,"https://core.blockstack.org/v1/names/").then(
         response => {
           if(response){
             next();

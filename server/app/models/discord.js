@@ -131,6 +131,7 @@ class Discord {
                 discordSubscriberInfo.discordId = discordResult.id;
                 discordSubscriberInfo.email = discordResult.email;
                 discordSubscriberInfo.username = discordResult.username;
+                discordSubscriberInfo.discriminator = discordResult.discriminator;
                 if(shouldCreate){
                     discordSubscriberInfoData.insert(discordSubscriberInfo).then(()=> resolve()).catch((e) => reject(e));
                 }

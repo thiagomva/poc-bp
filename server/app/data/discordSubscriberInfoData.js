@@ -9,7 +9,8 @@ class DiscordSubscriberInfoData{
                 primaryKey: true
             },
             email: Sequelize.CHAR(100),
-            username: Sequelize.CHAR(50)
+            username: Sequelize.CHAR(50),
+            discriminator: Sequelize.CHAR(10)
         });
     }
     insert(discordSubscriberInfo){

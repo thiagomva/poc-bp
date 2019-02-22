@@ -50,6 +50,11 @@ export default class PublicList extends Component {
                                     <div className="posts-title pull-left">
                                         <i className="fa fa-bullhorn rotate-315"></i>POSTS
                                     </div>
+                                    {this.isLoggedUserPage() && this.hasDiscord() &&
+                                    <div className="posts-title">
+                                        <i className="fa fa-bullhorn rotate-315"></i>DISCORD
+                                    </div>
+                                    }
                                     {this.isLoggedUserPage() && <div className="icon-btn pull-right">
                                         <div className='btn btn-primary' onClick={e => {this.props.handleNewPost()}}>
                                             <span>New Post</span>

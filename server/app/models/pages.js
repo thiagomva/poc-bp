@@ -1,6 +1,8 @@
-var config = require('nconf');
-var Error = require('../util/error.js');
+var JsonTokens = require('jsontokens');
 var PageInfoData = require('../data/pageInfoData.js');
+var DiscordPageInfoData = require('../data/discordPageInfoData.js');
+var DiscordApiData = require('../data/discordApiData.js');
+var SubscriberData = require('../data/subscriberData.js');
 var PeriodType = require('./periodType.js');
 
 class Pages {
@@ -26,6 +28,38 @@ class Pages {
                 return item; 
             });
             cb(null, result);
+        }).catch(err => cb(err));
+    }
+
+    getPageDiscordInfo(username, blockstackAuthToken, cb) {
+        var decodedTokenPayload = (0, JsonTokens.decodeToken)(blockstackAuthToken).payload;
+        var loggedUsername = decodedTokenPayload.username;
+        var pageDiscordInfo = {
+            hasDiscord: false,
+            userAlreadyJoined: false
+        }
+        new DiscordPageInfoData().get(username).then(result => {
+            pageDiscordInfo.hasDiscord = result && result.roleId;
+            if(pageDiscordInfo.hasDiscord){
+                new SubscriberData().getValid(username,loggedUsername).then(result => {
+                    if(result && result.length > 0){
+                        var subscriber = result[0];
+                        var guildMemberUrl = "guilds/"+subscriber.guildId+"/members/"+subscriber.discordId;
+                        new DiscordApiData().get(guildMemberUrl).then(result => {
+                            pageDiscordInfo.userAlreadyJoined=true;
+                            cb(null, pageDiscordInfo);
+                        }).catch(e => {
+                            cb(null, pageDiscordInfo);
+                        })
+                    }
+                    else{
+                        cb(null, pageDiscordInfo);
+                    }
+                })
+            }
+            else{
+                cb(null, pageDiscordInfo);
+            }
         }).catch(err => cb(err));
     }
 

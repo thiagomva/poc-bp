@@ -26,6 +26,11 @@ class PagesController {
     listPages(cb) {
         new Pages().listPages(cb);
     }
+
+    getPageDiscordInfo(username, blockstackAuthToken, cb) {
+        if (!username) throw new Error(400, 'username is mandatory');
+        new Pages().getPageDiscordInfo(username, blockstackAuthToken, cb);
+    }
 }
 
 module.exports = PagesController;

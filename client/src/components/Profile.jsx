@@ -393,6 +393,15 @@ export default class Profile extends Component {
           this.setState({ isLoading: false })
         })
       })
+
+    this.getPageHasDiscord(username);
+  }
+
+  getPageHasDiscord(username){
+    var url = server_url + '/api/v1/pages/'+username+'/hasDiscord';
+    Axios.get(url).then(response => {
+      this.setState({hasDiscord: response});
+    });
   }
 
   isLocal() {

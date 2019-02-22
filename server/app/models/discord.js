@@ -53,9 +53,9 @@ class Discord {
                 }
                 new DiscordApiData().get('/users/@me', discordAuthorization, 'Bearer').then(
                     result => {
-                        saveDiscordSubscriberInfo(result).then(
-                            saveSubscriber(charge, pageUsername, result.id).then(
-                                addSubscriberToDiscord(result.id, pageUsername, discordAuthorization)
+                        this.saveDiscordSubscriberInfo(result, loggedUsername).then(
+                            this.saveSubscriber(charge, pageUsername, result.id).then(
+                                this.addSubscriberToDiscord(result.id, pageUsername, discordAuthorization).then(r=> cb(null,null))
                             )
                         );
                     }   
@@ -76,9 +76,9 @@ class Discord {
                 };
                 discordApi.get(guildMemberUrl, result.AccessToken, 'Bot').then(result => {
                     requestBody.roles = result.roles.concat(requestBody.roles);
-                    discordApi.patch(guildMemberUrl, requestBody, result.AccessToken, 'Bot').then(result);
+                    discordApi.patch(guildMemberUrl, requestBody, result.AccessToken, 'Bot').then(e=>resolve()).catch(e=>reject(e));
                 }).catch(error => {
-                    discordApi.put(guildMemberUrl, requestBody, result.AccessToken, 'Bot').then(result);
+                    discordApi.put(guildMemberUrl, requestBody, result.AccessToken, 'Bot').then(e=>resolve()).catch(e=>reject(e));
                 })
             })
         });
@@ -96,7 +96,7 @@ class Discord {
         });
     }
 
-    saveDiscordSubscriberInfo(discordResult){
+    saveDiscordSubscriberInfo(discordResult,blockstackUsername){
         return new Promise(function(resolve, reject){
             var discordSubscriberInfoData = new DiscordSubscriberInfoData();
             discordSubscriberInfoData.get(result.id).then(
@@ -108,7 +108,8 @@ class Discord {
 
                 discordSubscriberInfo.id = discordResult.id;
                 discordSubscriberInfo.email = discordResult.email;
-                discordSubscriberInfo.username = discordResult.username;                    
+                discordSubscriberInfo.username = discordResult.username;
+                discordSubscriberInfo.blockstackUsername = blockstackUsername;                    
                 if(shouldCreate){
                     discordSubscriberInfoData.insert(discordSubscriberInfo).then(resolve).catch(reject);
                 }

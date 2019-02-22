@@ -8,7 +8,8 @@ export default class DiscordPanel extends Component {
         super(props);
 
         this.state = {
-            subscribers: []
+            subscribers: [],
+            discordRoles: []
         };
     }
 
@@ -69,6 +70,21 @@ export default class DiscordPanel extends Component {
 
     componentWillMount(){
         this.listSubscribers();
+        if (this.userAlreadyConfiguredDiscord()) {
+            this.listRoles();
+        }
+    }
+
+    listRoles(){
+        var config={headers:{}};
+        if(loadUserData()){
+            config.headers["blockstack-auth-token"] = loadUserData().authResponseToken;
+            
+            var url = server_url + '/api/v1/discord/roles';
+            Axios.get(url, config).then(response => {
+                this.setState({discordRoles: response.data});
+            });
+        }
     }
 
     listSubscribers(){

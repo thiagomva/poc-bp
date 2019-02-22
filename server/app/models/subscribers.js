@@ -4,15 +4,13 @@ var Blockstack = require('blockstack');
 var JsonTokens = require('jsontokens');
 const axios = require('axios');
 var PageInfoData = require('../data/pageInfoData.js');
-var Charges = require('./Charges.js');
 
 class Subscribers {
-    constructor(username, appPublicKey, periodType, subscriberUsername, paymentDate) {
+    constructor(username, appPublicKey, subscriberUsername, expirationDate) {
         this.username = username;
         this.appPublicKey = appPublicKey;
-        this.periodType = periodType;
         this.subscriberUsername = subscriberUsername;
-        this.paymentDate = paymentDate;
+        this.expirationDate = expirationDate;
     }
 
     getSubscribersResult(cb) {
@@ -50,7 +48,7 @@ class Subscribers {
 
 
     handleFilesRead(self, appPrivateKey, jwt, address, hubServerUrl, hubUrlPrefix, filesPrivateKeys, subscribers, pageInfo, cb) {
-        var expiration = Charges.GetExpirationDateFromPaymentDate(this.paymentDate, this.periodType);
+        var expiration = this.expirationDate;
         subscribers[self.appPublicKey.toLowerCase()] = {expirationDate:expiration, subscriberUsername: self.subscriberUsername};
         var subscribersToSave = Blockstack.encryptContent(JSON.stringify(subscribers), {publicKey: Blockstack.getPublicKeyFromPrivate(appPrivateKey)});
         var subscriptionFile = {};

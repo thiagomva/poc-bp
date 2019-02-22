@@ -5,6 +5,7 @@ var PageInfoData = require('../data/pageInfoData.js');
 var ChargeData = require('../data/chargeData.js');
 var PeriodType = require('./periodType.js');
 var Pages = require('./pages.js');
+var JsonTokens = require('jsontokens');
 
 class Charges {
     constructor() {
@@ -36,12 +37,13 @@ class Charges {
                 else{
                     charge.paymentDate = new Date();
                 }
+                charge.expirationDate = this.constructor.GetExpirationDateFromCharge(charge);
             }
             
             var chargeData = new ChargeData();
             chargeData.update(charge).then(result => {
                 if(charge.status == "processing" || charge.status == "paid"){
-                    new Subscribers(charge.username, charge.appPublicKey, charge.periodType, charge.subscriberUsername, charge.paymentDate).getSubscribersResult(cb);
+                    new Subscribers(charge.username, charge.appPublicKey, charge.subscriberUsername, charge.expirationDate).getSubscribersResult(cb);
                 }
                 else{
                     cb(null, JSON.parse(stringfiedJson));
@@ -171,6 +173,7 @@ class Charges {
 
     updateAllPaymentDates(cb){
         var chargeData = new ChargeData();
+        var _this = this;
         chargeData.listAllProcessingAndPaid().then(charges => {
             let httpConfig = {
                 headers: {
@@ -191,6 +194,7 @@ class Charges {
                         else{
                             charge.paymentDate = new Date();
                         }
+                        charge.expirationDate = _this.constructor.GetExpirationDateFromCharge(charge);
                     }
                     var chargeData = new ChargeData();
                     chargeData.update(charge).then(result => {
@@ -228,12 +232,21 @@ class Charges {
         });
     }
 
+    listSubscribers(blockstackAuthToken, cb){
+        var decodedTokenPayload = (0, JsonTokens.decodeToken)(blockstackAuthToken).payload;
+        var loggedUsername = decodedTokenPayload.username;
+        var chargeData = new ChargeData();
+        chargeData.listSubscribers(loggedUsername).then(result => {
+            cb(null, result);
+        }).catch(e => cb(e));
+    }
+
     static GetExpirationDateFromCharge(charge){
         return this.GetExpirationDateFromPaymentDate(charge.paymentDate, charge.periodType);
     }
     
     static GetExpirationDateFromPaymentDate(paymentDate, periodType){
-        var expirationDate = paymentDate;
+        var expirationDate = new Date(paymentDate.getTime());
         if(periodType == PeriodType.MONTHLY){
             expirationDate.setMonth(expirationDate.getMonth()+1);
         }

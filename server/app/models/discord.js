@@ -108,7 +108,6 @@ class Discord {
                 subscriber.chargeId = charge.chargeId;
                 subscriber.pageUsername = pageUsername;
                 subscriber.discordId = discordId;
-                subscriber.expirationDate = Charges.GetExpirationDateFromCharge(charge);
                 if(shouldCreate){
                     subscriberData.insert(subscriber).then(()=>resolve()).catch(e => reject(e));
                 }

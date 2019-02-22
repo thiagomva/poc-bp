@@ -19,24 +19,32 @@ class Discord {
             redirect_uri: 'https://bitpatron.co'
         };
 
-        new DiscordApiData().post('oauth2/token', body).then(
-            result => {
-                var loggedUsername = this.getUsernameFromAuthToken(authToken);
-                var discordPageInfoData = new DiscordPageInfoData();
-                var currentTime = new Date();
-                var expiration = new Date(currentTime.setSeconds(currentTime.getSeconds() + result.expires_in));
+        new DiscordApiData().post('oauth2/token', body).then(result => {
+            var loggedUsername = this.getUsernameFromAuthToken(authToken);
+            var discordPageInfoData = new DiscordPageInfoData();
+            var currentTime = new Date();
+            var expiration = new Date(currentTime.setSeconds(currentTime.getSeconds() + result.expires_in));
 
-                var discordPageInfo = {
-                    username: loggedUsername, 
-                    guildId: guild_id, 
-                    accessToken: result.access_token,
-                    refreshToken: result.refresh_token, 
-                    expirationDate: expiration
-                };
+            discordPageInfoData.get(loggedUsername).then(discordPageInfo => {
+                var shouldCreate = !discordPageInfo;
+                if(shouldCreate){
+                    discordPageInfo = {};
+                }
 
-                discordPageInfoData.insert(discordPageInfo);
-
-                cb(null, result)
+                discordPageInfo.username = loggedUsername;
+                discordPageInfo.guildId = guild_id;
+                discordPageInfo.accessToken = result.access_token;
+                discordPageInfo.refreshToken = result.refresh_token;
+                discordPageInfo.expirationDate = expiration;
+                discordPageInfo.roleId = null;
+                discordPageInfo.roleName = null;
+                if(shouldCreate){
+                    discordPageInfoData.insert(discordPageInfo).then(() => cb(null, result)).catch(e => cb(e));
+                }
+                else{
+                    discordPageInfoData.update(discordPageInfo).then(() => cb(null, result)).catch(e => cb(e));
+                }
+            }).catch(e => cb(e));
         }).catch(e => cb(e));
     }
 
@@ -100,7 +108,6 @@ class Discord {
                 subscriber.chargeId = charge.chargeId;
                 subscriber.pageUsername = pageUsername;
                 subscriber.discordId = discordId;
-                subscriber.expirationDate = Charges.GetExpirationDateFromCharge(charge);
                 if(shouldCreate){
                     subscriberData.insert(subscriber).then(()=>resolve()).catch(e => reject(e));
                 }
@@ -128,7 +135,7 @@ class Discord {
                     discordSubscriberInfoData.insert(discordSubscriberInfo).then(()=> resolve()).catch((e) => reject(e));
                 }
                 else{
-                    discordSubscriberInfoData.update(discordSubscriberInfo).then(() => resolve())
+                    discordSubscriberInfoData.update(discordSubscriberInfo).then(() => resolve()).catch((e) => reject(e));
                 }
             }).catch((e) => reject(e));
         });
@@ -146,7 +153,7 @@ class Discord {
                 result => {
                     cb(null, result);
                 }).catch(e => cb(e));
-        });
+        }).catch(e => cb(e));
     }
 
     updateRole(roleId, roleName, authToken, cb) {
@@ -162,7 +169,7 @@ class Discord {
                 result => {
                     cb(null, result);
                 }).catch(e => cb(e));
-        });
+        }).catch(e => cb(e));;
     }
 
     getUsernameFromAuthToken(authToken) {

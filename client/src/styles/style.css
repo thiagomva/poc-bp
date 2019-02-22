@@ -554,8 +554,16 @@ body {
 }
 
 .discord-btn .btn-primary:not(.disabled):hover,
-.discord-btn .btn-primary:active,
+.discord-btn .btn-primary:not(.disabled):active,
 .discord-btn .btn-primary:not(:disabled):not(.disabled):active {
     background-color: #5f57bf;
     border-color: #5f57bf;
+}
+
+.btn{
+    cursor: pointer;
+}
+
+.btn.disabled, .btn:disabled {
+    cursor: default;
 }

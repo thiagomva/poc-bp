@@ -14,7 +14,8 @@ class ChargeData{
             periodType: Sequelize.INTEGER,
             subscriberUsername: Sequelize.STRING(50),
             amount: Sequelize.FLOAT,
-            paymentDate: Sequelize.DATE
+            paymentDate: Sequelize.DATE,
+            expirationDate: Sequelize.DATE
         });
     }
     insert(charge){
@@ -55,6 +56,22 @@ class ChargeData{
         return this.Charge.findAll({where: {
             status: {[ne]:"unpaid"}
         }});
+    }
+    listSubscribers(pageUsername){
+        var query = "SELECT Charge.SubscriberUsername, max(DiscordSubscriberInfo.Username) AS DiscordUsername, max(DiscordSubscriberInfo.Email) AS DiscordEmail, max(Charge.ExpirationDate) AS ExpirationDate, max(Charge.PaymentDate) AS PaymentDate  FROM Charge ";
+        query += " LEFT JOIN Subscriber ON Charge.ChargeId = Subscriber.ChargeId ";
+        query += " LEFT JOIN DiscordSubscriberInfo ON DiscordSubscriberInfo.DiscordId = Subscriber.DiscordId ";
+        query += " LEFT JOIN PageInfo ON PageInfo.Username = Subscriber.PageUsername ";
+        query += " LEFT JOIN DiscordPageInfo ON DiscordPageInfo.Username = Subscriber.PageUsername ";
+        query += " WHERE Charge.Status != 'unpaid'";
+        query += " AND Charge.Username = :pageUsername ";
+        query += " GROUP BY SubscriberUsername ORDER BY PaymentDate DESC " ;
+        return DataAccess.query(query, {
+            replacements:{
+                pageUsername:pageUsername
+            }, 
+            type: Sequelize.QueryTypes.SELECT}
+        );
     }
     get(chargeId){
         return this.Charge.findById(chargeId);

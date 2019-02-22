@@ -24,7 +24,6 @@ var start = function (cb) {
 
   logger.info('[SERVER] Initializing routes');
   require('../../app/helpers/authenticationHelper')(app);
-  require('../../app/helpers/requestIntervalHelper')(app);
   require('../../app/resources/index')(app);
   app.use(express.static(path.join(__dirname, 'public')));
 
@@ -32,7 +31,7 @@ var start = function (cb) {
     res.status(err.status || 500);
     res.json({
       message: err.message,
-      error: (app.get('env') === 'development' ? err : {})
+      error: (app.get('env') === 'dev' ? err : {})
     });
     next(err);
   });

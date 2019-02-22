@@ -8,11 +8,14 @@ module.exports = function (app) {
   var authentication = function (req, res, next) {
     var _ = require('underscore')
       , apiPrefix = '/api/v' + config.get('API_VERSION')
-      , securePaths = [apiPrefix + '/discord', apiPrefix + '/discord/join'];
+      , securePaths = [apiPrefix + '/discord', apiPrefix + '/discord/join', apiPrefix + '/charges/subscribers'];
 
     if ( _.contains(securePaths, req.path) ){
       var token = req.headers["blockstack-auth-token"];
-      Blockstack.verifyAuthResponse(token,"https://core.blockstack.org/v1/names/").then(
+      if(!token){
+        throw new Error(401, 'request unauthorized');
+      }
+      Blockstack.verifyAuthResponse(token,"https://core.blockstack.org/v1/name/").then(
         response => {
           if(response){
             next();
@@ -22,7 +25,7 @@ module.exports = function (app) {
           }
         }
       ).catch(e => {
-        throw new Error(401, 'request unauthorized');
+        next(e);
       })
     }
     else{

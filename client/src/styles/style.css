@@ -235,7 +235,8 @@ body {
     border-bottom: 5px solid #ff4828;
 }
 
-.posts-title i{
+.posts-title i,
+.posts-title img{
     color: #4d4d4d;
     margin-right: 8px;
 }

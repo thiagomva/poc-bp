@@ -48,12 +48,12 @@ export default class PublicList extends Component {
                             <div className="file-container">
                             <div className="row">
                                 <div className="col-md-12 mb-2">
-                                    <div onClick={e => {this.showOrHideDiscordSettings()}} className={"posts-title pull-left" + (this.state.isSettingUpDiscord ? '' : ' selected-tab')}>
+                                    <div onClick={e => {this.activatePosts()}} className={"posts-title pull-left" + (this.state.isSettingUpDiscord ? '' : ' selected-tab')}>
                                         <i className="fa fa-bullhorn rotate-315"></i>POSTS
                                     </div>
                                     {this.isLoggedUserPage() && 
-                                    <div onClick={e => {this.showOrHideDiscordSettings()}} className={"posts-title pull-left" + (this.state.isSettingUpDiscord ? ' selected-tab' : '')}>
-                                        <i className="fa fa-bullhorn rotate-315"></i>DISCORD
+                                    <div onClick={e => {this.activateDiscord()}} className={"posts-title pull-left" + (this.state.isSettingUpDiscord ? ' selected-tab' : '')}>
+                                        <img src="/images/icons/Icon_Discord_01.png" />DISCORD
                                     </div>
                                     }
                                     {this.isLoggedUserPage() && <div className="icon-btn pull-right">
@@ -116,9 +116,15 @@ export default class PublicList extends Component {
         );
     }
 
-    showOrHideDiscordSettings() {
+    activatePosts() {
         this.setState({
-                isSettingUpDiscord: !this.state.isSettingUpDiscord
+                isSettingUpDiscord: false
+            });
+    }
+
+    activateDiscord() {
+        this.setState({
+                isSettingUpDiscord: true
             });
     }
 

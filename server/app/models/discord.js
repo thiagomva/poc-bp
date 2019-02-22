@@ -20,8 +20,7 @@ class Discord {
 
         new DiscordApiData().post('oauth2/token', body).then(
             result => {
-                var decodedTokenPayload = (0, JsonTokens.decodeToken)(authToken).payload;
-                var loggedUsername = decodedTokenPayload.username;
+                var loggedUsername = this.getUsernameFromAuthToken(authToken);
                 var discordPageInfoData = new DiscordPageInfoData();
                 var currentTime = new Date();
                 var expiration = new Date(currentTime.setSeconds(currentTime.getSeconds() + result.expires_in));
@@ -41,8 +40,7 @@ class Discord {
     }
 
     joinServer(json, authToken, cb) {
-        var decodedTokenPayload = (0, JsonTokens.decodeToken)(authToken).payload;
-        var loggedUsername = decodedTokenPayload.username;
+        var loggedUsername = this.getUsernameFromAuthToken(authToken);
         var pageUsername = json.pageUsername;
         var discordAuthorization = json.discordAuthorization;
 
@@ -118,6 +116,42 @@ class Discord {
                 }
             })
         });
+    }
+
+    listRoles(authToken, cb) {
+        var loggedUsername = this.getUsernameFromAuthToken(authToken);
+
+        var discordPageInfoData = new DiscordPageInfoData();
+
+        discordPageInfoData.get(loggedUsername).then(discordPageInfo => {
+            var path = 'guilds/' + discordPageInfo.guildId + '/roles';
+
+            new DiscordApiData().get(path, nconf.get('DISCORD_BOT_AUTH_TOKEN'), 'Bot').then(
+                result => {
+                    cb(null, result);
+                }).catch(e => cb(e));
+        });
+    }
+
+    updateRole(roleId, roleName, authToken, cb) {
+        var loggedUsername = this.getUsernameFromAuthToken(authToken);
+
+        var discordPageInfoData = new DiscordPageInfoData();
+
+        discordPageInfoData.get(loggedUsername).then(discordPageInfo => {
+            discordPageInfo.roleId = roleId;
+            discordPageInfo.roleName = roleName;
+            
+            discordPageInfoData.update(discordPageInfo).then(
+                result => {
+                    cb(null, result);
+                }).catch(e => cb(e));
+        });
+    }
+
+    getUsernameFromAuthToken(authToken) {
+        var decodedTokenPayload = (0, JsonTokens.decodeToken)(authToken).payload;
+        return decodedTokenPayload.username;
     }
 }
 

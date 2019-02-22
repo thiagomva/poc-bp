@@ -87,6 +87,23 @@ export default class DiscordPanel extends Component {
         }
     }
 
+    saveSelectedRole() {
+        var config={headers:{}};
+        if(loadUserData()){
+            config.headers["blockstack-auth-token"] = loadUserData().authResponseToken;
+
+            var data = {
+                roleId: this.state.selectedRoleId,
+                roleName: this.state.selectedRoleName
+            };
+            
+            var url = server_url + '/api/v1/discord/roles';
+            Axios.patch(url, data, config).then(response => {
+                this.setState({discordRoles: response.data});
+            });
+        }
+    }
+
     listSubscribers(){
         var config={headers:{}};
         if(loadUserData()){

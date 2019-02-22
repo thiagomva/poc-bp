@@ -545,3 +545,15 @@ body {
     border-color: #ff4828;
     background-color: #ff4828;
 }
+
+.discord-btn .btn-primary {
+    background-color: #7076d6;
+    border-color: #7076d6;
+}
+
+.discord-btn .btn-primary:not(.disabled):hover,
+.discord-btn .btn-primary:active,
+.discord-btn .btn-primary:not(:disabled):not(.disabled):active {
+    background-color: #5f57bf;
+    border-color: #5f57bf;
+}

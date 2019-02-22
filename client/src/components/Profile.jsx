@@ -207,7 +207,7 @@ export default class Profile extends Component {
               <PostDetails handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} postId={this.props.match.params.postId}/>
             }
             {!this.showNewPostForm() &&  !this.showPageEdit() && !this.showPostDetails() &&
-              <PublicList handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person}/>
+              <PublicList handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} discordInfo={this.state.discordInfo}/>
             }
             
           </div>
@@ -398,9 +398,13 @@ export default class Profile extends Component {
   }
 
   getPageHasDiscord(username){
-    var url = server_url + '/api/v1/pages/'+username+'/hasDiscord';
-    Axios.get(url).then(response => {
-      this.setState({hasDiscord: response});
+    var config={headers:{}};
+    if(loadUserData()){
+      config.headers["blockstack-auth-token"] = loadUserData().authResponseToken;
+    }
+    var url = server_url + '/api/v1/pages/'+username+'/discord';
+    Axios.get(url, config).then(response => {
+      this.setState({discordInfo: response.data});
     });
   }
 

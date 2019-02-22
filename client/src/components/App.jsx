@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import Profile from './Profile.jsx';
 import TopBar from './TopBar.jsx';
 import Site from './Site.jsx';
+import DiscordAuth from './DiscordAuth.jsx';
 
 import {
   isSignInPending,
@@ -45,11 +46,17 @@ export default class App extends Component {
                 }
               />
               <Route
+                path='/discordAuth'
+                render={
+                  routeProps => <DiscordAuth handleSignIn={ this.handleSignIn } {...routeProps} />
+                }
+              />
+              <Route
                 path='/:username/:postId?/:postTitle?'
                 render={
                   routeProps => <Profile handleSignIn={ this.handleSignIn } {...routeProps} />
                 }
-              />
+              />              
               {!isUserSignedIn() ?
               <Route path='/' render={routeProps => <Site handleSignIn={ this.handleSignIn } />}/>
               : <Route path='/' render={routeProps => <Profile handleSignIn={ this.handleSignIn } {...routeProps}/>}/>

@@ -9,8 +9,7 @@ class DiscordSubscriberInfoData{
                 primaryKey: true
             },
             email: Sequelize.CHAR(100),
-            username: Sequelize.CHAR(50),
-            blockstackUsername: Sequelize.CHAR(50)
+            username: Sequelize.CHAR(50)
         });
     }
     insert(discordSubscriberInfo){

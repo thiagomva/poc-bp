@@ -8,6 +8,7 @@ import {
     Person,
     decryptContent
   } from 'blockstack';
+import { discord_auth_url } from '../config';
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
@@ -31,8 +32,6 @@ export default class PublicList extends Component {
         
         this.state = Object.assign({}, defaultState, newState);
 
-        newState
-
         this.subscriptionConfirmed = this.subscriptionConfirmed.bind(this);
     }
 
@@ -53,7 +52,13 @@ export default class PublicList extends Component {
                                     </div>
                                     {this.isLoggedUserPage() && <div className="icon-btn pull-right">
                                         <div className='btn btn-primary' onClick={e => {this.props.handleNewPost()}}>
-                                            <i className="fa fa-edit"></i><span>New Post</span>
+                                            <span>New Post</span>
+                                        </div>
+                                    </div>}
+                                    {!this.isLoggedUserPage() && this.hasDiscord() &&
+                                    <div className="icon-btn discord-btn pull-right">
+                                        <div className={(this.userAlreadyJoinedDiscord() || !this.state.subscriptionFile) ? "btn btn-primary disabled" : "btn btn-primary"} onClick={e => {this.handleConnectToDiscord()}}>
+                                            <span>{this.userAlreadyJoinedDiscord() ? "CONNECTED TO " : "CONNECT TO "}</span><img src="./images/icons/Icon_Discord_02.png"/>
                                         </div>
                                     </div>}
                                 </div>
@@ -103,6 +108,22 @@ export default class PublicList extends Component {
         
 
         );
+    }
+
+    hasDiscord(){
+        return this.props.discordInfo && this.props.discordInfo.hasDiscord;
+    }
+
+    userAlreadyJoinedDiscord(){
+        return this.hasDiscord() && this.props.discordInfo.userAlreadyJoined;
+    }
+
+    handleConnectToDiscord(){
+        if(!this.userAlreadyJoinedDiscord() && this.state.subscriptionFile){
+            var redirectUri = window.location.origin = "/discordAuth";
+            var url = discord_auth_url.replace("{CLIENT_ID}", this.props.discordInfo.clientId).replace("{REDIRECT_URI}", redirectUri).replace("{STATE}", this.state.pageUsername);
+            window.location = url;
+        }
     }
     
     getPostUrl(fileName){

@@ -4,6 +4,7 @@ var DiscordPageInfoData = require('../data/discordPageInfoData.js');
 var DiscordApiData = require('../data/discordApiData.js');
 var SubscriberData = require('../data/subscriberData.js');
 var PeriodType = require('./periodType.js');
+var nconf = require('nconf');
 
 class Pages {
     constructor(jwt, userBlockstackId, pageName, pageDescription, numberOfPosts, monthlyPrice, yearlyPrice,email, quarterlyPrice, halfYearlyPrice) {
@@ -32,20 +33,24 @@ class Pages {
     }
 
     getPageDiscordInfo(username, blockstackAuthToken, cb) {
-        var decodedTokenPayload = (0, JsonTokens.decodeToken)(blockstackAuthToken).payload;
-        var loggedUsername = decodedTokenPayload.username;
+        var loggedUsername = null;
+        if(blockstackAuthToken){
+            var decodedTokenPayload = (0, JsonTokens.decodeToken)(blockstackAuthToken).payload;
+            loggedUsername = decodedTokenPayload.username;
+        }
         var pageDiscordInfo = {
             hasDiscord: false,
-            userAlreadyJoined: false
+            userAlreadyJoined: false,
+            clientId: nconf.get("DISCORD_CLIENT_ID")
         }
         new DiscordPageInfoData().get(username).then(result => {
             pageDiscordInfo.hasDiscord = result && result.roleId;
-            if(pageDiscordInfo.hasDiscord){
+            if(pageDiscordInfo.hasDiscord && loggedUsername){
                 new SubscriberData().getValid(username,loggedUsername).then(result => {
                     if(result && result.length > 0){
                         var subscriber = result[0];
-                        var guildMemberUrl = "guilds/"+subscriber.guildId+"/members/"+subscriber.discordId;
-                        new DiscordApiData().get(guildMemberUrl).then(result => {
+                        var guildMemberUrl = "guilds/"+subscriber.GuildId+"/members/"+subscriber.DiscordId;
+                        new DiscordApiData().get(guildMemberUrl, nconf.get('DISCORD_BOT_AUTH_TOKEN'), 'Bot').then(result => {
                             pageDiscordInfo.userAlreadyJoined=true;
                             cb(null, pageDiscordInfo);
                         }).catch(e => {

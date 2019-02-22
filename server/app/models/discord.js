@@ -2,8 +2,9 @@ var DiscordApiData = require('../data/discordApiData.js');
 var JsonTokens = require('jsontokens');
 var DiscordSubscriberInfoData = require('../data/discordSubscriberInfoData.js');
 var DiscordPageInfoData = require('../data/discordPageInfoData.js');
+var SubscriberData = require('../data/subscriberData.js');
 var nconf = require('nconf');
-var Charges = require('./charges.js');
+var Charges = require('./Charges.js');
 
 class Discord {
     constructor() {
@@ -51,13 +52,13 @@ class Discord {
                 }
                 new DiscordApiData().get('/users/@me', discordAuthorization, 'Bearer').then(
                     result => {
-                        this.saveDiscordSubscriberInfo(result, loggedUsername).then(
-                            this.saveSubscriber(charge, pageUsername, result.id).then(
-                                this.addSubscriberToDiscord(result.id, pageUsername, discordAuthorization).then(r=> cb(null,null))
-                            )
-                        );
+                        this.saveDiscordSubscriberInfo(result).then(() => {
+                            this.saveSubscriber(charge, pageUsername, result.id).then(() => {
+                                this.addSubscriberToDiscord(result.id, pageUsername, discordAuthorization).then(r=> cb(null,null)).catch(err => cb(err))
+                            }).catch(err => cb(err))
+                        }).catch(err => cb(err));
                     }   
-                )
+                ).catch(err => cb(err))
             }
         ).catch(err => cb(err));
     }
@@ -72,49 +73,64 @@ class Discord {
                     access_token: discordAuthorization,
                     roles: [result.roleId]
                 };
-                discordApi.get(guildMemberUrl, result.AccessToken, 'Bot').then(result => {
+                var botAccessToken = nconf.get('DISCORD_BOT_AUTH_TOKEN');
+                discordApi.get(guildMemberUrl, botAccessToken, 'Bot').then(result => {
                     requestBody.roles = result.roles.concat(requestBody.roles);
-                    discordApi.patch(guildMemberUrl, requestBody, result.AccessToken, 'Bot').then(e=>resolve()).catch(e=>reject(e));
+                    discordApi.patch(guildMemberUrl, requestBody, botAccessToken, 'Bot').then(e=>resolve()).catch(e=>reject(e));
                 }).catch(error => {
-                    discordApi.put(guildMemberUrl, requestBody, result.AccessToken, 'Bot').then(e=>resolve()).catch(e=>reject(e));
+                    if(error && error.response && error.response.status == 404){
+                        discordApi.put(guildMemberUrl, requestBody, botAccessToken, 'Bot').then(e=>resolve()).catch(e=>reject(e));
+                    }
+                    else{
+                        reject(e);
+                    }
                 })
-            })
+            }).catch(e=>reject(e))
         });
     }
 
     saveSubscriber(charge, pageUsername, discordId){
         return new Promise(function(resolve,reject){
-            var subscriber = {};
-            subscriber.chargeId = charge.chargeId;
-            subscriber.pageUsername = pageUsername;
-            subscriber.discordId = discordId;
-            subscriber.expirationDate = Charges.GetExpirationDateFromCharge(charge);
             var subscriberData = new SubscriberData();
-            subscriberData.insert(subscriber).then(resolve).catch(reject);
+            subscriberData.get(charge.chargeId, pageUsername, discordId).then(subscriber => {
+                var shouldCreate = !subscriber;
+                if(shouldCreate){
+                    subscriber = {};
+                }
+                subscriber.chargeId = charge.chargeId;
+                subscriber.pageUsername = pageUsername;
+                subscriber.discordId = discordId;
+                subscriber.expirationDate = Charges.GetExpirationDateFromCharge(charge);
+                if(shouldCreate){
+                    subscriberData.insert(subscriber).then(()=>resolve()).catch(e => reject(e));
+                }
+                else{
+                    subscriberData.update(subscriber).then(()=>resolve()).catch(e => reject(e));
+                }
+            }).catch(e => reject(e));
         });
     }
 
-    saveDiscordSubscriberInfo(discordResult,blockstackUsername){
+    saveDiscordSubscriberInfo(discordResult){
         return new Promise(function(resolve, reject){
             var discordSubscriberInfoData = new DiscordSubscriberInfoData();
-            discordSubscriberInfoData.get(result.id).then(
+            discordSubscriberInfoData.get(discordResult.id).then(
             discordSubscriberInfo => {
                 var shouldCreate = !discordSubscriberInfo;
                 if(shouldCreate){
                     discordSubscriberInfo = {};
                 }
 
-                discordSubscriberInfo.id = discordResult.id;
+                discordSubscriberInfo.discordId = discordResult.id;
                 discordSubscriberInfo.email = discordResult.email;
                 discordSubscriberInfo.username = discordResult.username;
-                discordSubscriberInfo.blockstackUsername = blockstackUsername;                    
                 if(shouldCreate){
-                    discordSubscriberInfoData.insert(discordSubscriberInfo).then(resolve).catch(reject);
+                    discordSubscriberInfoData.insert(discordSubscriberInfo).then(()=> resolve()).catch((e) => reject(e));
                 }
                 else{
-                    discordSubscriberInfoData.update(discordSubscriberInfo).then(resolve).catch(reject);
+                    discordSubscriberInfoData.update(discordSubscriberInfo).then(() => resolve())
                 }
-            })
+            }).catch((e) => reject(e));
         });
     }
 

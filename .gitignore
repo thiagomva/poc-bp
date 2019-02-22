@@ -10,3 +10,5 @@ server/chargesStore.json
 /server/config/environments/production.js
 /server/config/environments/dev.js
 /server/config/environments/_production.js
+/client/node_modules/blockstack/node_modules/query-string
+/client/node_modules/blockstack/node_modules/strict-uri-encode

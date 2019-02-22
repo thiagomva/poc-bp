@@ -14,6 +14,7 @@ class ChargeData{
             periodType: Sequelize.INTEGER,
             subscriberUsername: Sequelize.STRING(50),
             amount: Sequelize.FLOAT,
+            paymentDate: Sequelize.DATE
         });
     }
     insert(charge){
@@ -47,6 +48,12 @@ class ChargeData{
         const ne = Sequelize.Op.ne;
         return this.Charge.findAll({where: {
             status: {[ne]:"paid"}
+        }});
+    }
+    listAllProcessingAndPaid(){
+        const ne = Sequelize.Op.ne;
+        return this.Charge.findAll({where: {
+            status: {[ne]:"unpaid"}
         }});
     }
     get(chargeId){

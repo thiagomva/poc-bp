@@ -26,10 +26,11 @@ class SubscriberData{
         return this.Subscriber.findOne({where:{ chargeId: chargeId, pageUsername: pageUsername, discordId: discordId }});
     }
     getValid(pageUsername, subscriberUsername){
-        var query = "SELECT * FROM Subscriber ";
+        var query = "SELECT DiscordPageInfo.GuildId, Subscriber.DiscordId FROM Subscriber ";
         query += " INNER JOIN Charge ON Charge.ChargeId = Subscriber.ChargeId ";
         query += " INNER JOIN PageInfo ON PageInfo.Username = Subscriber.PageUsername ";
-        query += " WHERE ExpirationDate > :currentDate " ;
+        query += " INNER JOIN DiscordPageInfo ON DiscordPageInfo.Username = Subscriber.PageUsername ";
+        query += " WHERE Subscriber.ExpirationDate > :currentDate " ;
         query += " AND Charge.SubscriberUsername = :subscriberUsername " ;
         query += " AND Charge.Username = :pageUsername " ;
         return DataAccess.query(query, {

@@ -49,6 +49,10 @@ class ChargesController {
         new Charges().updateAllChargesInfo(cb);
     }
 
+    updateAllPaymentDates(cb) {
+        new Charges().updateAllPaymentDates(cb);
+    }
+
     getTotalAmount(username, cb) {
         if (!username) throw new Error(400, 'username is mandatory');
         new Charges().getTotalAmount(username, cb);

@@ -7,6 +7,9 @@ var PeriodType = require('./periodType.js');
 var Pages = require('./pages.js');
 
 class Charges {
+    constructor() {
+    }
+
     getCallbackResult(callback, cb) {
         try {
             if(callback.status != "processing" && callback.status != "paid"){
@@ -22,13 +25,13 @@ class Charges {
         }
     }
 
-    updateChargeStatusIfNecessary(charge, nodeChargeData, settledAt, cb){
+    updateChargeStatusIfNecessary(charge, nodeChargeData, cb){
         var newStatus = nodeChargeData.status
         if(charge.status != "paid" &&  charge.status != newStatus){
             charge.status = newStatus;
-            if((newStatus == "paid" ||newStatus == "processing") && !charge.paymentDate){
-                if(callback.chain_invoice && callback.chain_invoice.settled_at){
-                    charge.paymentDate = new Date(parseInt(callback.chain_invoice.settled_at + "000"));
+            if((newStatus == "paid" || newStatus == "processing") && !charge.paymentDate){
+                if(nodeChargeData.chain_invoice && nodeChargeData.chain_invoice.settled_at){
+                    charge.paymentDate = new Date(parseInt(nodeChargeData.chain_invoice.settled_at + "000"));
                 }
                 else{
                     charge.paymentDate = new Date();
@@ -136,6 +139,7 @@ class Charges {
     }
 
     updateAllChargesInfo(cb){
+        var _this = this;
         var chargeData = new ChargeData();
         chargeData.listAllPending().then(charges => {
             let httpConfig = {
@@ -149,10 +153,12 @@ class Charges {
                 apiCalls++;
                 axios.get(url + charge.chargeId, httpConfig).then(response => {
                     var data = response && response.data && response.data.data;
-                    updateChargeStatusIfNecessary(charge, data, () => {});
-                    if(apiCalls <= 0){
-                        cb(null,null);
-                    }
+                    _this.updateChargeStatusIfNecessary(charge, data, () => {
+                        apiCalls--;
+                        if(apiCalls <= 0){
+                            cb(null,null);
+                        }
+                    });
                 })
                 .catch(error => {
                     cb(error);
@@ -164,12 +170,56 @@ class Charges {
         });
     }
 
+    updateAllPaymentDates(cb){
+        var chargeData = new ChargeData();
+        chargeData.listAllProcessingAndPaid().then(charges => {
+            let httpConfig = {
+                headers: {
+                    Authorization: config.get('OPEN_NODE_API_KEY')
+                }
+            };
+            var url = config.get('OPEN_NODE_API_URL') + "v1/charge/";
+            var apiCalls = 0;
+            charges.forEach((charge) => {
+                apiCalls++;
+                axios.get(url + charge.chargeId, httpConfig).then(response => {
+                    var data = response && response.data && response.data.data;
+                    charge.status = data.status
+                    if(!charge.paymentDate){
+                        if(data.chain_invoice && data.chain_invoice.settled_at){
+                            charge.paymentDate = new Date(parseInt(data.chain_invoice.settled_at + "000"));
+                        }
+                        else{
+                            charge.paymentDate = new Date();
+                        }
+                    }
+                    var chargeData = new ChargeData();
+                    chargeData.update(charge).then(result => {
+                        apiCalls--;
+                        if(apiCalls <= 0){
+                            cb(null,null);
+                        }
+                    });
+                });
+                if(apiCalls <= 0){
+                    cb(null,null);
+                }
+            })
+            if(charges.length <= 0){
+                cb(null,null);
+            }
+        }).catch(error => {
+            cb(error);
+        });;
+    }
+
     getUserPayment(loggedUsername, pageUsername){
+        var _this = this;
         return new Promise(function(resolve, reject){
             var chargeData = new ChargeData();
             chargeData.listPaidAndProcessingFromUserAndSubscriber(pageUsername, loggedUsername).then(result =>{
                 result.forEach(charge => {
-                    if(GetExpirationDateFromCharge(charge) > new Date()){
+                    if(_this.constructor.GetExpirationDateFromCharge(charge) > new Date()){
                         resolve(charge);
                         return;
                     }
@@ -180,10 +230,10 @@ class Charges {
     }
 
     static GetExpirationDateFromCharge(charge){
-        return GetExpirationDateFromPaymentDate(charge.paymentDate);
+        return this.GetExpirationDateFromPaymentDate(charge.paymentDate, charge.periodType);
     }
     
-    static GetExpirationDateFromPaymentDate(paymentDate){
+    static GetExpirationDateFromPaymentDate(paymentDate, periodType){
         var expirationDate = paymentDate;
         if(periodType == PeriodType.MONTHLY){
             expirationDate.setMonth(expirationDate.getMonth()+1);

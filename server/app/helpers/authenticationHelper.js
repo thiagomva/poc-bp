@@ -12,7 +12,10 @@ module.exports = function (app) {
 
     if ( _.contains(securePaths, req.path) ){
       var token = req.headers["blockstack-auth-token"];
-      Blockstack.verifyAuthResponse(token,"https://core.blockstack.org/v1/names/").then(
+      if(!token){
+        throw new Error(401, 'request unauthorized');
+      }
+      Blockstack.verifyAuthResponse(token,"https://core.blockstack.org/v1/name/").then(
         response => {
           if(response){
             next();
@@ -22,7 +25,7 @@ module.exports = function (app) {
           }
         }
       ).catch(e => {
-        throw new Error(401, 'request unauthorized');
+        next(e);
       })
     }
     else{

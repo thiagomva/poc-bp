@@ -42,12 +42,19 @@ class Pages {
             hasDiscord: false,
             userAlreadyJoined: false,
             clientId: nconf.get("DISCORD_CLIENT_ID"),
-            discordRole: null
+            discordRole: null,
+            guildId: null
         }
         new DiscordPageInfoData().get(username).then(result => {
             pageDiscordInfo.hasDiscord = result != null;
-            if(pageDiscordInfo.hasDiscord && result.roleId){
-                pageDiscordInfo.discordRole = {id: result.roleId, name: result.roleName}
+            if(pageDiscordInfo.hasDiscord)
+            {
+                if(result.guildId){
+                    pageDiscordInfo.guildId = result.guildId;
+                }
+                if(result.roleId){
+                    pageDiscordInfo.discordRole = {id: result.roleId, name: result.roleName}
+                }
             }
             if(pageDiscordInfo.hasDiscord && pageDiscordInfo.discordRole != null && loggedUsername){
                 new SubscriberData().getValid(username,loggedUsername).then(result => {

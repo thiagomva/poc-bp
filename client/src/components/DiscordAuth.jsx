@@ -15,7 +15,7 @@ export default class DiscordAuth extends Component {
   }
 
   render() {
-    return (<div></div>);
+    return (<div className="discord-auth-msg">Joining Discord Channel... You will be redirected when it's done.</div>);
   }
 
   componentWillMount() {

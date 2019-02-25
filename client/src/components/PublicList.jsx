@@ -73,8 +73,8 @@ export default class PublicList extends Component {
                                 </div>}
                                 {!this.isLoggedUserPage() && this.hasDiscord() &&
                                 <div className="icon-btn discord-btn pull-right">
-                                    <div className={(this.userAlreadyJoinedDiscord() || !this.state.subscriptionFile) ? "btn btn-primary disabled" : "btn btn-primary"} onClick={e => {this.handleConnectToDiscord()}}>
-                                        <span>{this.userAlreadyJoinedDiscord() ? "CONNECTED TO " : "CONNECT TO "}</span><img src="./images/icons/Icon_Discord_02.png"/>
+                                    <div title={(!this.state.subscriptionFile) ? "Subscribe to get access" : ""} className={(!this.state.subscriptionFile) ? "btn btn-primary disabled" : "btn btn-primary"} onClick={e => {this.handleConnectToDiscord()}}>
+                                        <span>{this.userAlreadyJoinedDiscord() ? "ACCESS " : "CONNECT TO "}</span><img className="ml-1" src="./images/icons/Icon_Discord_02.png"/>
                                     </div>
                                 </div>}
                             </div>
@@ -159,6 +159,11 @@ export default class PublicList extends Component {
                 replace("{STATE}", this.state.pageUsername).
                 replace("{SCOPE}", "email identify guilds.join");
             window.location = url;
+        }
+        else{
+            if(this.props.discordInfo && this.props.discordInfo.guildId){
+                window.open("https://discordapp.com/channels/"+this.props.discordInfo.guildId, "_blank");
+            }
         }
     }
     

@@ -86,11 +86,11 @@ class Discord {
                     requestBody.roles = result.roles.concat(requestBody.roles);
                     discordApi.patch(guildMemberUrl, requestBody, botAccessToken, 'Bot').then(e=>resolve()).catch(e=>reject(e));
                 }).catch(error => {
-                    if(error && error.response && error.response.status == 404){
+                    if(error && (error.status == 404 || (error.response && error.response.status == 404))){
                         discordApi.put(guildMemberUrl, requestBody, botAccessToken, 'Bot').then(e=>resolve()).catch(e=>reject(e));
                     }
                     else{
-                        reject(e);
+                        reject(error);
                     }
                 })
             }).catch(e=>reject(e))

@@ -294,15 +294,6 @@ export default class Profile extends Component {
     else{
       this.fetchData();
     }
-
-    if (this.checkUserIsPageOwner()) {
-      const script = document.createElement("script");
-
-      script.src = "//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5c5dbb7e21461dc9";
-      script.type = "text/javascript";
-
-      document.body.appendChild(script);
-    }
   }
 
   getLoggedUserName(){

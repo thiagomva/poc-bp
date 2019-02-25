@@ -645,3 +645,8 @@ body {
 .role-config-img{
     width: 100%;
 }
+
+.discord-auth-msg{
+    margin: 40px auto;
+    text-align: center;
+}

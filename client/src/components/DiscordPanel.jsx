@@ -11,15 +11,11 @@ export default class DiscordPanel extends Component {
         super(props);
 
         this.handleClose = this.handleClose.bind(this);
-
-        this.state = {
-            subscribers: [],
-            discordRoles: [],
-            showModal: false,
-            selectedRoleId:"",
-            selectedRoleName:"",
-            savedRole: false
-        };
+        var state = this.getStateFromProps(props);
+        state.subscribers = [];
+        state.discordRoles = [];
+        state.showModal = false;
+        this.state = state;
     }
 
     handleClose() {
@@ -162,12 +158,28 @@ export default class DiscordPanel extends Component {
 
     componentWillMount(){
         this.listSubscribers();
+        this.listRoles();
     }
 
     componentWillReceiveProps(nextProps){
-        if (!this.checkIfHasDiscord(this.props) && this.checkIfHasDiscord(nextProps)) {
-            this.listRoles();
+        if(nextProps.discordInfo && nextProps.discordInfo.discordRole){
+            var state = this.getStateFromProps(nextProps);
+            this.setState(state);
         }
+    }
+
+    getStateFromProps(props){
+        var state = {
+            selectedRoleId:"",
+            selectedRoleName:"",
+            savedRole: false
+        };
+        if(props.discordInfo && props.discordInfo.discordRole){
+            state.selectedRoleId = props.discordInfo.discordRole.id;
+            state.selectedRoleName = props.discordInfo.discordRole.name;
+            state.savedRole = true;
+        }
+        return state;
     }
 
     listRoles(){
@@ -177,14 +189,8 @@ export default class DiscordPanel extends Component {
             
             var url = server_url + '/api/v1/discord/roles';
             Axios.get(url, config).then(response => {
-                var discordRoles = response.data;
-                var selectedRoleId = "";
-                var selectedRoleName = "";
-                if(this.props.discordInfo.discordRole){
-                    selectedRoleId = this.props.discordInfo.discordRole.id;
-                    selectedRoleName = this.props.discordInfo.discordRole.name;
-                }
-                this.setState({discordRoles: discordRoles, selectedRoleId: selectedRoleId, selectedRoleName: selectedRoleName});
+                var discordRoles = response.data;                
+                this.setState({discordRoles: discordRoles});
             });
         }
     }

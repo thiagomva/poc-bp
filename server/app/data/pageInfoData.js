@@ -26,7 +26,7 @@ class PageInfoData{
         return pageInfo.update(pageInfo, { where: { username: pageInfo.username }, fields: pageInfo.changed() });
     }
     get(username){
-        return this.PageInfo.findById(username);
+        return this.PageInfo.findByPk(username);
     }
     list(){
         return this.PageInfo.findAll();

@@ -23,7 +23,7 @@ class DiscordPageInfoData{
         return discordPageInfo.update(discordPageInfo, { where: { username: discordPageInfo.username }, fields: discordPageInfo.changed() });
     }
     get(username){
-        return this.DiscordPageInfo.findById(username);
+        return this.DiscordPageInfo.findByPk(username);
     }
     list(){
         return this.DiscordPageInfo.findAll();

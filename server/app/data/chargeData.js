@@ -74,7 +74,7 @@ class ChargeData{
         );
     }
     get(chargeId){
-        return this.Charge.findById(chargeId);
+        return this.Charge.findByPk(chargeId);
     }
 }
 

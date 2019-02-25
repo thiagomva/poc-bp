@@ -161,7 +161,7 @@ export default class PublicList extends Component {
             window.location = url;
         }
         else{
-            if(this.props.discordInfo && this.props.discordInfo.guildId){
+            if(this.state.subscriptionFile && this.props.discordInfo && this.props.discordInfo.guildId){
                 window.open("https://discordapp.com/channels/"+this.props.discordInfo.guildId, "_blank");
             }
         }

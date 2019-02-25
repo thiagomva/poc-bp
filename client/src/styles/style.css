@@ -224,11 +224,19 @@ body {
     font-weight: bold;
     letter-spacing: 0.6px;
     text-align: left;
-    color: #ff4828;
     line-height: 38px;
+    font-family: Montserrat-Bold;
+    cursor: pointer;
+    margin-right: 30px;
 }
 
-.posts-title i{
+.selected-tab {
+    color: #ff4828;
+    border-bottom: 5px solid #ff4828;
+}
+
+.posts-title i,
+.posts-title img{
     color: #4d4d4d;
     margin-right: 8px;
 }
@@ -349,7 +357,7 @@ body {
 }
 
 .input-group-append .input-group-text {
-    min-width: 115px;
+    min-width: 125px;
 }
 
 .uploader input {
@@ -528,3 +536,112 @@ body {
   .saving {
       font-style: italic;
   }
+
+.custom-switch .custom-control-label::before{
+    top: calc(50% - 7px);
+}
+
+.custom-switch .custom-control-label::after{
+    top: calc(50% - 5px);
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem #ff482840;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #ff4828;
+    background-color: #ff4828;
+}
+
+.discord-btn .btn-primary {
+    background-color: #7076d6;
+    border-color: #7076d6;
+}
+
+.discord-btn .btn-primary:not(.disabled):hover,
+.discord-btn .btn-primary:not(.disabled):active,
+.discord-btn .btn-primary:not(:disabled):not(.disabled):active {
+    background-color: #5f57bf;
+    border-color: #5f57bf;
+}
+
+.btn{
+    cursor: pointer;
+}
+
+.btn.disabled, .btn:disabled {
+    cursor: default;
+}
+
+.subscribers-title{
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 0.6px;
+    color: #4e4e4e;
+    margin: 20px 0px;
+}
+
+.discord-panel{
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0.4px;
+    color: #4d4d4d;
+}
+
+.discord-roles {
+    font-size: 16px;
+    font-weight: bold;
+    color: #4d4d4d;
+}
+
+#discordRolesSelect{
+    width: 280px;
+    max-width: 100%;
+    margin: auto;
+}
+
+.section-separator{
+    width: 100%;
+    height: 1px;
+    background-color: #9a9a9a;
+    margin: 25px 0;
+}
+
+.give-bot-permissions-title{
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: #4c4c4c;
+    margin-bottom: 20px;
+}
+
+.give-bot-permissions-description{
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.4px;
+    color: #4c4c4c;
+    margin-bottom: 15px;
+}
+
+.img-hint-div{
+    cursor: pointer;
+}
+
+.plus-img-icon{
+    position: relative;
+    left: calc(50% - 10px);
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    width: 20px;
+}
+
+.role-config-img-sm{
+    width: 130px;
+    margin: 0 20px 0 0;
+}
+
+.role-config-img{
+    width: 100%;
+}

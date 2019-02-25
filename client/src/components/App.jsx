@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import Profile from './Profile.jsx';
 import TopBar from './TopBar.jsx';
 import Site from './Site.jsx';
+import DiscordAuth from './DiscordAuth.jsx';
 
 import {
   isSignInPending,
@@ -23,8 +24,9 @@ export default class App extends Component {
     if(e && e.preventDefault){
       e.preventDefault();
     }
-    const origin = window.location.origin
-    redirectToSignIn(origin, origin + '/manifest.json', ['store_write', 'publish_data', 'email'])
+    const origin = window.location.origin;
+    const currentPage = window.location.href;
+    redirectToSignIn(currentPage, origin + '/manifest.json', ['store_write', 'publish_data', 'email']);
   }
 
   handleSignOut(e) {
@@ -45,11 +47,17 @@ export default class App extends Component {
                 }
               />
               <Route
+                path='/discordAuth/:owner?'
+                render={
+                  routeProps => <DiscordAuth handleSignIn={ this.handleSignIn } {...routeProps} />
+                }
+              />
+              <Route
                 path='/:username/:postId?/:postTitle?'
                 render={
                   routeProps => <Profile handleSignIn={ this.handleSignIn } {...routeProps} />
                 }
-              />
+              />              
               {!isUserSignedIn() ?
               <Route path='/' render={routeProps => <Site handleSignIn={ this.handleSignIn } />}/>
               : <Route path='/' render={routeProps => <Profile handleSignIn={ this.handleSignIn } {...routeProps}/>}/>
@@ -64,7 +72,12 @@ export default class App extends Component {
   componentWillMount() {
     if (isSignInPending()) {
       handlePendingSignIn().then((userData) => {
-        window.location = window.location.origin;
+        if (window.location.href.indexOf('?') >= 0) {
+          window.location = window.location.href.split('?')[0];
+        }
+        else {
+          window.location = window.location.href;
+        }
       });
     }
   }

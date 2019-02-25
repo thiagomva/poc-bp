@@ -12,9 +12,16 @@ module.exports = function (router) {
       .get(function (req, res, next) {
         new PagesController().listPages(baseResponse(res, next));
       });
-      
+    
     router.route('/numberOfPosts')
       .post(function (req, res, next) {
         new PagesController().updateNumberOfPosts(req.body, baseResponse(res, next));
       })
+
+    router.route('/:username/discord')
+      .get(function (req, res, next) {
+        new PagesController().getPageDiscordInfo(req.params.username, req.headers["blockstack-auth-token"], baseResponse(res, next));
+      })
+      
+    
   };

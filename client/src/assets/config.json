@@ -1,5 +1,6 @@
 {
   "server_url": "https://pocbpnode.azurewebsites.net",
   "ethereum_network": "4",
-  "open_node_url": "https://checkout.opennode.co/"
+  "open_node_url": "https://checkout.opennode.co/",
+  "discord_auth_url": "https://discordapp.com/oauth2/authorize?response_type={RESPONSE_TYPE}&client_id={CLIENT_ID}&scope={SCOPE}&state={STATE}&redirect_uri={REDIRECT_URI}"
 }

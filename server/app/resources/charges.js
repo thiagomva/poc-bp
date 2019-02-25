@@ -24,8 +24,19 @@ module.exports = function (router) {
       new ChargesController().updateAll(baseResponse(res, next));
     });
 
+  router.route('/updateAllPaymentDates')
+    .post(function (req, res, next) {
+      new ChargesController().updateAllPaymentDates(baseResponse(res, next));
+    });
+
+
   router.route('/totalAmount/:username')
     .get(function (req, res, next) {
       new ChargesController().getTotalAmount(req.params.username, baseResponse(res, next));
+    });
+
+  router.route('/subscribers')
+    .get(function (req, res, next) {
+      new ChargesController().listSubscribers(req.headers["blockstack-auth-token"], baseResponse(res, next));
     });
 };

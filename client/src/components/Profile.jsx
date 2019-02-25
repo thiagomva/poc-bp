@@ -110,6 +110,8 @@ export default class Profile extends Component {
               numberOfPosts: Object.keys(pageInfo.files).length,
               monthlyPrice: pageInfo.monthlyPrice,
               yearlyPrice: pageInfo.yearlyPrice,
+              halfYearlyPrice: pageInfo.halfYearlyPrice,
+              quarterlyPrice: pageInfo.quarterlyPrice,
               email: userEmail
             };
             var privateKey = loadUserData().appPrivateKey;
@@ -205,7 +207,7 @@ export default class Profile extends Component {
               <PostDetails handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} postId={this.props.match.params.postId}/>
             }
             {!this.showNewPostForm() &&  !this.showPageEdit() && !this.showPostDetails() &&
-              <PublicList handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person}/>
+              <PublicList handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} discordInfo={this.state.discordInfo} location={this.props.location}/>
             }
             
           </div>
@@ -219,7 +221,7 @@ export default class Profile extends Component {
               <div className="row pl-5 pt-3 mb-4">
                 <span>Choose a subscription plan</span>
               </div>
-              <SubscriptionOptions handleSignIn={handleSignIn} expirationDate={this.getExpirationDate()} radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
+              <SubscriptionOptions handleSignIn={handleSignIn} expirationDate={this.getExpirationDate()} radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} quarterlyPrice={this.state.pageInfo.quarterlyPrice} halfYearlyPrice={this.state.pageInfo.halfYearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
               {this.checkUserIsPageOwner() && <div className="payout-box p-3 mt-3">
                 <div className="box-label">Edit your payout</div>
                 <div className="payout-info">Total Subscribers: {this.state.totalSubscribers}</div>
@@ -351,6 +353,9 @@ export default class Profile extends Component {
 
   getBitcointWallet(){
     getFile('bitcoinWallet').then(wallet => {
+      if(!wallet){
+        wallet = "";
+      }
       this.setState({ storedBitcoinWallet: wallet, bitcoinWallet: wallet });
     })
   }
@@ -391,6 +396,19 @@ export default class Profile extends Component {
           this.setState({ isLoading: false })
         })
       })
+
+    this.getPageDiscordInfo(username);
+  }
+
+  getPageDiscordInfo(username){
+    var config={headers:{}};
+    if(loadUserData()){
+      config.headers["blockstack-auth-token"] = loadUserData().authResponseToken;
+    }
+    var url = server_url + '/api/v1/pages/'+username+'/discord';
+    Axios.get(url, config).then(response => {
+      this.setState({discordInfo: response.data});
+    });
   }
 
   isLocal() {

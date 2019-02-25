@@ -13,7 +13,7 @@ class PagesController {
 
     savePage(json, cb) {
         this.valid(json);
-        new Pages(json.jwt, json.userBlockstackId, json.pageName, json.pageDescription, json.numberOfPosts, json.monthlyPrice, json.yearlyPrice, json.email).getPagesResult(cb);
+        new Pages(json.jwt, json.userBlockstackId, json.pageName, json.pageDescription, json.numberOfPosts, json.monthlyPrice, json.yearlyPrice, json.email, json.quarterlyPrice, json.halfYearlyPrice).getPagesResult(cb);
     }
 
     updateNumberOfPosts(json, cb) {
@@ -25,6 +25,11 @@ class PagesController {
 
     listPages(cb) {
         new Pages().listPages(cb);
+    }
+
+    getPageDiscordInfo(username, blockstackAuthToken, cb) {
+        if (!username) throw new Error(400, 'username is mandatory');
+        new Pages().getPageDiscordInfo(username, blockstackAuthToken, cb);
     }
 }
 

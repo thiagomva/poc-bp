@@ -1,9 +1,13 @@
-var config = require('nconf');
-var Error = require('../util/error.js');
+var JsonTokens = require('jsontokens');
 var PageInfoData = require('../data/pageInfoData.js');
+var DiscordPageInfoData = require('../data/discordPageInfoData.js');
+var DiscordApiData = require('../data/discordApiData.js');
+var SubscriberData = require('../data/subscriberData.js');
+var PeriodType = require('./periodType.js');
+var nconf = require('nconf');
 
 class Pages {
-    constructor(jwt, userBlockstackId, pageName, pageDescription, numberOfPosts, monthlyPrice, yearlyPrice,email) {
+    constructor(jwt, userBlockstackId, pageName, pageDescription, numberOfPosts, monthlyPrice, yearlyPrice,email, quarterlyPrice, halfYearlyPrice) {
         this.jwt = jwt;
         this.userBlockstackId = userBlockstackId;
         this.pageName = pageName ? pageName : '';
@@ -11,6 +15,8 @@ class Pages {
         this.numberOfPosts = numberOfPosts ? numberOfPosts : 0;
         this.monthlyPrice = monthlyPrice;
         this.yearlyPrice = yearlyPrice;
+        this.quarterlyPrice = quarterlyPrice;
+        this.halfYearlyPrice = halfYearlyPrice;
         this.email = email;
     }
 
@@ -23,6 +29,46 @@ class Pages {
                 return item; 
             });
             cb(null, result);
+        }).catch(err => cb(err));
+    }
+
+    getPageDiscordInfo(username, blockstackAuthToken, cb) {
+        var loggedUsername = null;
+        if(blockstackAuthToken){
+            var decodedTokenPayload = (0, JsonTokens.decodeToken)(blockstackAuthToken).payload;
+            loggedUsername = decodedTokenPayload.username;
+        }
+        var pageDiscordInfo = {
+            hasDiscord: false,
+            userAlreadyJoined: false,
+            clientId: nconf.get("DISCORD_CLIENT_ID"),
+            discordRole: null
+        }
+        new DiscordPageInfoData().get(username).then(result => {
+            pageDiscordInfo.hasDiscord = result != null;
+            if(result.roleId){
+                pageDiscordInfo.discordRole = {id: result.roleId, name: result.roleName}
+            }
+            if(pageDiscordInfo.hasDiscord && pageDiscordInfo.discordRole != null && loggedUsername){
+                new SubscriberData().getValid(username,loggedUsername).then(result => {
+                    if(result && result.length > 0){
+                        var subscriber = result[0];
+                        var guildMemberUrl = "guilds/"+subscriber.GuildId+"/members/"+subscriber.DiscordId;
+                        new DiscordApiData().get(guildMemberUrl, nconf.get('DISCORD_BOT_AUTH_TOKEN'), 'Bot').then(result => {
+                            pageDiscordInfo.userAlreadyJoined=true;
+                            cb(null, pageDiscordInfo);
+                        }).catch(e => {
+                            cb(null, pageDiscordInfo);
+                        })
+                    }
+                    else{
+                        cb(null, pageDiscordInfo);
+                    }
+                }).catch(e => cb(e));
+            }
+            else{
+                cb(null, pageDiscordInfo);
+            }
         }).catch(err => cb(err));
     }
 
@@ -72,6 +118,14 @@ class Pages {
                 pageInfo.yearlyPrice = _this.yearlyPrice;
             }
 
+            if (_this.quarterlyPrice != null) {
+                pageInfo.quarterlyPrice = _this.quarterlyPrice;
+            }
+
+            if (_this.halfYearlyPrice != null) {
+                pageInfo.halfYearlyPrice = _this.halfYearlyPrice;
+            }
+
             if (_this.email != null) {
                 pageInfo.email = _this.email;
             }
@@ -82,6 +136,22 @@ class Pages {
                 pageInfoData.update(pageInfo).then(result => cb(null, null)).catch(err => cb(err));
             }
         }).catch(err => cb(err));
+    }
+
+    static GetPriceFromPeriodType(periodType, pageInfo){
+        if(periodType == PeriodType.MONTHLY){
+            return pageInfo.monthlyPrice;
+        }
+        else if(periodType == PeriodType.QUARTERLY){
+            return pageInfo.quarterlyPrice;
+        }
+        else if(periodType == PeriodType.HALF_YEARLY){
+            return pageInfo.halfYearlyPrice;
+        }
+        else if(periodType == PeriodType.YEARLY){
+            return pageInfo.yearlyPrice;
+        }
+        return null;
     }
 }
 

@@ -14,6 +14,8 @@ class PageInfoData{
             numberOfPosts: Sequelize.INTEGER,
             monthlyPrice: Sequelize.DOUBLE,
             yearlyPrice: Sequelize.DOUBLE,
+            quarterlyPrice: Sequelize.DOUBLE,
+            halfYearlyPrice: Sequelize.DOUBLE,
             email: Sequelize.STRING(100)
         });
     }
@@ -24,7 +26,7 @@ class PageInfoData{
         return pageInfo.update(pageInfo, { where: { username: pageInfo.username }, fields: pageInfo.changed() });
     }
     get(username){
-        return this.PageInfo.findById(username);
+        return this.PageInfo.findByPk(username);
     }
     list(){
         return this.PageInfo.findAll();

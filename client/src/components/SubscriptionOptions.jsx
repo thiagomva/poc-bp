@@ -11,7 +11,7 @@ export default class SubscriptionOptions extends Component {
         super(props);
 
         this.state = {
-            monthlySubscription: false
+            subscriptionPeriodType: null
           };
     }
 
@@ -19,36 +19,66 @@ export default class SubscriptionOptions extends Component {
         return (<div>
             <div className="card">
               <div className="card-body prices">
-                <div className={(this.props.alignCenter ? "payment-option-modal " : "") + "row"}>
+              {this.props.yearlyPrice > 0 && <div className={(this.props.alignCenter ? "payment-option-modal " : "") + "row"}>
                   <div className="col-md-12">
                     <label>
                       <input
                         type="radio"
                         name={"payment" + this.props.radioGroupName}
-                        value="yearly"
-                        checked={this.canSubscribe() && !this.state.monthlySubscription}
+                        value="1"
+                        checked={this.canSubscribe() && this.state.subscriptionPeriodType == "1"}
                         onChange={e => this.handleSubscriptionTypeChange(e)}
                         disabled={!this.canSubscribe()}
                       />
                       &nbsp;{this.props.yearlyPrice} USD per year
                     </label>
                   </div>
-                </div>
-                <div className={(this.props.alignCenter ? "payment-option-modal " : "") + "row"}>
+                </div>}
+                {this.props.halfYearlyPrice > 0 && <div className={(this.props.alignCenter ? "payment-option-modal " : "") + "row"}>
                   <div className="col-md-12">
                     <label>
                       <input
                         type="radio"
                         name={"payment" + this.props.radioGroupName}
-                        value="monthly"
-                        checked={this.canSubscribe() && this.state.monthlySubscription}
+                        value="2"
+                        checked={this.canSubscribe() && this.state.subscriptionPeriodType == "2"}
+                        onChange={e => this.handleSubscriptionTypeChange(e)}
+                        disabled={!this.canSubscribe()}
+                      />
+                      &nbsp;{this.props.halfYearlyPrice} USD per half year
+                    </label>
+                  </div>
+                </div>}
+                {this.props.quarterlyPrice > 0 && <div className={(this.props.alignCenter ? "payment-option-modal " : "") + "row"}>
+                  <div className="col-md-12">
+                    <label>
+                      <input
+                        type="radio"
+                        name={"payment" + this.props.radioGroupName}
+                        value="3"
+                        checked={this.canSubscribe() && this.state.subscriptionPeriodType == "3"}
+                        onChange={e => this.handleSubscriptionTypeChange(e)}
+                        disabled={!this.canSubscribe()}
+                      />
+                      &nbsp;{this.props.quarterlyPrice} USD per quarter
+                    </label>
+                  </div>
+                </div>}
+                {this.props.monthlyPrice > 0 && <div className={(this.props.alignCenter ? "payment-option-modal " : "") + "row"}>
+                  <div className="col-md-12">
+                    <label>
+                      <input
+                        type="radio"
+                        name={"payment" + this.props.radioGroupName}
+                        value="0"
+                        checked={this.canSubscribe() && this.state.subscriptionPeriodType == "0"}
                         onChange={e => this.handleSubscriptionTypeChange(e)}
                         disabled={!this.canSubscribe()}
                       />
                       &nbsp;{this.props.monthlyPrice} USD per month
                     </label>
                   </div>
-                </div>
+                </div>}
                 {this.canSubscribe() && <div className="btn btn-primary subscription-btn" onClick={e => this.createPaymentRequest(e)}>Subscribe</div>}
                 {!this.isOwner() && this.getFormattedDateFromDuration() && <div className="btn btn-success subscription-btn">Subscribed until {this.getFormattedDateFromDuration()}</div>}
               </div>
@@ -82,13 +112,13 @@ export default class SubscriptionOptions extends Component {
         this.props.handleSignIn();
       }
       else{
-        var monthly = this.state.monthlySubscription;
+        var subscriptionPeriodType = this.state.subscriptionPeriodType;
         var url = server_url + '/api/v1/charges';
         var loggedUserAppPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey);
         Axios.post(url, {
           appPublicKey: loggedUserAppPublicKey,
           username: this.props.pageUsername,
-          monthly: monthly,
+          periodType: subscriptionPeriodType,
           subscriberUsername: loadUserData().username
         }).then(response => {
           if(response.data && response.data.id){
@@ -108,6 +138,8 @@ export default class SubscriptionOptions extends Component {
     }
 
       handleSubscriptionTypeChange(event) {
-        this.setState({ monthlySubscription: event.target.value === 'monthly' && event.target.checked })
+        if(event.target.checked){
+          this.setState({ subscriptionPeriodType: event.target.value})
+        }
       }
 }

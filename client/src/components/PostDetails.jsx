@@ -24,6 +24,8 @@ export default class PostDetails extends Component {
             pageDescription: "",
             monthlyPrice: undefined,
             yearlyPrice: undefined,
+            halfYearlyPrice: undefined,
+            quarterlyPrice: undefined,
             file: null,
             pageUsername: ""
         }
@@ -75,7 +77,7 @@ export default class PostDetails extends Component {
                                         Posted by {this.state.pageOwner && this.state.pageOwner.name() ? this.state.pageOwner.name() : this.state.pageUsername.split('.')[0]}
                                     </div>
                                     <div className="pull-right">
-                                        {!this.state.file.isPublic && this.checkUserNotAllowed() && <Payment handleSignIn={handleSignIn} pageUsername={this.state.pageUsername}  monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} confirmed={this.subscriptionConfirmed} subscriptionMode={true}></Payment>}
+                                        {!this.state.file.isPublic && this.checkUserNotAllowed() && <Payment handleSignIn={handleSignIn} pageUsername={this.state.pageUsername}  monthlyPrice={this.state.monthlyPrice} yearlyPrice={this.state.yearlyPrice} halfYearlyPrice={this.state.halfYearlyPrice} quarterlyPrice={this.state.quarterlyPrice} confirmed={this.subscriptionConfirmed}></Payment>}
                                         {(this.state.file.isPublic || !this.checkUserNotAllowed()) && !this.state.file.content &&<div className='btn btn-primary' onClick={e => {if(!this.state.file.isPublic && this.checkUserNotAllowed()) this.handleRedirectSubscribe; else this.handleReadFile()}}  ><span>Read More</span></div>}
                                     </div>
                                 </div>
@@ -122,7 +124,9 @@ export default class PostDetails extends Component {
                 pageName: props.pageInfo.pageName,
                 pageDescription: props.pageInfo.pageDescription,
                 monthlyPrice: props.pageInfo.monthlyPrice,
-                yearlyPrice: props.pageInfo.yearlyPrice
+                yearlyPrice: props.pageInfo.yearlyPrice,
+                halfYearlyPrice: props.pageInfo.halfYearlyPrice,
+                quarterlyPrice: props.pageInfo.quarterlyPrice
             }
         }
         if(props.pageUsername != null){

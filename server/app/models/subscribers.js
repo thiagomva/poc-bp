@@ -6,11 +6,11 @@ const axios = require('axios');
 var PageInfoData = require('../data/pageInfoData.js');
 
 class Subscribers {
-    constructor(username, appPublicKey, monthly, subscriberUsername) {
+    constructor(username, appPublicKey, subscriberUsername, expirationDate) {
         this.username = username;
         this.appPublicKey = appPublicKey;
-        this.monthly = monthly;
         this.subscriberUsername = subscriberUsername;
+        this.expirationDate = expirationDate;
     }
 
     getSubscribersResult(cb) {
@@ -48,9 +48,8 @@ class Subscribers {
 
 
     handleFilesRead(self, appPrivateKey, jwt, address, hubServerUrl, hubUrlPrefix, filesPrivateKeys, subscribers, pageInfo, cb) {
-        var date = new Date();
-        var expiration = date.getTime() + (86400000 * (this.monthly ? 30 : 365));
-        subscribers[self.appPublicKey.toLowerCase()] = {expirationDate:expiration};
+        var expiration = this.expirationDate;
+        subscribers[self.appPublicKey.toLowerCase()] = {expirationDate:expiration, subscriberUsername: self.subscriberUsername};
         var subscribersToSave = Blockstack.encryptContent(JSON.stringify(subscribers), {publicKey: Blockstack.getPublicKeyFromPrivate(appPrivateKey)});
         var subscriptionFile = {};
         subscriptionFile[self.appPublicKey.toLowerCase()] = {expirationDate:expiration};

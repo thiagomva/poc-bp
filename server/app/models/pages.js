@@ -46,7 +46,7 @@ class Pages {
         }
         new DiscordPageInfoData().get(username).then(result => {
             pageDiscordInfo.hasDiscord = result != null;
-            if(result.roleId){
+            if(pageDiscordInfo.hasDiscord && result.roleId){
                 pageDiscordInfo.discordRole = {id: result.roleId, name: result.roleName}
             }
             if(pageDiscordInfo.hasDiscord && pageDiscordInfo.discordRole != null && loggedUsername){

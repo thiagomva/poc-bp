@@ -650,3 +650,28 @@ body {
     margin: 40px auto;
     text-align: center;
 }
+
+.btn-twitter, .btn-facebook {
+    font-family: Montserrat-SemiBold;
+    font-size: 12px;
+    line-height: 2;
+    letter-spacing: 0.9px;
+    color: #ffffff;
+}
+
+.btn-twitter i, .btn-facebook i {
+    font-size: 20px;
+}
+
+.btn-twitter {
+    background-color: #34b3f7;
+}
+
+.btn-facebook {
+    background-color: #38529a;
+}
+
+.social-media-link {
+    text-align: center;
+    font-size: 14px;
+}

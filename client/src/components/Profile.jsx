@@ -222,18 +222,31 @@ export default class Profile extends Component {
                 <span>Choose a subscription plan</span>
               </div>
               <SubscriptionOptions handleSignIn={handleSignIn} expirationDate={this.getExpirationDate()} radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} quarterlyPrice={this.state.pageInfo.quarterlyPrice} halfYearlyPrice={this.state.pageInfo.halfYearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
-              {this.checkUserIsPageOwner() && <div className="payout-box p-3 mt-3">
-                <div className="box-label">Edit your payout</div>
-                <div className="payout-info">Total Subscribers: {this.state.totalSubscribers}</div>
-                <div className="payout-info">Total Earnings: {this.state.totalEarnings} BTC</div>
-                <input className="wallet-input" 
-                  placeholder="Enter your wallet number"
-                  value={this.state.bitcoinWallet}
-                  onChange={e => this.handleBitcoinWalletChange(e)}></input>
-                <div className="small-round-btn" onClick={e => this.updatePayoutWallet(e)}><i className="fa fa-arrow-right"></i></div>
-                {this.state.storedBitcoinWallet && this.state.storedBitcoinWallet == this.state.bitcoinWallet && 
-                <div className="wallet-status-label saved">Saved</div>}
-                {this.state.isSubmittingWallet && <div className="wallet-status-label saving">Saving...</div>}
+              {this.checkUserIsPageOwner() && <div>
+                <div className="card mt-3 p-3">
+                  <div className="row">
+                    <div className="col-md-6">
+                    <div className="btn btn-twitter">SHARE ON <i class="fa fa-twitter"></i></div>
+                    </div>
+                    <div className="col-md-6">
+                    <div className="btn btn-facebook">SHARE ON <i class="fa fa-facebook-square"></i></div>
+                    </div>
+                  </div>
+                  <div className="social-media-link mt-3">Link: <a href={window.location.href}>{window.location.href.split('//')[1]}</a></div>
+                </div>
+                <div className="payout-box p-3 mt-3">
+                  <div className="box-label">Edit your payout</div>
+                  <div className="payout-info">Total Subscribers: {this.state.totalSubscribers}</div>
+                  <div className="payout-info">Total Earnings: {this.state.totalEarnings} BTC</div>
+                  <input className="wallet-input" 
+                    placeholder="Enter your wallet number"
+                    value={this.state.bitcoinWallet}
+                    onChange={e => this.handleBitcoinWalletChange(e)}></input>
+                  <div className="small-round-btn" onClick={e => this.updatePayoutWallet(e)}><i className="fa fa-arrow-right"></i></div>
+                  {this.state.storedBitcoinWallet && this.state.storedBitcoinWallet == this.state.bitcoinWallet && 
+                  <div className="wallet-status-label saved">Saved</div>}
+                  {this.state.isSubmittingWallet && <div className="wallet-status-label saving">Saving...</div>}
+                </div>
               </div>}
             </div>
           </div>}

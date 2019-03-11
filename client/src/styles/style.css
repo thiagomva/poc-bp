@@ -652,15 +652,17 @@ body {
 }
 
 .btn-twitter, .btn-facebook {
-    font-family: Montserrat-SemiBold;
+    font-family: Montserrat-Light;
     font-size: 12px;
-    line-height: 2;
+    line-height: 14px;
     letter-spacing: 0.9px;
     color: #ffffff;
+    width: 100%;
 }
 
 .btn-twitter i, .btn-facebook i {
-    font-size: 20px;
+    font-size: 18px;
+    margin-left: 4px;
 }
 
 .btn-twitter {
@@ -674,4 +676,10 @@ body {
 .social-media-link {
     text-align: center;
     font-size: 14px;
+}
+
+.link-to-share {
+    display: inline-block;
+    text-decoration: underline;
+    cursor: pointer;
 }

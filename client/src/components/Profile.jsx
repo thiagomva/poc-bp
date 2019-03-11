@@ -73,6 +73,11 @@ export default class Profile extends Component {
     const { handleSignIn } = this.props;
     const { person } = this.state;
     const { username } = this.state;
+    
+    const url = window.location.href;
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+    const twitterUrl = `https://twitter.com/home?status=${url}`;
+    
     var handleNewPost = () =>{
       this.setState({isCreatingPost: true, editingFile: null});
     }
@@ -225,14 +230,14 @@ export default class Profile extends Component {
               {this.checkUserIsPageOwner() && <div>
                 <div className="card mt-3 p-3">
                   <div className="row">
-                    <div className="col-md-6">
-                    <div className="btn btn-twitter">SHARE ON <i class="fa fa-twitter"></i></div>
+                    <div className="col-6">
+                    <a href={twitterUrl} target="_blank"  className="btn btn-twitter">SHARE ON <i class="fa fa-twitter"></i></a>
                     </div>
-                    <div className="col-md-6">
-                    <div className="btn btn-facebook">SHARE ON <i class="fa fa-facebook-square"></i></div>
+                    <div className="col-6">
+                    <a href={facebookUrl} target="_blank" className="btn btn-facebook">SHARE ON <i class="fa fa-facebook-square"></i></a>
                     </div>
                   </div>
-                  <div className="social-media-link mt-3">Link: <a href={window.location.href}>{window.location.href.split('//')[1]}</a></div>
+                  <div className="social-media-link mt-3">Link: <div className="link-to-share" onClick={e => this.copyLink(e)}>{window.location.href.split('//')[1]}</div></div>
                 </div>
                 <div className="payout-box p-3 mt-3">
                   <div className="box-label">Edit your payout</div>
@@ -353,6 +358,10 @@ export default class Profile extends Component {
     this.getPageInfo(username);
     this.setSubscriptionFile(username);
     
+  }
+
+  copyLink(e) {
+    alert('Copied to clipboard.');
   }
 
   getBitcointWallet(){

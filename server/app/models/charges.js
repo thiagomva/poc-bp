@@ -43,7 +43,15 @@ class Charges {
             var chargeData = new ChargeData();
             chargeData.update(charge).then(result => {
                 if(charge.status == "processing" || charge.status == "paid"){
-                    new Subscribers(charge.username, charge.appPublicKey, charge.subscriberUsername, charge.expirationDate).getSubscribersResult(cb);
+                    new Subscribers(charge.username, charge.appPublicKey, charge.subscriberUsername, charge.expirationDate).getSubscribersResult(
+                        function(errPi, respPi) {
+                            if (errPi) throw new Error(404, 'pageInfo.json not found.');
+                            else {
+                                charge.blockstackStatus = 1;
+                                chargeData.update(charge).then(result => 
+                                    cb(null, {success:true}).catch(err => cb(err)));
+                            }
+                        });
                 }
                 else{
                     cb(null, JSON.parse(stringfiedJson));
@@ -54,8 +62,6 @@ class Charges {
             cb(null, false);
         }
     }
-
-    
 
     getCreateResult(json, cb) {
         var pageInfoData = new PageInfoData();
@@ -221,6 +227,35 @@ class Charges {
         }).catch(error => {
             cb(error);
         });;
+    }
+
+    updateAllBlockstackStatus(cb){
+        var chargeData = new ChargeData();
+        var _this = this;
+        chargeData.listAllProcessingAndPaidAndPendingBlockstack().then(charges => {
+            _this.updateSubscribers(_this,charges, 0);
+            cb(null,null);
+        }).catch(error => {
+            cb(error);
+        });
+    }
+
+    updateSubscribers(self, charges, i){
+        var chargeData = new ChargeData();
+        var length = charges.length;
+        if(i<length){
+            var charge = charges[i];
+            new Subscribers(charge.username, charge.appPublicKey, charge.subscriberUsername, charge.expirationDate).getSubscribersResult(
+                function(errPi, respPi) {
+                    if (errPi) throw new Error(404, 'pageInfo.json not found.');
+                    else {
+                        charge.blockstackStatus = 1;
+                        chargeData.update(charge).then(result => {}).catch(err => {});
+                    }
+                    var nextIndex = i+1;
+                    self.updateSubscribers(self, charges, nextIndex);
+                });
+        }
     }
 
     getUserPayment(loggedUsername, pageUsername){

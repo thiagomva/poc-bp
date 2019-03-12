@@ -29,6 +29,11 @@ module.exports = function (router) {
       new ChargesController().updateAllPaymentDates(baseResponse(res, next));
     });
 
+  router.route('/updateAllBlockstackStatus')
+    .post(function (req, res, next) {
+      new ChargesController().updateAllBlockstackStatus(baseResponse(res, next));
+    });
+
 
   router.route('/totalAmount/:username')
     .get(function (req, res, next) {

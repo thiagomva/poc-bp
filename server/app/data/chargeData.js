@@ -15,7 +15,9 @@ class ChargeData{
             subscriberUsername: Sequelize.STRING(50),
             amount: Sequelize.FLOAT,
             paymentDate: Sequelize.DATE,
-            expirationDate: Sequelize.DATE
+            expirationDate: Sequelize.DATE,
+            withdrawalDate: Sequelize.DATE,
+            blockstackStatus: Sequelize.INTEGER
         });
     }
     insert(charge){
@@ -55,6 +57,13 @@ class ChargeData{
         const ne = Sequelize.Op.ne;
         return this.Charge.findAll({where: {
             status: {[ne]:"unpaid"}
+        }});
+    }
+    listAllProcessingAndPaidAndPendingBlockstack(){
+        const ne = Sequelize.Op.ne;
+        return this.Charge.findAll({where: {
+            status: {[ne]:"unpaid"},
+            blockstackStatus:{[Sequelize.Op.or]:{[Sequelize.Op.eq]:null, [ne]:1}}
         }});
     }
     listSubscribers(pageUsername){

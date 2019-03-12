@@ -61,6 +61,10 @@ class ChargesController {
     listSubscribers(blockstackAuthToken, cb){
         new Charges().listSubscribers(blockstackAuthToken, cb);
     }
+
+    updateAllBlockstackStatus(cb){
+        new Charges().updateAllBlockstackStatus(cb);
+    }
 }
 
 module.exports = ChargesController;

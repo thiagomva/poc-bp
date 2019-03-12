@@ -34,10 +34,9 @@ module.exports = function (router) {
       new ChargesController().updateAllBlockstackStatus(baseResponse(res, next));
     });
 
-
-  router.route('/totalAmount/:username')
+  router.route('/info')
     .get(function (req, res, next) {
-      new ChargesController().getTotalAmount(req.params.username, baseResponse(res, next));
+      new ChargesController().getInfo(req.headers["blockstack-auth-token"], baseResponse(res, next));
     });
 
   router.route('/subscribers')

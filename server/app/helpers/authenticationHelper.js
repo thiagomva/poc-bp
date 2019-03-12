@@ -8,7 +8,7 @@ module.exports = function (app) {
   var authentication = function (req, res, next) {
     var _ = require('underscore')
       , apiPrefix = '/api/v' + config.get('API_VERSION')
-      , securePaths = [apiPrefix + '/discord', apiPrefix + '/discord/join', apiPrefix + '/charges/subscribers'];
+      , securePaths = [apiPrefix + '/discord', apiPrefix + '/discord/join', apiPrefix + '/charges/subscribers', apiPrefix + '/charges/info'];
 
     if ( _.contains(securePaths, req.path) ){
       var token = req.headers["blockstack-auth-token"];

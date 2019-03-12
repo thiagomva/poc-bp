@@ -58,6 +58,10 @@ class ChargesController {
         new Charges().getTotalAmount(username, cb);
     }
 
+    getInfo(jwt, cb) {
+        new Charges().getInfo(jwt, cb);
+    }
+
     listSubscribers(blockstackAuthToken, cb){
         new Charges().listSubscribers(blockstackAuthToken, cb);
     }

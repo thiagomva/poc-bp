@@ -227,7 +227,7 @@ export default class Profile extends Component {
                 <div className="box-label">Edit your payout</div>
                 <div className="payout-info">You have {this.state.totalSubscribers} subscribers</div>
                 <div className="payout-info">{this.state.totalEarnings} BTC earned</div>
-                <div className="payout-info">{this.state.pendingWithdrawal} BTC pending to receive</div>
+                <div className="payout-info">{this.state.pendingWithdrawal} BTC pending</div>
                 <input className="wallet-input" 
                   placeholder="Enter your wallet number"
                   value={this.state.bitcoinWallet}
@@ -367,13 +367,16 @@ export default class Profile extends Component {
   }
 
   getTotalEarnings(){
-    var url = server_url + '/api/v1/charges/totalAmount/' + this.state.username;
-    Axios.get(url).then(response => {
-      if(response && response.data){
-        
-        this.setState({totalEarnings: response.data.totalAmount.toFixed(8), pendingWithdrawal:(response.data.totalAmount-response.data.totalWithdrawal).toFixed(8) });
-      }
-    })
+    if(loadUserData()){
+      var config={headers:{}};
+      config.headers["blockstack-auth-token"] = loadUserData().authResponseToken;
+      var url = server_url + '/api/v1/charges/info/';
+      Axios.get(url, config).then(response => {
+        if(response && response.data){          
+          this.setState({totalEarnings: response.data.totalAmount.toFixed(8), pendingWithdrawal:(response.data.totalAmount-response.data.totalWithdrawal).toFixed(8) });
+        }
+      })
+    }
   }
 
   getPageInfo(username){
@@ -390,7 +393,6 @@ export default class Profile extends Component {
           this.setState({ isLoading: false })
         })
       })
-
     this.getPageDiscordInfo(username);
   }
 
@@ -438,12 +440,16 @@ export default class Profile extends Component {
           .then(
               (file)=>{
               if (file) {
+                var subscriptionFile = JSON.parse(file);
+                var appPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey).toLowerCase();
+                if (subscriptionFile && subscriptionFile[appPublicKey] && subscriptionFile[appPublicKey].expirationDate > new Date().getTime()){
                   this.setState(
                       {
                           subscriptionFile: JSON.parse(file)
                       }
                   );
-              } 
+                }
+              }
           })
           .catch((error) => {
               console.log(error);

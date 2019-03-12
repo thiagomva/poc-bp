@@ -127,6 +127,11 @@ class Charges {
         }).catch(e => cb(e));;
     }
 
+    getInfo(jwt, cb){
+        var decodedTokenPayload = (0, JsonTokens.decodeToken)(jwt).payload;
+        this.getTotalAmount(decodedTokenPayload.username, cb);
+    }
+
     getTotalAmount(username, cb){
         var chargeData = new ChargeData();
         chargeData.listPaidFromUser(username).then(charges => {

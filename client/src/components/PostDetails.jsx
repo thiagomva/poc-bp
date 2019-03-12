@@ -169,7 +169,11 @@ export default class PostDetails extends Component {
                 (file)=>{
                 var parsedFile = null;
                 if (file) {
-                    parsedFile = JSON.parse(file)
+                    var subscriptionFile = JSON.parse(file);
+                    var appPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey).toLowerCase();
+                    if (subscriptionFile && subscriptionFile[appPublicKey] && subscriptionFile[appPublicKey].expirationDate > new Date().getTime()){
+                        parsedFile = subscriptionFile;
+                    }
                 }
                 this.setState(
                     {

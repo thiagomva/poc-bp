@@ -256,11 +256,13 @@ export default class PublicList extends Component {
             .then(
                 (file)=>{
                 if (file) {
-                    this.setState(
-                        {
+                    var subscriptionFile = JSON.parse(file);
+                    var appPublicKey = getPublicKeyFromPrivate(loadUserData().appPrivateKey).toLowerCase();
+                    if (subscriptionFile && subscriptionFile[appPublicKey] && subscriptionFile[appPublicKey].expirationDate > new Date().getTime()){
+                        this.setState({
                             subscriptionFile: JSON.parse(file)
-                        }
-                    );
+                        });
+                    }
                 } 
             })
             .catch((error) => {

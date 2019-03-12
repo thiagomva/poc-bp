@@ -56,6 +56,7 @@ export default class Profile extends Component {
       subscriptionFile: null,
       totalSubscribers: 0,
       totalEarnings: 0,
+      pendingWithdrawal: 0,
       isSubmittingWallet: false
     };
 
@@ -224,8 +225,9 @@ export default class Profile extends Component {
               <SubscriptionOptions handleSignIn={handleSignIn} expirationDate={this.getExpirationDate()} radioGroupName="-side" monthlyPrice={this.state.pageInfo.monthlyPrice} yearlyPrice={this.state.pageInfo.yearlyPrice} quarterlyPrice={this.state.pageInfo.quarterlyPrice} halfYearlyPrice={this.state.pageInfo.halfYearlyPrice} pageUsername={this.state.pageUsername}></SubscriptionOptions>
               {this.checkUserIsPageOwner() && <div className="payout-box p-3 mt-3">
                 <div className="box-label">Edit your payout</div>
-                <div className="payout-info">Total Subscribers: {this.state.totalSubscribers}</div>
-                <div className="payout-info">Total Earnings: {this.state.totalEarnings} BTC</div>
+                <div className="payout-info">You have {this.state.totalSubscribers} subscribers</div>
+                <div className="payout-info">{this.state.totalEarnings} BTC earned</div>
+                <div className="payout-info">{this.state.pendingWithdrawal} BTC pending to receive</div>
                 <input className="wallet-input" 
                   placeholder="Enter your wallet number"
                   value={this.state.bitcoinWallet}
@@ -368,7 +370,8 @@ export default class Profile extends Component {
     var url = server_url + '/api/v1/charges/totalAmount/' + this.state.username;
     Axios.get(url).then(response => {
       if(response && response.data){
-        this.setState({totalEarnings: response.data.toFixed(8)});
+        
+        this.setState({totalEarnings: response.data.totalAmount.toFixed(8), pendingWithdrawal:(response.data.totalAmount-response.data.totalWithdrawal).toFixed(8) });
       }
     })
   }

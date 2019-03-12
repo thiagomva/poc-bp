@@ -124,15 +124,22 @@ class Charges {
     getTotalAmount(username, cb){
         var chargeData = new ChargeData();
         chargeData.listPaidFromUser(username).then(charges => {
-            var totalAmount = 0;
+            var paymentInfo = {
+                totalAmount: 0,
+                totalWithdrawal: 0
+            };
+            
             if(charges){
                 charges.forEach((charge) => {
                     if(charge.amount){
-                        totalAmount += charge.amount;
+                        paymentInfo.totalAmount += charge.amount;
+                        if(charge.withdrawalDate){
+                            paymentInfo.totalWithdrawal += charge.amount;
+                        }
                     }
                 });
             }
-            cb(null, totalAmount);
+            cb(null, paymentInfo);
         })
         .catch(error => {
             cb(error);

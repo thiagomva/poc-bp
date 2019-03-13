@@ -30,7 +30,10 @@ class ChargeData{
         const ne = Sequelize.Op.ne;
         return this.Charge.findAll({where: {
             appPublicKey: appPublicKey,
-            status: {[ne]:"paid"}
+            [Sequelize.Op.or]:{
+                status: {[ne]:"paid"},
+                blockstackStatus:{[Sequelize.Op.or]:{[Sequelize.Op.eq]:null, [ne]:1}}
+            }
         }});
     }
     listPaidFromUser(username){

@@ -28,7 +28,7 @@ class Charges {
 
     updateChargeStatusIfNecessary(charge, nodeChargeData, cb){
         var newStatus = nodeChargeData.status
-        if(charge.status != "paid" &&  charge.status != newStatus){
+        if((charge.status != "paid" &&  charge.status != newStatus) || charge.blockstackStatus != 1){
             charge.status = newStatus;
             if((newStatus == "paid" || newStatus == "processing") && !charge.paymentDate){
                 if(nodeChargeData.chain_invoice && nodeChargeData.chain_invoice.settled_at){
@@ -49,7 +49,7 @@ class Charges {
                             else {
                                 charge.blockstackStatus = 1;
                                 chargeData.update(charge).then(result => 
-                                    cb(null, {success:true}).catch(err => cb(err)));
+                                    cb(null, {success:true})).catch(err => cb(err));
                             }
                         });
                 }

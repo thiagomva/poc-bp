@@ -17,8 +17,8 @@ export default class Site extends Component {
               <img src="./images/logo.svg" className="center-logo" />
           </div>
           <div className="center-text">
-            <h4>The Decentralized Patreon Alternative</h4>
-            <span>Monetize your content, without being controlled by big corporates.</span>
+            <h4>Bitcoin Lightning Patreon Alternative</h4>
+            <span>Earn Bitcoins with your content</span>
           </div>      
           <div className="signup-button" id="myBtn" onClick={ handleSignIn.bind(this) }>
               <span>CREATE YOUR PAGE <img src="./images/icons/arrow.png" className="arrow" /></span>
@@ -146,7 +146,7 @@ export default class Site extends Component {
                   <div className="bitpatron">
                       <h2>BitPatron</h2>
                       <ul>
-                          <li>4%</li>
+                          <li>1%</li>
                           <li>Weekly</li>
                           <li>No</li>
                           <li>Yes</li>

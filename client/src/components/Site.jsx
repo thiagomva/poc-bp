@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-
+import {
+    isUserSignedIn,
+    loadUserData
+  } from 'blockstack';
 
 export default class Site extends Component {
   constructor(props) {
@@ -8,7 +11,10 @@ export default class Site extends Component {
 
   render() {
     const { handleSignIn } = this.props;
-
+    var username = null;
+    if(isUserSignedIn()){
+      username = loadUserData().username;
+    }
     return (
       <div className="page">
         <header className="masthead">
@@ -20,9 +26,18 @@ export default class Site extends Component {
             <h4>Bitcoin Lightning Patreon Alternative</h4>
             <span>Earn Bitcoins with your content</span>
           </div>      
+          {username && 
+            <a href={"/"+username}>
+                <div  className="signup-button" id="myBtn">
+                    <span>GO TO YOUR PAGE <img src="./images/icons/arrow.png" className="arrow" /></span>
+                </div>
+            </a>
+          }
+          {!username && 
           <div className="signup-button" id="myBtn" onClick={ handleSignIn.bind(this) }>
               <span>CREATE YOUR PAGE <img src="./images/icons/arrow.png" className="arrow" /></span>
           </div>
+          }
       </header>
       <div id="myModal" className="modal">
           <div className="modal-content">

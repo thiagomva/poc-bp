@@ -33,6 +33,7 @@ export default class TopBar extends Component {
             <ul className="navbar-nav mr-auto ml-lg-5">
               <NavLink to="/" title="HOME"></NavLink>
               <NavLink to="/explore" title="EXPLORE"></NavLink>
+              <NavLink to="/faq" title="FAQ"></NavLink>
             </ul>
             <ul className="navbar-nav ml-auto">
               <li className="nav-item twitter-nav-item">
@@ -41,7 +42,7 @@ export default class TopBar extends Component {
               <div className="nav-separator mx-lg-2"></div>
               {username && 
                 <li className="nav-item">                  
-                  <a className="nav-link clickable" href="/"><i className="fa fa-user-circle mr-1"></i><span>{username}</span></a>
+                  <a className="nav-link clickable" href={"/"+username}><i className="fa fa-user-circle mr-1"></i><span>{username}</span></a>
                 </li>
               }
               {username && 

@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import Profile from './Profile.jsx';
 import TopBar from './TopBar.jsx';
 import Site from './Site.jsx';
+import Faq from './Faq.jsx';
 import DiscordAuth from './DiscordAuth.jsx';
 
 import {
@@ -26,7 +27,7 @@ export default class App extends Component {
     }
     const origin = window.location.origin;
     const currentPage = window.location.href;
-    redirectToSignIn(currentPage, origin + '/manifest.json', ['store_write', 'publish_data', 'email']);
+    redirectToSignIn(currentPage + "login", origin + '/manifest.json', ['store_write', 'publish_data', 'email']);
   }
 
   handleSignOut(e) {
@@ -52,16 +53,17 @@ export default class App extends Component {
                   routeProps => <DiscordAuth handleSignIn={ this.handleSignIn } {...routeProps} />
                 }
               />
+              <Route path='/faq'
+                render={routeProps => <Faq/>}
+              />
+              <Route path='/login' render={routeProps => <Profile handleSignIn={ this.handleSignIn } {...routeProps}/>}/>
               <Route
                 path='/:username/:postId?/:postTitle?'
                 render={
                   routeProps => <Profile handleSignIn={ this.handleSignIn } {...routeProps} />
                 }
-              />              
-              {!isUserSignedIn() ?
-              <Route path='/' render={routeProps => <Site handleSignIn={ this.handleSignIn } />}/>
-              : <Route path='/' render={routeProps => <Profile handleSignIn={ this.handleSignIn } {...routeProps}/>}/>
-              }
+              />
+              <Route path='/' render={routeProps => <Site handleSignIn={ this.handleSignIn } />}/>              
             </Switch>
           }
         </div>

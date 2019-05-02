@@ -1,7 +1,5 @@
-
-section.features {
+section.steps {
     height:unset;
-    margin-top: 40px;
     .boxes {
         display: flex;
         flex-direction: row;
@@ -20,24 +18,30 @@ section.features {
             > *{
                 margin-bottom:30px;
             }
-            img {
-                height: 76px;
+            // img {
+            //     height: 76px;
+            // }
+
+            .content{
+                display: inline-flex;
             }
 
 
             .title span {
                 color: #ff4828;
                 font-family: Montserrat-Bold;
-                font-size: 24px;
-                letter-spacing: 1.2px;
-                text-align: center;
+                font-size: 70px;
+                font-weight: bold;
+                line-height: 0.72;
             }
 
             .description span {
-                font-size: 13px;
-                line-height: 1.38;
-                letter-spacing: 0.3px;
+                font-size: 20px;
+                font-weight: 300;
+                line-height: 1.2;
+                letter-spacing: 0.5px;
                 text-align: center;
+                color: #4d4d4d;
             }
         }
     }

@@ -39,18 +39,80 @@ export default class Site extends Component {
           </div>
           }
       </header>
-      <div id="myModal" className="modal">
-          <div className="modal-content">
-              <div className="modal-header">
-                  <span className="close">&times;</span>
+      <section className="steps">
+          <div className="boxes">
+              <div className="box">
+                  <div>
+                      <img src="./images/step_1.png" />
+                  </div>
+                  <div className="content">
+                  <div className="title">
+                      <span>1</span>
+                  </div>
+                  <div className="description">
+                      <span>Set up your page and subscription plans</span>
+                  </div>
+                  </div>
               </div>
-              <div className="modal-body" id="modal-body-widget">
-                  <div data-vl-widget="embedForm" className="widget-container-div"></div>
-                  <div data-vl-widget="milestoneWidget" className="widget-container-div"></div>
+              <div className="box">
+                  <div>
+                      <img src="./images/step_2.png" />
+                  </div>
+                  <div className="content">
+                  <div className="title">
+                      <span>2</span>
+                  </div>
+                  <div className="description">
+                      <span>Create exclusive content for your subscribers</span>
+                  </div>
+                  </div>
+              </div>
+              <div className="box">
+                  <div>
+                      <img src="./images/step_3.png" />
+                  </div>
+                  <div className="content">
+                  <div className="title">
+                      <span>3</span>
+                  </div>
+                  <div className="description">
+                      <span>Share with your audience and earn bitcoin</span>
+                  </div>
+                  </div>
               </div>
           </div>
-
-      </div>
+      </section>
+      <section className="content">
+            <h2>Your content, your rules</h2>
+          <div className="content-rules">
+            <div id="carouselContent" className="carousel slide" data-ride="carousel">
+                <ol className="carousel-indicators">
+                    <li data-target="#carouselContent" data-slide-to="0" className="active"></li>
+                    <li data-target="#carouselContent" data-slide-to="1"></li>
+                    <li data-target="#carouselContent" data-slide-to="2"></li>
+                    <li data-target="#carouselContent" data-slide-to="3"></li>
+                </ol>
+                <div className="carousel-inner">
+                    <div className="carousel-item active">
+                        <h5>Your Payment Terms</h5>
+                        <p>Microtransactions allow you to charge any amount, even less than a penny.</p>
+                    </div>
+                    <div className="carousel-item">
+                        <h5>Content Freedom</h5>
+                        <p>You control your content. Feel free to run sponsored ads, post memes, etc.</p>
+                    </div>
+                    <div className="carousel-item">
+                        <h5>Content Ownership</h5>
+                        <p>You retain 100% ownership of your content and control where data is hosted.</p>
+                    </div>
+                    <div className="carousel-item">
+                        <h5>Content Encryption</h5>
+                        <p>BitPatron makes it easy to protect your member only content.</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+      </section>
       <section className="features">
           <div className="boxes">
               <div className="box">
@@ -84,57 +146,6 @@ export default class Site extends Component {
                   </div>
                   <div className="description">
                       <span>60% Cheaper than Patreon, experience Bitcoin Lightning instant settlements and low fees</span>
-                  </div>
-              </div>
-          </div>
-      </section>
-      <section className="content">
-          <div className="content-rules">
-              <h2>Your content, your rules</h2>
-          </div>
-          <div className="boxes">
-              <div className="box">
-                  <div>
-                      <img src="./images/icons/your-pay.png" />
-                  </div>
-                  <div className="title">
-                      <span>Your Payment Terms</span>
-                  </div>
-                  <div className="description">
-                      <span>Microtransactions allow you to charge any amount, even less than a penny.</span>
-                  </div>
-              </div>
-              <div className="box">
-                  <div>
-                      <img src="./images/icons/cont-freedom.png" />
-                  </div>
-                  <div className="title">
-                      <span>Content Freedom</span>
-                  </div>
-                  <div className="description">
-                      <span>You control your content. Feel free to run sponsored ads, post memes, etc.</span>
-                  </div>
-              </div>
-              <div className="box">
-                  <div>
-                      <img src="./images/icons/cont-own.png" />
-                  </div>
-                  <div className="title">
-                      <span>Content Ownership</span>
-                  </div>
-                  <div className="description">
-                      <span>You retain 100% ownership of your content and control where data is hosted.</span>
-                  </div>
-              </div>
-              <div className="box">
-                  <div>
-                      <img src="./images/icons/cont-protect.png" />
-                  </div>
-                  <div className="title">
-                      <span>Content Encryption</span>
-                  </div>
-                  <div className="description">
-                      <span>BitPatron makes it easy to protect your member only content</span>
                   </div>
               </div>
           </div>

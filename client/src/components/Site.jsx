@@ -163,7 +163,7 @@ export default class Site extends Component {
                       <span>Cheap & Fast</span>
                   </div>
                   <div className="description">
-                      <span>60% Cheaper than Patreon, experience Bitcoin Lightning instant settlements and low fees</span>
+                      <span>90% Cheaper than Patreon, experience Bitcoin Lightning instant settlements and low fees</span>
                   </div>
               </div>
           </div>

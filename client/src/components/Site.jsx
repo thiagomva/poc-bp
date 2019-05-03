@@ -7,6 +7,25 @@ import {
 export default class Site extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+        currentImgIndex: 0,
+        contentImages: ["illustration", "music", "photos", "podcasts", "videos", "writing"]
+    }
+
+    this.startTimeoutAndChangeImage();
+  };  
+
+  startTimeoutAndChangeImage(){
+      setTimeout(() =>
+          {
+              var nextIndex = this.state.currentImgIndex+1;
+              if(nextIndex == this.state.contentImages.length){
+                nextIndex = 0;
+              }
+              this.setState({currentImgIndex:nextIndex});
+              this.startTimeoutAndChangeImage();
+          }, 1000);
   }
 
   render() {
@@ -17,14 +36,13 @@ export default class Site extends Component {
     }
     return (
       <div className="page">
-        <header className="masthead">
-          <img src="./images/top-right.png" className="top-right-image" />
-          <div>
-              <img src="./images/logo.svg" className="center-logo" />
-          </div>
-          <div className="center-text">
+        <header className="masthead">          
+          <div className="top-image-div center-text">
             <h4>Bitcoin Lightning Patreon Alternative</h4>
-            <span>Earn Bitcoins with your content</span>
+            <div className="earn-bitcoins">
+                <span>Earn Bitcoins with your</span>
+                <div className={"img-div " + this.state.contentImages[this.state.currentImgIndex]}></div>
+            </div>
           </div>      
           {username && 
             <a href={"/"+username}>

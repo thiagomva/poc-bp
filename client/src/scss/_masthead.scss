@@ -3,6 +3,13 @@ header.masthead {
     width: 100%;
     text-align: center;
     min-height: 550px;
+    .top-image-div{
+        background-image: url(/images/header/Banner.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        text-align: center;
+        height: 400px;
+    }
 
     .top-right-image {
         z-index: -1;
@@ -32,28 +39,72 @@ header.masthead {
     .center-text {
         width: 100%;
 
-        h4 {
-            font-family: Montserrat-Bold;
-            letter-spacing: 0.6px;
-            font-size: 24px;
+        .earn-bitcoins{
+            display: flex;
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+            margin-left: 50px;
+            @media(max-width: 692px) {
+                flex-direction: column;
+                margin-left: 0px;
+            }
 
-            @media(max-width: 600px) {
-                font-size: 20px;
+            .img-div{
+                margin-left:10px;
+                margin-right: 10px;
+                background-repeat: no-repeat;
+                background-position: left;
+                text-align: center;
+                height: 70px;
+                width:220px;
+                @media(max-width: 692px) {
+                    background-position: center; 
+                }
+            }
+            .illustration{
+                background-image: url(/images/header/Illustration.png);                
+            }
+            .music{
+                background-image: url(/images/header/Music.png);
+            }
+            .photos{
+                background-image: url(/images/header/Photos.png);                
+            }
+            .podcasts{
+                background-image: url(/images/header/Podcasts.png);                
+            }
+            .videos{
+                background-image: url(/images/header/Videos.png);
+            }
+            .writing{
+                background-image: url(/images/header/Writing.png);
             }
         }
 
-        span {
-            font-size: 20px;
+        h4 {
+            font-size: 18px;
+            font-weight: 300;
+            line-height: 1.33;
             letter-spacing: 0.5px;
+            text-align: center;
+            color: #fafafa;
+            padding-top:100px;
+        }
 
-            @media(max-width: 600px) {
-                font-size: 16px;
-            }
+        span {
+            font-family: Montserrat-Bold;
+            font-size: 30px;
+            font-weight: bold;
+            line-height: 1.08;
+            letter-spacing: 0.8px;
+            text-align: center;
+            color: #fafafa;
         }
     }
 
     .signup-button {
-        margin: 40px auto;
+        margin: -25px auto;
         width: 300px;
         height: 48px;
         border-radius: 4px;
@@ -65,7 +116,6 @@ header.masthead {
         cursor: pointer;
 
         @media(max-width: 600px) {
-            margin: 20px auto;
             max-width: 84%;
         }
 

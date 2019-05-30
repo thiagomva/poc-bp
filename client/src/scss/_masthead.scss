@@ -2,11 +2,11 @@
 header.masthead {
     width: 100%;
     text-align: center;
-    min-height: 550px;
     .top-image-div{
         background-image: url(/images/header/Banner.png);
         background-repeat: no-repeat;
         background-position: center;
+        background-color: #141414;
         text-align: center;
         height: 400px;
     }
@@ -39,29 +39,45 @@ header.masthead {
     .center-text {
         width: 100%;
 
-        .earn-bitcoins{
+        .content-options{
+            margin-top: 30px;
+            margin-bottom: 40px;
             display: flex;
             align-items: center;
             align-content: center;
             justify-content: center;
-            margin-left: 50px;
             @media(max-width: 692px) {
-                flex-direction: column;
                 margin-left: 0px;
             }
-
+        
             .img-div{
                 margin-left:10px;
                 margin-right: 10px;
                 background-repeat: no-repeat;
-                background-position: left;
+                background-position: center;
                 text-align: center;
                 height: 70px;
-                width:220px;
+                width:180px;
                 @media(max-width: 692px) {
                     background-position: center; 
+                    background-size: contain;
                 }
             }
+
+            .dot-separator{
+                width: 8px;
+                height: 8px;
+                background-color: #ff4828;
+                border-radius: 5px;
+                
+                @media(max-width: 692px) {
+                    margin-right: 0px;
+                    margin-left: 0px;
+                    width: 4px;
+                    height: 4px;
+                }
+            }
+
             .illustration{
                 background-image: url(/images/header/Illustration.png);                
             }
@@ -81,15 +97,16 @@ header.masthead {
                 background-image: url(/images/header/Writing.png);
             }
         }
+        
 
         h4 {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 300;
-            line-height: 1.33;
+            line-height: 1.2;
             letter-spacing: 0.5px;
             text-align: center;
-            color: #fafafa;
-            padding-top:100px;
+            color: #ff4828;
+            padding-top:80px;
         }
 
         span {
@@ -101,32 +118,37 @@ header.masthead {
             text-align: center;
             color: #fafafa;
         }
+
+        .signup-button {
+            margin: 0 auto;
+            width: 300px;
+            height: 48px;
+            border-radius: 4px;
+            color: #ffffff;
+            font-family: Montserrat-SemiBold;
+            font-size: 14px;
+            background-color: #ff4828;
+            padding-top: 15px;
+            cursor: pointer;
+            span {
+                font-size: inherit;
+            }
+    
+            @media(max-width: 600px) {
+                max-width: 84%;
+            }
+    
+            @media(max-width: 640px) {
+                letter-spacing: 0.6px;
+            }
+    
+            .arrow {
+                margin-left: 15px;
+            }
+        }
     }
 
-    .signup-button {
-        margin: -25px auto;
-        width: 300px;
-        height: 48px;
-        border-radius: 4px;
-        color: #ffffff;
-        font-family: Montserrat-SemiBold;
-        font-size: 14px;
-        background-color: #ff4828;
-        padding-top: 15px;
-        cursor: pointer;
-
-        @media(max-width: 600px) {
-            max-width: 84%;
-        }
-
-        @media(max-width: 640px) {
-            letter-spacing: 0.6px;
-        }
-
-        .arrow {
-            margin-left: 15px;
-        }
-    }
+    
 
     .countdown-box {
         width: 486px;

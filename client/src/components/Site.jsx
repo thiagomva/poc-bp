@@ -38,64 +38,75 @@ export default class Site extends Component {
       <div className="page">
         <header className="masthead">          
           <div className="top-image-div center-text">
-            <h4>Bitcoin Lightning Patreon Alternative</h4>
+            <h4>Bitcoin Patreon Alternative</h4>
             <div className="earn-bitcoins">
-                <span>Earn Bitcoins with your</span>
-                <div className={"img-div " + this.state.contentImages[this.state.currentImgIndex]}></div>
+                <span>EARN BITCOINS WITH YOUR</span>
             </div>
-          </div>      
-          {username && 
+            <div className="content-options">
+                <div className="img-div music"></div>
+                <div className="dot-separator"></div>
+                <div className="img-div videos"></div>
+                <div className="dot-separator"></div>
+                <div className="img-div podcasts"></div>
+            </div>
+            {username && 
             <a href={"/"+username}>
                 <div  className="signup-button" id="myBtn">
                     <span>GO TO YOUR PAGE <img src="./images/icons/arrow.png" className="arrow" /></span>
                 </div>
             </a>
-          }
-          {!username && 
-          <div className="signup-button" id="myBtn" onClick={ handleSignIn.bind(this) }>
-              <span>CREATE YOUR PAGE <img src="./images/icons/arrow.png" className="arrow" /></span>
-          </div>
-          }
+            }
+            {!username && 
+            <div className="signup-button" id="myBtn" onClick={ handleSignIn.bind(this) }>
+                <span>CREATE YOUR PAGE <img src="./images/icons/arrow.png" className="arrow" /></span>
+            </div>
+            }
+          </div>      
+          
       </header>
       <section className="steps">
+          <h1>How it works</h1>
           <div className="boxes">
               <div className="box">
+                  <div className="content">
+                    <div className="number">1</div>
+                    <div className="title">
+                        <span>CREATE PAGE & SUBSCRIPTION PLAN</span>
+                    </div>
+                    <div className="description">
+                        <span>Whether you’re selling exclusive videos, podcasts or photos, just set your subscription price</span>
+                    </div>
+                  </div>
                   <div>
                       <img src="./images/step_1.png" />
                   </div>
-                  <div className="content">
-                  <div className="title">
-                      <span>1</span>
-                  </div>
-                  <div className="description">
-                      <span>Set up your page and subscription plans</span>
-                  </div>
-                  </div>
               </div>
-              <div className="box">
+              <div className="box">  
+                <div className="content">
+                    <div className="number">2</div>
+                    <div className="title">
+                        <span>CREATE YOUR EXCLUSIVE CONTENT</span>
+                    </div>
+                    <div className="description">
+                        <span>Create and upload exclusive content</span>
+                    </div>
+                  </div>
                   <div>
                       <img src="./images/step_2.png" />
                   </div>
-                  <div className="content">
-                  <div className="title">
-                      <span>2</span>
-                  </div>
-                  <div className="description">
-                      <span>Create exclusive content for your subscribers</span>
-                  </div>
-                  </div>
               </div>
               <div className="box">
+                  <div className="content">
+                    <div className="number">3</div>
+                    <div className="title">
+                        <span>EARN BITCOIN</span>
+                    </div>
+                    <div className="description">
+                        <span>Share with your audience and earn Bitcoin whenever someone subscribes</span>
+                    </div>
+                  </div>
                   <div>
                       <img src="./images/step_3.png" />
-                  </div>
-                  <div className="content">
-                  <div className="title">
-                      <span>3</span>
-                  </div>
-                  <div className="description">
-                      <span>Share with your audience and earn bitcoin</span>
-                  </div>
                   </div>
               </div>
           </div>

@@ -29,11 +29,11 @@ export default class Faq extends Component {
                 <p>To understand more about Bitcoin, we recommend the following guide: <a href="https://www.bitwala.com/academy/">https://www.bitwala.com/academy/</a></p>
             </FaqItem>
             <FaqItem question="What is Blockstack?">
-                <p>BitPatron is built on top Blockstack, allowing us to provide decentralized encrypted content storage. Blockstack is a new internet for decentralized apps that you access through the Blockstack Browser. With Blockstack, there is a new world of apps that let you own your data and maintain your privacy, security and freedom.</p>
+                <p>BitPatron is built on top of Blockstack, allowing us to provide decentralized encrypted content storage. Blockstack is a new internet for decentralized apps that you access through the Blockstack Browser. With Blockstack, there is a new world of apps that let you own your data and maintain your privacy, security and freedom.</p>
                 <p>Almost everything is transparent for end-users, but if you want to understand how it works behind, please refer to: <a href="https://medium.com/bitpatron/the-business-model-behind-bitpatron-72599c441115">https://medium.com/bitpatron/the-business-model-behind-bitpatron-72599c441115</a></p>
             </FaqItem>
             <FaqItem question="Can content creators be censored/banned from BitPatron?">
-                <p>BitPatron is moderated, according to our community guidelines. Content creators that are not in accord with the terms of service and community guidelines will be removed from the BitPatron front-end. However, BitPatron has just control over the front-end and therefore even in the case of a removal, it won’t impact content storage, access to supporter information and payment subscription. Once banned, in theory, content creators can use a third party fron-tend or create their own one, since this data was never with us in the first place. All content and necessary data to give access to their patrons is stored in Blockstack decentralized storage, controlled by the content creator.</p>
+                <p>BitPatron is moderated, according to our community guidelines. Content creators that are violating terms of service and community guidelines will be removed from BitPatron's frontend. However, BitPatron just controls the frontend and therefore even in the case of a removal, it won’t impact content storage, access to supporter information and payment subscription. Once banned, in theory, content creators can use a third party frontend or create their own frontend, since their data was never with us in the first place. All content and necessary data to give access to their patrons is stored at Blockstack's decentralized storage, controlled by the content creator.</p>
             </FaqItem>
             <FaqItem question="Where can i see BitPatron community guidelines?">
                 <p>Link: <a href="https://bitpatron.co/docs/BitPatron+Community+Guidelines.pdf">https://bitpatron.co/docs/BitPatron+Community+Guidelines.pdf</a></p>
@@ -46,11 +46,11 @@ export default class Faq extends Component {
                 <p>Please refer to: <a href="https://medium.com/bitpatron/the-business-model-behind-bitpatron-72599c441115">https://medium.com/bitpatron/the-business-model-behind-bitpatron-72599c441115</a></p>
             </FaqItem>
             <FaqItem question="Will BitPatron add credit card payment processors?">
-                <p>Yes, we plan to add multiple payments gateways as an alternative for Bitcoin, consisting of various traditional providers directly linked to the content creator’s accounts, thus the content creator doesn’t rely on any powerful payment provider, nor on BitPatron for payments.</p>
+                <p>Yes, we plan to add multiple payment gateways as an alternative for Bitcoin, consisting of various traditional providers directly linked to the content creator’s accounts, thus the content creator doesn’t rely on any powerful payment provider, nor on BitPatron for payments.</p>
             </FaqItem>
             <div className="col-md-12"><hr/><div className="faq-topic-title">For Creators</div></div>
             <FaqItem question="How can I setup a page?">
-                <p>It's quite simple, go to the homepage, click on create page, create your login and set a Page name, description and choose your pricing per month and per year.</p>
+                <p>It's quite simple, go to the homepage, click on create page, create your login and set a page name, description and choose your pricing per month and per year.</p>
             </FaqItem>
             <FaqItem question="How can I set up my membership pricing? Should I offer discounts for annual billing?">
                 <p>You can set up while creating your page, or edit it later. We strongly recommend offering discounts for annual billing, because by default Bitcoin is a push technology, meaning each payment has to be initiated by the customer.&nbsp;</p>
@@ -100,7 +100,7 @@ export default class Faq extends Component {
                 <p>Coinbase - <a data-fr-linked="true" href="https://www.coinbase.com/buy-bitcoin">https://www.coinbase.com/buy-bitcoin</a>&nbsp;</p>
                 <p>Bitwalla - <a href="https://www.bitwala.com/bank-account">https://www.bitwala.com/bank-account</a>&nbsp;</p>
                 <p>Kraken - <a href="https://www.kraken.com">https://www.kraken.com</a>&nbsp;</p>
-                <p>3) Click on Become Bitpatron, choose on-chain payment, scan the QR Code and complete the payment.</p>
+                <p>3) Click on Become a Bitpatron, choose on-chain payment, scan the QR Code and complete the payment.</p>
                 <p>
                     <br/>
                 </p>

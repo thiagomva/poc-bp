@@ -42,7 +42,7 @@ export default class App extends Component {
         <div className="site-wrapper-inner">
           {
             <Switch>
-              <Route path='/explore'
+              <Route path='/explore/:category?'
                 render={
                   routeProps => <PageList handleSignOut={ this.handleSignOut } {...routeProps} />
                 }

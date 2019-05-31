@@ -148,6 +148,7 @@ export default class PageList extends Component {
         else {
             location = url;
         }
+        window.scrollTo(0, 0);
     }
 
     getCategoryName(category){

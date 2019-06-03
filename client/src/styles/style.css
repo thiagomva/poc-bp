@@ -778,3 +778,12 @@ body {
     text-align: left;
     color: #8c8c8c;
 }
+
+.page-item.active .page-link {
+    background-color: #e84528;
+    border-color: #e84528;
+}
+
+.page-item .page-link{
+    color: #e84528;
+}

@@ -27,6 +27,8 @@ const categoriesIcons = {1:"fa-video-camera",
     7:"fa-futbol-o",
     8:"fa-edit",
     9:"fa-ellipsis-h"};
+
+const PAGE_SIZE=12;
 export default class PageList extends Component {
     constructor(props) {
         super(props);
@@ -34,6 +36,8 @@ export default class PageList extends Component {
         this.state = {
             pages: [],
             filteredPages: [],
+            currentPageItens: [],
+            currentPage: 1,
             showPosts: false,
             isLoading: true,
             selectedCategory: this.getCategory(props.match.params.category),
@@ -57,6 +61,14 @@ export default class PageList extends Component {
         if(isUserSignedIn()){
             username = loadUserData().username;
         }
+
+        let pagesNumbers = []
+        var numberOfPages = Math.ceil(this.state.filteredPages.length/PAGE_SIZE);
+        for(let i=0; i<numberOfPages; i++){
+            if((this.state.currentPage - i > -3 && this.state.currentPage - i < 5)){
+                pagesNumbers.push(i+1);
+            }
+        }
         return (
             <div>
                 <div className="container">
@@ -77,7 +89,7 @@ export default class PageList extends Component {
                     {!this.state.isLoading && this.state.filteredPages.length == 0 &&
                         <div className="col-md-12">This category doesn't have any page.</div>
                     }
-                    {this.state.filteredPages.map((page) => (
+                    {this.state.currentPageItens.map((page) => (
                         <div key={page.username} className="col-md-4">
                             <div className="page-card card mb-4">
                                 <img src="/images/card_top.png" className="card-img-top"/>
@@ -101,6 +113,33 @@ export default class PageList extends Component {
                             </div>
                         </div>
                     ))}
+                    {pagesNumbers.length > 1 &&
+                        <nav className="col-md-12">
+                            <ul className="pagination">
+                                <li title="First" className={"page-item "+ ((this.state.currentPage == 1) ? "disabled":"")}>
+                                    <a onClick={e => this.onPage(1)} className="page-link" href="#" tabIndex="-1" aria-disabled="true">&laquo;</a>
+                                </li>
+                                <li title="Previous" className={"page-item "+ ((this.state.currentPage == 1) ? "disabled":"")}>
+                                    <a onClick={e => this.onPage(this.state.currentPage - 1)} className="page-link" href="#" tabIndex="-1" aria-disabled="true">‹</a>
+                                </li>
+                                {this.state.currentPage > 4 && <li className="page-item disabled">
+                                    <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">...</a>
+                                </li>}
+                                {pagesNumbers.map((pageNumber) => (
+                                    <li key={pageNumber} className={"page-item "+ ((this.state.currentPage == pageNumber) ? "active":"")} ><a onClick={e => this.onPage(pageNumber)} className="page-link" href="#">{pageNumber}</a></li>
+                                ))}
+                                {(numberOfPages - this.state.currentPage) >  3 && <li className="page-item disabled">
+                                    <a className="page-link" href="#" tabIndex="-1" aria-disabled="true">...</a>
+                                </li>}
+                                <li title="Next" className={"page-item "+ ((this.state.currentPage == numberOfPages) ? "disabled":"")}>
+                                    <a onClick={e => this.onPage(this.state.currentPage + 1)} className="page-link" href="#">›</a>
+                                </li>
+                                <li title="Last" className={"page-item "+ ((this.state.currentPage == numberOfPages) ? "disabled":"")}>
+                                    <a onClick={e => this.onPage(numberOfPages)} className="page-link" href="#">&raquo;</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    }
                     </div>
                     <hr></hr>
                     <div className="row">
@@ -172,7 +211,8 @@ export default class PageList extends Component {
             else{
                 newState.filteredPages = this.getFeaturedPages(response.data);
             }
-            this.setState(newState, () => this.fetchImagesAndProfilesOfFilteredPages());
+            newState.currentPage = 1;
+            this.setState(newState, () => this.fetchImagesAndProfilesOfCurrentPageItens());
           });
     }
 
@@ -199,15 +239,24 @@ export default class PageList extends Component {
     filterCategory(category){
         this.setState({isLoading: true});
         var filter = this.getFromCategory(category, this.state.pages);
-        this.setState({filteredPages: filter, selectedCategory: category}, () => this.fetchImagesAndProfilesOfFilteredPages());
+        this.setState({filteredPages: filter, selectedCategory: category, currentPage: 1}, () => this.fetchImagesAndProfilesOfCurrentPageItens());
     }
 
-    fetchImagesAndProfilesOfFilteredPages(){
-        for (var i =0; i<this.state.filteredPages.length;i++){
+    onPage(pageNumber){
+        this.setState({currentPage: pageNumber}, () => this.fetchImagesAndProfilesOfCurrentPageItens());
+    }
+
+    fetchImagesAndProfilesOfCurrentPageItens(){
+        var pageStart = (this.state.currentPage-1)*PAGE_SIZE;
+        var currentPageItens = this.state.filteredPages.slice(pageStart, pageStart+PAGE_SIZE);
+        var lastIndex = pageStart+PAGE_SIZE;
+        if(this.state.filteredPages.length < lastIndex)
+            lastIndex = this.state.filteredPages.length;
+        for (var i =pageStart; i<lastIndex;i++){
             this.getPageImage(i);
             this.getProfile(i);
         }
-        this.setState({isLoading: false});
+        this.setState({currentPageItens: currentPageItens, isLoading: false});
     }
 
     getProfile(index){

@@ -15,6 +15,11 @@ module.exports = function (router) {
         new DiscordController().joinServer(req.body, req.headers["blockstack-auth-token"], baseResponse(res, next));
     });
 
+    router.route('/remove_expired')
+    .post(function(req, res, next) {
+        new DiscordController().removeExpiredSubscribers(baseResponse(res, next));
+    });
+
     router.route('/roles')
     .get(function(req, res, next) {
         new DiscordController().listRoles(req.headers["blockstack-auth-token"], baseResponse(res, next));

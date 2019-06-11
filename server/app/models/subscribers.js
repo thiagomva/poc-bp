@@ -4,6 +4,8 @@ var Blockstack = require('blockstack');
 var JsonTokens = require('jsontokens');
 const axios = require('axios');
 var PageInfoData = require('../data/pageInfoData.js');
+var SubscriberData = require('../data/subscriberData.js');
+var Discord = require('./discord.js');
 
 class Subscribers {
     constructor(username, appPublicKey, subscriberUsername, expirationDate) {
@@ -151,6 +153,38 @@ class Subscribers {
                         console.log("fileName is NaN: "+fileName);
                     }
                 });
+            }
+        });
+    }
+    
+    removeExpiredSubscribers(cb){
+        var subscriberData = new SubscriberData();
+        subscriberData.listExpiredAndNotRemovedFromRole().then(subscribers => {
+            var discord = new Discord();
+            subscribers.forEach((subscriber) => {
+                discord.removeSubscriberFromDiscord(subscriber.DiscordId, subscriber.GuildId, subscriber.RoleId).then(
+                    subscriberData.get(subscriber.ChargeId, subscriberData.PageUsername, subscriber.DiscordId).then(result => {
+                        result.removedFromRole = new Date();
+                        subscriberData.update(result);
+                    })
+                );
+            });
+            cb(null,null);
+        });
+    }    
+
+    getWallet(username, cb){
+        var pageInfoData = new PageInfoData();
+        var _this = this;
+        pageInfoData.get(username).then(pageInfo => {
+            if (pageInfo) {
+                var payload = this.decodeJwtTokenPayload(pageInfo.jwt);
+                var appPrivateKey = payload.scopes[0].appPrivateKey;
+                var address = payload.scopes[0].address;
+                var hubServerUrl = payload.scopes[0].hubServerUrl;
+                var hubUrlPrefix = payload.scopes[0].hubUrlPrefix;
+                var self = this;
+                self.getPrivateFile(self, appPrivateKey, address, hubUrlPrefix, "bitcoinWallet", cb);
             }
         });
     }

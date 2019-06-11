@@ -23,5 +23,8 @@ module.exports = function (router) {
         new PagesController().getPageDiscordInfo(req.params.username, req.headers["blockstack-auth-token"], baseResponse(res, next));
       })
       
-    
+    router.route('/:username/wallet')
+      .get(function (req, res, next) {
+        new PagesController().getWallet(req.params.username, req.headers["authorization"], baseResponse(res, next));
+      })
   };

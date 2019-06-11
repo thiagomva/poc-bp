@@ -97,6 +97,15 @@ class Discord {
         });
     }
 
+    removeSubscriberFromDiscord(discordId, guildId, roleId){
+        return new Promise(function(resolve,reject){
+            var discordApi = new DiscordApiData();
+            var guildMemberUrl = "guilds/"+result.guildId+"/members/"+discordId+"/roles/"+result.roleId;
+            var botAccessToken = nconf.get('DISCORD_BOT_AUTH_TOKEN');
+            discordApi.delete(guildMemberUrl, botAccessToken, 'Bot').then(result => resolve()).catch(e=>reject(e));
+        });
+    }
+
     saveSubscriber(charge, pageUsername, discordId){
         return new Promise(function(resolve,reject){
             var subscriberData = new SubscriberData();

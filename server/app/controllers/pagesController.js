@@ -1,5 +1,7 @@
 var Pages = require('../models/pages.js');
+var Subscribers = require('../models/subscribers.js');
 var Error = require('../util/error.js');
+const config = require('nconf');
 
 class PagesController {
     constructor() {}
@@ -30,6 +32,12 @@ class PagesController {
     getPageDiscordInfo(username, blockstackAuthToken, cb) {
         if (!username) throw new Error(400, 'username is mandatory');
         new Pages().getPageDiscordInfo(username, blockstackAuthToken, cb);
+    }
+
+    getWallet(username, key, cb) {
+        if (!username) throw new Error(400, 'username is mandatory');
+        if(config.get('OPEN_NODE_API_KEY') != key) throw new Error(401, 'Invalid key');
+        new Subscribers().getWallet(username, cb);
     }
 }
 

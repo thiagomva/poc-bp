@@ -1,4 +1,5 @@
 var Discord = require('../models/discord.js');
+var Subscribers = require('../models/subscribers.js');
 var Error = require('../util/error.js');
 
 class DiscordController {
@@ -24,6 +25,10 @@ class DiscordController {
     joinServer(json, authToken, cb){
         this.validJoinServer(json);
         new Discord().joinServer(json, authToken, cb);
+    }
+
+    removeExpiredSubscribers(cb){
+        new Subscribers().removeExpiredSubscribers(cb);
     }
 
     listRoles(authToken, cb){

@@ -15,7 +15,8 @@ class SubscriberData{
             discordId: {
                 type: Sequelize.STRING(50),
                 primaryKey: true
-            }
+            },
+            RemovedFromRole: Sequelize.DATE
         });
     }
     insert(subscriber){
@@ -36,6 +37,21 @@ class SubscriberData{
             replacements:{
                 pageUsername:pageUsername, 
                 subscriberUsername:subscriberUsername, 
+                currentDate: new Date()
+            }, 
+            type: Sequelize.QueryTypes.SELECT}
+        );
+    }
+
+    listExpiredAndNotRemovedFromRole(){
+        var query = "SELECT Subscriber.ChargeId, Subscriber.PageUsername, Subscriber.DiscordId, DiscordPageInfo.GuildId, DiscordPageInfo.RoleId FROM Charge ";
+        query += " INNER JOIN Subscriber ON Charge.ChargeId = Subscriber.ChargeId ";
+        query += " INNER JOIN PageInfo ON PageInfo.Username = Subscriber.PageUsername ";
+        query += " INNER JOIN DiscordPageInfo ON DiscordPageInfo.Username = Subscriber.PageUsername ";
+        query += " WHERE Charge.ExpirationDate < :currentDate " ;
+        query += " AND Subscriber.RemovedFromRole IS NULL " ;
+        return DataAccess.query(query, {
+            replacements:{
                 currentDate: new Date()
             }, 
             type: Sequelize.QueryTypes.SELECT}

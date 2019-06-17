@@ -162,12 +162,12 @@ class Subscribers {
         subscriberData.listExpiredAndNotRemovedFromRole().then(subscribers => {
             var discord = new Discord();
             subscribers.forEach((subscriber) => {
-                discord.removeSubscriberFromDiscord(subscriber.DiscordId, subscriber.GuildId, subscriber.RoleId).then(
-                    subscriberData.get(subscriber.ChargeId, subscriberData.PageUsername, subscriber.DiscordId).then(result => {
+                discord.removeSubscriberFromDiscord(subscriber.DiscordId, subscriber.GuildId, subscriber.RoleId).then(result =>
+                    subscriberData.get(subscriber.ChargeId, subscriber.PageUsername, subscriber.DiscordId).then(result => {
                         result.removedFromRole = new Date();
                         subscriberData.update(result);
-                    })
-                );
+                    }).catch(e => console.log(e))
+                ).catch(e => console.log(e))
             });
             cb(null,null);
         });

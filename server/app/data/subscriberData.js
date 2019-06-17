@@ -16,7 +16,7 @@ class SubscriberData{
                 type: Sequelize.STRING(50),
                 primaryKey: true
             },
-            RemovedFromRole: Sequelize.DATE
+            removedFromRole: Sequelize.DATE
         });
     }
     insert(subscriber){

@@ -34,7 +34,7 @@ class DiscordApiData {
             }else if(method == 'PATCH'){
                 apiPromise = axios.patch(url, body, httpConfig);
             }else if(method == 'DELETE'){
-                apiPromise = axios.post(url, httpConfig);
+                apiPromise = axios.delete(url, httpConfig);
             }
             
             apiPromise.then(response => {

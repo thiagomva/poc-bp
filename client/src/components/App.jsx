@@ -25,13 +25,13 @@ export default class App extends Component {
     if(e && e.preventDefault){
       e.preventDefault();
     }
-    const origin = window.location.origin;
+    const origin = window.location.origin + "/";
     const currentPage = window.location.href;
     var redirect = origin + "login";
     if(currentPage != origin){
       redirect = currentPage;
     }
-    redirectToSignIn(redirect, origin + '/manifest.json', ['store_write', 'publish_data', 'email']);
+    redirectToSignIn(redirect, origin + 'manifest.json', ['store_write', 'publish_data', 'email']);
   }
 
   handleSignOut(e) {

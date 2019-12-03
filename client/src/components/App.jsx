@@ -12,8 +12,10 @@ import {
   redirectToSignIn,
   handlePendingSignIn,
   signUserOut,
+  loadUserData
 } from 'blockstack';
 import PageList from './PageList.jsx';
+import { isExpirationDateValid } from 'blockstack/lib/auth';
 
 export default class App extends Component {
 
@@ -35,7 +37,9 @@ export default class App extends Component {
   }
 
   handleSignOut(e) {
-    e.preventDefault();
+    if(e && e.preventDefault){
+      e.preventDefault();
+    }
     signUserOut(window.location.origin);
   }
 
@@ -85,6 +89,8 @@ export default class App extends Component {
           window.location = window.location.href;
         }
       });
+    } else if (isUserSignedIn() && !isExpirationDateValid(loadUserData().authResponseToken)) {
+      this.handleSignOut(null);
     }
   }
 }

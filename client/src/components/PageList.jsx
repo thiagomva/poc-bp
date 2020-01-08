@@ -8,7 +8,7 @@ import {
     Person,
     loadUserData
   } from 'blockstack';
-const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
+const avatarFallbackImage = './images/icons/avatar-placeholder.png';
 const categories = {1:"VIDEOS",
     2:"PODCASTS",
     3:"GAMES",

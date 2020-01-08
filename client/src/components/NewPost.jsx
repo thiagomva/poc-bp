@@ -98,7 +98,8 @@ export default class NewPost extends Component {
             tag='textarea'
             config={{
               placeholderText: "Content",
-              toolbarButtons: ['bold', 'italic', 'underline', 'color', 'align', 'fontSize', 'insertLink', 'insertImage', 'embedly'],
+              videoResponsive: true,
+              toolbarButtons: ['bold', 'italic', 'underline', 'color', 'align', 'fontSize', 'insertLink', 'insertImage', 'insertVideo'],
               imageInsertButtons: ['imageByURL'],
               imageUploadRemoteUrls: false,
               heightMin: '200px',

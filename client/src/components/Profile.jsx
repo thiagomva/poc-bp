@@ -295,6 +295,7 @@ export default class Profile extends Component {
   componentWillMount() {
     var userData = loadUserData();
     if(userData){
+      this.setState({username: userData.username})
       var person = new Person(userData.profile)
       this.setPersonUsernameAndBlobState(person, userData.username)
     }

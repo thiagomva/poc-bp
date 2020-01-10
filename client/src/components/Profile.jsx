@@ -205,10 +205,10 @@ export default class Profile extends Component {
             }
             <div className="col-md-12">
             {!this.showNewPostForm() &&  !this.showPageEdit() && this.showPostDetails() &&            
-              <PostDetails handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} postId={this.props.match.params.postId}/>
+              <PostDetails handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} blobUrl={this.state.blobUrl} postId={this.props.match.params.postId}/>
             }
             {!this.showNewPostForm() &&  !this.showPageEdit() && !this.showPostDetails() &&
-              <PublicList handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} discordInfo={this.state.discordInfo} location={this.props.location}/>
+              <PublicList handleSignIn={handleSignIn} handleEditPost={handleEditPost} handleNewPost={handleNewPost} pageInfo={this.state.pageInfo} pageUsername={this.state.pageUsername} pageOwner={this.state.person} blobUrl={this.state.blobUrl} discordInfo={this.state.discordInfo} location={this.props.location}/>
             }
             
           </div>
@@ -270,14 +270,44 @@ export default class Profile extends Component {
     return duration;
   }
 
+  convertGaiaToBlobImage (imageUrl) {
+    return new Promise(function(resolve,reject) {
+      if (imageUrl) {
+        fetch(imageUrl).then((response) =>
+        {
+            response.arrayBuffer().then((buffer) =>
+            {
+                resolve(URL.createObjectURL(new Blob([new Uint8Array(buffer)], {type: "image"})));
+            })
+            .catch((err) =>
+            {
+                console.error(err);
+                resolve("");
+            });
+        })
+      }
+      else {
+        resolve("")
+      }
+    })  
+  }
+
   componentWillMount() {
     var userData = loadUserData();
     if(userData){
-      this.setState({
-        person: new Person(userData.profile),
-        username: userData.username
-      });
+      var person = new Person(userData.profile)
+      this.setPersonUsernameAndBlobState(person, userData.username)
     }
+  }
+
+  setPersonUsernameAndBlobState(person, username) {
+    this.convertGaiaToBlobImage(person.avatarUrl()).then((blobUrl) => {
+      this.setState({
+        person: person,
+        username: username,
+        blobUrl: blobUrl
+      });
+    });
   }
 
   componentDidMount() {
@@ -324,10 +354,7 @@ export default class Profile extends Component {
      username = this.props.match.params.username
      lookupProfile(username)
        .then((profile) => {
-         this.setState({
-           person: new Person(profile),
-           username: username
-         });
+          this.setPersonUsernameAndBlobState(new Person(profile), username)
         })
        .catch((error) => {
          console.log('could not resolve profile')

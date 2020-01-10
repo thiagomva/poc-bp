@@ -10,7 +10,7 @@ import {
   } from 'blockstack';
 import { isNull } from 'util';
 
-const avatarFallbackImage = './images/avatar-placeholder.png';
+const avatarFallbackImage = '/images/avatar-placeholder.png';
 
 export default class PostDetails extends Component {
     constructor(props) {

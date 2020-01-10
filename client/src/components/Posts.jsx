@@ -11,7 +11,7 @@ import {
     decryptContent
   } from 'blockstack';
 
-const avatarFallbackImage = './images/avatar-placeholder.png';
+const avatarFallbackImage = '/images/avatar-placeholder.png';
 
 export default class Posts extends Component {
     constructor(props) {

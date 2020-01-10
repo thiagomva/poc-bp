@@ -12,7 +12,7 @@ import { discord_auth_url } from '../config';
 import DiscordPanel from './DiscordPanel.jsx';
 import queryString from 'query-string';
 
-const avatarFallbackImage = './images/icons/avatar-placeholder.png';
+const avatarFallbackImage = './images/avatar-placeholder.png';
 
 export default class PublicList extends Component {
     constructor(props) {

@@ -25,7 +25,7 @@ import {decodeToken} from 'jsontokens';
 import { listFiles, decryptContent, encryptContent } from 'blockstack/lib/storage';
 import SubscriptionOptions from './SubscriptionOptions.jsx';
 
-const avatarFallbackImage = './images/icons/avatar-placeholder.png';
+const avatarFallbackImage = './images/avatar-placeholder.png';
 
 export default class Profile extends Component {
   constructor(props) {

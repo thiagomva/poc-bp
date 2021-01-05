@@ -4,7 +4,7 @@
   "dependencies": {
     "applicationinsights": "^1.0.8",
     "async": "^1.2.1",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "blockstack": "^18.2.1",
     "body-parser": "^1.13.1",
     "change-case": "^2.3.0",

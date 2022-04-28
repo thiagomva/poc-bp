@@ -3,7 +3,7 @@
   "main": "index.js",
   "dependencies": {
     "applicationinsights": "^1.0.8",
-    "async": "^1.2.1",
+    "async": "^2.6.4",
     "axios": "^0.18.0",
     "blockstack": "^18.2.1",
     "body-parser": "^1.13.1",
